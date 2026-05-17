@@ -52,12 +52,28 @@ function CinematicVideoBg() {
 
 export default function App() {
   const [showIntro, setShowIntro] = useState(true)
+  const [introExiting, setIntroExiting] = useState(false)
+  const [introDone, setIntroDone] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const { scrollY } = useScroll()
   const heroY = useTransform(scrollY, [0, 800], [0, -90])
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowIntro(false), 1800)
-    return () => clearTimeout(timer)
+    const syncViewport = () => setIsMobile(window.innerWidth < 768)
+    syncViewport()
+    window.addEventListener('resize', syncViewport)
+
+    const exitTimer = setTimeout(() => setIntroExiting(true), 1100)
+    const doneTimer = setTimeout(() => {
+      setShowIntro(false)
+      setIntroDone(true)
+    }, 2200)
+
+    return () => {
+      window.removeEventListener('resize', syncViewport)
+      clearTimeout(exitTimer)
+      clearTimeout(doneTimer)
+    }
   }, [])
 
   return (
@@ -65,19 +81,29 @@ export default function App() {
       <CinematicVideoBg />
 
       {showIntro ? (
-        <motion.div className="intro-overlay" initial={{ opacity: 1 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <motion.div
+          className="intro-overlay"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: introExiting ? 0 : 1 }}
+          transition={{ duration: 0.85, ease: 'easeOut' }}
+        >
+          <div className="intro-spotlight" />
           <motion.img
             src="/invision_logo_transparent.png"
             alt="INVISION logo intro"
             className="intro-logo"
             initial={{ opacity: 0, scale: 0.84 }}
-            animate={{ opacity: 1, scale: 1.02 }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            animate={
+              introExiting
+                ? { opacity: 0.65, scale: isMobile ? 0.64 : 0.56, x: isMobile ? -120 : -360, y: isMobile ? 64 : 94 }
+                : { opacity: 1, scale: 1.02, x: 0, y: 0 }
+            }
+            transition={{ duration: introExiting ? 0.95 : 1.1, ease: [0.22, 1, 0.36, 1] }}
           />
           <motion.h1
             initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35, duration: 0.75 }}
+            animate={introExiting ? { opacity: 0, y: -12, scale: 0.97 } : { opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: introExiting ? 0 : 0.35, duration: 0.75 }}
             className="intro-sub"
           >
             INVISION FILMS PRODUCTIONS
@@ -117,7 +143,7 @@ export default function App() {
 
       <main>
         <section id="hero" className="section-shell relative flex min-h-screen items-center">
-          <motion.div style={{ y: heroY }} className="mx-auto grid w-[92%] max-w-6xl items-center gap-10 py-28 lg:grid-cols-[1.1fr_1fr]">
+          <motion.div style={{ y: heroY }} className={`mx-auto grid w-[92%] max-w-6xl items-center gap-10 py-28 lg:grid-cols-[1.1fr_1fr] ${introDone ? 'hero-ready' : 'hero-hidden'}`}>
             <motion.div
               initial={{ opacity: 0, scale: 0.78 }}
               animate={{ opacity: 1, scale: 1 }}
