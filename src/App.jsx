@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import React, { useEffect, useState } from 'react'
 import SectionHeading from './components/SectionHeading'
 
 const services = [
@@ -187,7 +187,7 @@ export default function App() {
       </main>
 
       <footer className="border-t border-white/10 py-8 text-center">
-        <p className="font-display text-xs uppercase tracking-[0.25em] text-slate-300">INVISION FILMS PRODUCTIONS • SAME INTEREST. SAME VISION.</p>
+        <p className="font-display text-xs uppercase tracking-[0.25em] text-slate-300">INVISION FILMS PRODUCTIONS â€¢ SAME INTEREST. SAME VISION.</p>
       </footer>
     </div>
   )
