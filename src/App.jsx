@@ -85,17 +85,6 @@ export default function App() {
 
       <main>
         <section id="hero" className="section-shell relative flex min-h-screen items-center">
-          <div className="hero-gradient absolute inset-0" />
-          <div className="hero-illustration">
-            <div className="hero-layer hero-layer-a" />
-            <div className="hero-layer hero-layer-b" />
-            <div className="hero-layer hero-layer-c" />
-            <div className="hero-story">
-              <p>From concept and script to camera and final grade, every frame serves a feeling.</p>
-            </div>
-          </div>
-          <img src="/invision-banner.jpg" alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20" />
-
           <div className="mx-auto grid w-[92%] max-w-6xl items-center gap-10 py-28 lg:grid-cols-[1.1fr_1fr]">
             <div className="relative mx-auto w-full max-w-[360px] lg:mx-0">
               {!logoMissing ? (

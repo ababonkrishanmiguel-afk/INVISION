@@ -51,7 +51,7 @@ body {
   height: 100%;
   object-fit: cover;
   transform: scale(1.04);
-  filter: saturate(0.9) contrast(1.08) brightness(0.44);
+  filter: saturate(1) contrast(1.04) brightness(0.62);
 }
 
 .cinematic-video-vignette {
@@ -66,8 +66,6 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  backdrop-filter: blur(14px) saturate(125%);
-  -webkit-backdrop-filter: blur(14px) saturate(125%);
   background: linear-gradient(130deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015) 46%, rgba(179, 13, 18, 0.07));
   pointer-events: none;
 }
@@ -87,7 +85,6 @@ body {
     rgba(5, 5, 5, 0.9) 82%,
     rgba(5, 5, 5, 1) 100%
   );
-  filter: blur(8px);
   pointer-events: none;
 }
 
