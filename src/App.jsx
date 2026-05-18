@@ -88,7 +88,7 @@ export default function App() {
 
   return (
     <div className={`relative min-h-screen overflow-x-hidden bg-ink text-smoke ${lowPower ? 'low-power' : ''}`}>
-      {!lowPower ? <CinematicVideoBg /> : null}
+      <CinematicVideoBg />
 
       {showIntro ? (
         <motion.div
