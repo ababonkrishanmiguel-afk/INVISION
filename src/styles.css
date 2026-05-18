@@ -155,10 +155,10 @@ body {
   right: 0;
   z-index: 60;
   opacity: 0;
-  transform: translateY(-120px);
+  transform: translateY(-180px);
   filter: blur(8px);
   pointer-events: none;
-  transition: opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1), transform 0.95s cubic-bezier(0.22, 1, 0.36, 1), filter 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 1.3s cubic-bezier(0.22, 1, 0.36, 1), transform 1.3s cubic-bezier(0.22, 1, 0.36, 1), filter 1.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .top-nav {
@@ -177,7 +177,7 @@ body {
 
 .nav-pre {
   opacity: 0;
-  transform: translateY(-120px);
+  transform: translateY(-180px);
   filter: blur(8px);
   pointer-events: none;
 }
@@ -194,7 +194,7 @@ main,
   opacity: 0;
   transform: translateY(14px);
   filter: blur(6px);
-  transition: opacity 1.05s cubic-bezier(0.22, 1, 0.36, 1), transform 1.05s cubic-bezier(0.22, 1, 0.36, 1), filter 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 1.25s cubic-bezier(0.22, 1, 0.36, 1), transform 1.25s cubic-bezier(0.22, 1, 0.36, 1), filter 1.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .content-pre {

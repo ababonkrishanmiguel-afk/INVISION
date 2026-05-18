@@ -340,7 +340,8 @@ function TeamStack() {
 
 export default function App() {
   const [introPhase, setIntroPhase] = useState('reveal')
-  const homeReady = introPhase === 'black' || introPhase === 'done'
+  const [navReady, setNavReady] = useState(false)
+  const [contentReady, setContentReady] = useState(false)
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
   const glowX = useSpring(mouseX, { stiffness: 120, damping: 22 })
@@ -372,7 +373,7 @@ export default function App() {
   useEffect(() => {
     const pauseTimer = setTimeout(() => setIntroPhase('pause'), 2800)
     const blackTimer = setTimeout(() => setIntroPhase('black'), 5000)
-    const doneTimer = setTimeout(() => setIntroPhase('done'), 6600)
+    const doneTimer = setTimeout(() => setIntroPhase('done'), 7000)
 
     return () => {
       clearTimeout(pauseTimer)
@@ -380,6 +381,24 @@ export default function App() {
       clearTimeout(doneTimer)
     }
   }, [])
+
+  useEffect(() => {
+    let navTimer
+    let contentTimer
+
+    if (introPhase === 'done') {
+      navTimer = setTimeout(() => setNavReady(true), 140)
+      contentTimer = setTimeout(() => setContentReady(true), 420)
+    } else {
+      setNavReady(false)
+      setContentReady(false)
+    }
+
+    return () => {
+      clearTimeout(navTimer)
+      clearTimeout(contentTimer)
+    }
+  }, [introPhase])
 
   return (
     <div
@@ -398,7 +417,7 @@ export default function App() {
         </video>
       </div>
 
-      <header className={`top-nav-wrap ${!homeReady ? 'nav-pre' : 'nav-reveal'}`}>
+      <header className={`top-nav-wrap ${!navReady ? 'nav-pre' : 'nav-reveal'}`}>
         <nav className="top-nav">
           <a href="#hero" className="brand-anchor">
             <img src="/invision_logo_transparent.png" alt="INVISION FILMS logo" />
@@ -413,7 +432,7 @@ export default function App() {
         </nav>
       </header>
 
-      <main className={!homeReady ? 'content-pre' : 'content-reveal'}>
+      <main className={!contentReady ? 'content-pre' : 'content-reveal'}>
         <section id="hero" className="hero-scene">
           <motion.div className="hero-depth-layer" style={{ y: heroDepthY }}>
             <motion.img
@@ -422,12 +441,12 @@ export default function App() {
               className="hero-logo"
               style={{ y: logoDepth }}
               initial={false}
-              animate={homeReady ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.86 }}
+              animate={contentReady ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.86 }}
               transition={{ duration: 1.05, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
             />
             <motion.h1
               initial={false}
-              animate={homeReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
+              animate={contentReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
               transition={{ duration: 0.9, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
               className="hero-title"
             >
@@ -435,7 +454,7 @@ export default function App() {
             </motion.h1>
             <motion.p
               initial={false}
-              animate={homeReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              animate={contentReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.88, delay: 0.44, ease: [0.22, 1, 0.36, 1] }}
               className="hero-motto"
             >
@@ -502,7 +521,7 @@ export default function App() {
         <TeamStack />
       </main>
 
-      <footer className={`site-footer ${!homeReady ? 'content-pre' : 'content-reveal footer-reveal'}`}>
+      <footer className={`site-footer ${!contentReady ? 'content-pre' : 'content-reveal footer-reveal'}`}>
         <p>INVISION FILMS</p>
         <a href="mailto:invisionfilms21@gmail.com">invisionfilms21@gmail.com</a>
       </footer>
