@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import React, { useEffect, useMemo, useState } from 'react'
+import { AnimatePresence, motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import SectionHeading from './components/SectionHeading'
 
 const services = [
@@ -12,256 +12,276 @@ const services = [
 ]
 
 const films = [
-  { title: 'Red Frame', type: 'Narrative Short', year: '2025' },
-  { title: 'Afterlight', type: 'Music Video', year: '2024' },
-  { title: 'Pulse of Manila', type: 'Event Film', year: '2024' }
+  { title: 'Red Frame', type: 'Narrative Short', year: '2025', mood: 'Visceral / Noir' },
+  { title: 'Afterlight', type: 'Music Video', year: '2024', mood: 'Rhythmic / Atmospheric' },
+  { title: 'Pulse of Manila', type: 'Event Film', year: '2024', mood: 'Dynamic / Documentary' },
+  { title: 'Silent Orbit', type: 'Branded Film', year: '2023', mood: 'Minimal / Emotional' }
 ]
 
 const team = [
-  { name: 'Creative Director', role: 'Story, visual language, final tone.' },
-  { name: 'Lead Cinematographer', role: 'Camera movement and cinematic framing.' },
-  { name: 'Post Producer', role: 'Editing rhythm, color, and finishing.' }
+  { name: 'Creative Direction', role: 'Narrative architecture, visual identity, emotional tone.' },
+  { name: 'Cinematography', role: 'Lens language, movement, texture, and light orchestration.' },
+  { name: 'Post Production', role: 'Edit pacing, grading, sound layering, and final polish.' }
 ]
 
-const gallery = ['Frame Study I', 'Motion Portrait II', 'Noir Light III', 'Studio Cut IV', 'Urban Echo V', 'Final Reel VI']
+const gallery = [
+  { name: 'Noir Lens Study', tag: 'Storyframe 01' },
+  { name: 'Human Pulse', tag: 'Storyframe 02' },
+  { name: 'Burning Silence', tag: 'Storyframe 03' },
+  { name: 'City Echo', tag: 'Storyframe 04' },
+  { name: 'Final Light', tag: 'Storyframe 05' },
+  { name: 'Origin Cut', tag: 'Storyframe 06' }
+]
 
-function FadeUp({ children, className = '' }) {
+function IntroSequence({ done }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 34, scale: 0.96 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, amount: 0.22 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
+    <AnimatePresence>
+      {!done ? (
+        <motion.div
+          className="intro-layer"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: { duration: 1.1, ease: [0.22, 1, 0.36, 1] } }}
+        >
+          <div className="intro-beam" />
+          <motion.img
+            src="/invision_logo_transparent.png"
+            alt="INVISION logo"
+            className="intro-logo"
+            initial={{ opacity: 0, scale: 0.82, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1.3, ease: [0.22, 1, 0.36, 1] }}
+          />
+          <motion.h1
+            className="intro-wordmark"
+            initial={{ opacity: 0, letterSpacing: '0.5em', y: 18 }}
+            animate={{ opacity: 1, letterSpacing: '0.18em', y: 0 }}
+            transition={{ duration: 1.2, delay: 0.2 }}
+          >
+            INVISION FILMS PRODUCTIONS
+          </motion.h1>
+          <motion.div
+            className="intro-noise-sweep"
+            initial={{ x: '-120%' }}
+            animate={{ x: '130%' }}
+            transition={{ duration: 2.4, ease: 'easeInOut', delay: 0.15 }}
+          />
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
   )
 }
 
-function CinematicVideoBg() {
+function AmbientDust() {
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 22 }, (_, i) => ({
+        id: i,
+        left: `${(i * 13.7) % 100}%`,
+        delay: (i * 0.21) % 3,
+        duration: 5 + (i % 7)
+      })),
+    []
+  )
+
   return (
-    <div className="cinematic-video-wrap" aria-hidden="true">
-      <video className="cinematic-video" autoPlay muted loop playsInline preload="auto">
-        <source src="/invision-logo-bg.mp4" type="video/mp4" />
-      </video>
-      <div className="cinematic-video-vignette" />
+    <div className="dust-wrap" aria-hidden="true">
+      {particles.map((p) => (
+        <span
+          key={p.id}
+          className="dust-particle"
+          style={{
+            left: p.left,
+            animationDelay: `${p.delay}s`,
+            animationDuration: `${p.duration}s`
+          }}
+        />
+      ))}
     </div>
   )
 }
 
+function FilmSection({ id, children, className = '' }) {
+  return (
+    <motion.section
+      id={id}
+      initial={{ opacity: 0, y: 42, scale: 0.96 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      className={`scene-block ${className}`}
+    >
+      {children}
+    </motion.section>
+  )
+}
+
 export default function App() {
-  const [showIntro, setShowIntro] = useState(true)
-  const [introExiting, setIntroExiting] = useState(false)
   const [introDone, setIntroDone] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-  const [lowPower, setLowPower] = useState(false)
-  const { scrollY } = useScroll()
-  const heroY = useTransform(scrollY, [0, 800], [0, -90])
+  const [mouse, setMouse] = useState({ x: 0, y: 0 })
+  const { scrollYProgress, scrollY } = useScroll()
+  const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 24, mass: 0.4 })
+  const heroParallax = useTransform(scrollY, [0, 900], [0, -120])
+  const auraX = useSpring(mouse.x, { stiffness: 80, damping: 20 })
+  const auraY = useSpring(mouse.y, { stiffness: 80, damping: 20 })
+  const auraTx = useTransform(auraX, [0, 1], [-120, 120])
+  const auraTy = useTransform(auraY, [0, 1], [-80, 80])
 
   useEffect(() => {
-    const syncViewport = () => setIsMobile(window.innerWidth < 768)
-    syncViewport()
-    window.addEventListener('resize', syncViewport)
-
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const lowCPU = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4
-    const lowRAM = navigator.deviceMemory && navigator.deviceMemory <= 4
-    const lowDevice = prefersReduced || lowCPU || lowRAM
-    setLowPower(Boolean(lowDevice))
-
-    const exitAt = window.innerWidth < 768 ? 2400 : 3000
-    const endAt = window.innerWidth < 768 ? 3600 : 4300
-
-    const exitTimer = setTimeout(() => setIntroExiting(true), lowDevice ? Math.floor(exitAt * 0.72) : exitAt)
-    const doneTimer = setTimeout(() => {
-      setShowIntro(false)
-      setIntroDone(true)
-    }, lowDevice ? Math.floor(endAt * 0.72) : endAt)
-
-    return () => {
-      window.removeEventListener('resize', syncViewport)
-      clearTimeout(exitTimer)
-      clearTimeout(doneTimer)
-    }
+    const timer = setTimeout(() => setIntroDone(true), 3600)
+    return () => clearTimeout(timer)
   }, [])
 
   return (
-    <div className={`relative min-h-screen overflow-x-hidden bg-ink text-smoke ${lowPower ? 'low-power' : ''}`}>
-      <CinematicVideoBg />
+    <div
+      className="cinema-root"
+      onMouseMove={(e) => {
+        const x = e.clientX / window.innerWidth
+        const y = e.clientY / window.innerHeight
+        setMouse({ x, y })
+      }}
+    >
+      <IntroSequence done={introDone} />
 
-      {showIntro ? (
-        <motion.div
-          className="intro-overlay"
-          initial={{ opacity: 1 }}
-          animate={{ opacity: introExiting ? 0 : 1 }}
-          transition={{ duration: 0.85, ease: 'easeOut' }}
-        >
-          <div className={`intro-spotlight ${lowPower ? 'intro-spotlight-lite' : ''}`} />
-          <motion.img
-            src="/invision_logo_transparent.png"
-            alt="INVISION logo intro"
-            className="intro-logo intro-pulse"
-            initial={{ opacity: 0, scale: 0.84 }}
-            animate={
-              introExiting
-                ? { opacity: 0.65, scale: isMobile ? 0.64 : 0.56, x: isMobile ? -120 : -360, y: isMobile ? 64 : 94 }
-                : { opacity: 1, scale: 1.02, x: 0, y: 0 }
-            }
-            transition={{ duration: introExiting ? 0.95 : 1.1, ease: [0.22, 1, 0.36, 1] }}
-          />
-          <motion.h1
-            initial={{ opacity: 0, y: 18 }}
-            animate={introExiting ? { opacity: 0, y: -12, scale: 0.97 } : { opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: introExiting ? 0 : 0.35, duration: 0.75 }}
-            className="intro-sub"
-          >
-            INVISION FILMS PRODUCTIONS
-          </motion.h1>
-        </motion.div>
-      ) : null}
+      <motion.div className="scroll-progress" style={{ scaleX: progress, transformOrigin: '0% 50%' }} />
+      <AmbientDust />
+      <div className="grain-overlay" />
 
-      <div className="grain-overlay pointer-events-none absolute inset-0 z-10" />
+      <div className="video-stage" aria-hidden="true">
+        <video className="cinema-video" autoPlay muted loop playsInline preload="auto">
+          <source src="/invision-logo-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="video-vignette" />
+      </div>
 
-      <header className="fixed top-3 left-0 right-0 z-40">
-        <nav className="mx-auto flex w-[92%] max-w-6xl items-center justify-between py-4">
-          <div className="glass-nav w-full rounded-2xl px-5 py-3">
-            <div className="flex items-center justify-between">
-              <a href="#hero" className="inline-flex items-center gap-3">
-                <img src="/invision_logo_transparent.png" alt="INVISION logo" className="brand-logo-nav" />
-                <span className="font-display text-xl tracking-widest text-white">INVISION</span>
-              </a>
-              <div className="hidden gap-6 text-xs uppercase tracking-[0.2em] md:flex">
-                <a href="#about" className="nav-link">About</a>
-                <a href="#films" className="nav-link">Films</a>
-                <a href="#services" className="nav-link">Services</a>
-                <a href="#team" className="nav-link">Team</a>
-                <a href="#portfolio" className="nav-link">Portfolio</a>
-                <a href="#contact" className="nav-link">Contact</a>
-              </div>
-            </div>
-            <div className="mobile-nav mt-3 md:hidden">
-              <a href="#about">About</a>
-              <a href="#films">Films</a>
-              <a href="#services">Services</a>
-              <a href="#portfolio">Work</a>
-              <a href="#contact">Contact</a>
-            </div>
+      <header className="floating-nav-wrap">
+        <nav className="floating-nav">
+          <a href="#hero" className="brand-anchor">
+            <img src="/invision_logo_transparent.png" alt="INVISION logo" className="brand-nav-logo" />
+            <span>INVISION</span>
+          </a>
+          <div className="nav-links">
+            <a href="#about">About</a>
+            <a href="#films">Films</a>
+            <a href="#services">Services</a>
+            <a href="#team">Team</a>
+            <a href="#portfolio">Portfolio</a>
+            <a href="#contact">Contact</a>
           </div>
         </nav>
       </header>
 
       <main>
-        <section id="hero" className="section-shell relative flex min-h-screen items-center">
-          <motion.div style={{ y: lowPower ? 0 : heroY }} className={`mx-auto grid w-[92%] max-w-6xl items-center gap-10 py-28 lg:grid-cols-[1.1fr_1fr] ${introDone ? 'hero-ready' : 'hero-hidden'}`}>
+        <section id="hero" className="hero-scene">
+          <motion.div className="hero-aura" style={{ x: auraTx, y: auraTy }} />
+          <motion.div className="hero-inner" style={{ y: heroParallax }}>
             <motion.div
               initial={{ opacity: 0, scale: 0.78 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.25, ease: [0.22, 1, 0.36, 1] }}
-              className="relative mx-auto w-full max-w-[420px] lg:mx-0"
+              transition={{ duration: 1.4, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="hero-logo-shell"
             >
-              <img src="/invision_logo_transparent.png" alt="INVISION logo" className="logo-image logo-hero" />
+              <img src="/invision_logo_transparent.png" alt="INVISION logo" className="hero-logo-img" />
             </motion.div>
-            <div className="relative">
-              <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.8 }} className="mb-2 font-display text-xs uppercase tracking-[0.45em] text-ember">
-                Independent Production Studio
-              </motion.p>
-              <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.9 }} className="font-display text-5xl uppercase leading-[0.95] text-white md:text-7xl">
-                INVISION Films Productions
-              </motion.h1>
-              <motion.p initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45, duration: 0.75 }} className="mt-5 text-xl text-slate-200">
-                Same Interest. Same Vision.
-              </motion.p>
-              <motion.p initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55, duration: 0.75 }} className="mt-4 max-w-xl text-slate-300">
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.1, delay: 0.45 }}
+              className="hero-copy"
+            >
+              <p className="eyebrow">Independent Production Studio</p>
+              <h1>INVISION FILMS PRODUCTIONS</h1>
+              <p className="tagline">Same Interest. Same Vision.</p>
+              <p className="subline">
                 Cinematic stories, multimedia production, and creative visuals built with passion.
-              </motion.p>
-              <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65, duration: 0.75 }} className="mt-8 flex flex-wrap gap-4">
+              </p>
+              <div className="hero-actions">
                 <a href="#portfolio" className="btn-primary">View Portfolio</a>
-                <a href="#contact" className="btn-secondary">Start a Project</a>
-              </motion.div>
-            </div>
+                <a href="#contact" className="btn-secondary">Start A Project</a>
+              </div>
+            </motion.div>
           </motion.div>
         </section>
 
-        <section id="about" className="section-shell">
-          <SectionHeading eyebrow="About Invision" title="Bold Visual Storytelling" subtitle="INVISION is a creative production collective focused on cinematic emotion, disciplined craft, and meaningful narrative." />
-          <FadeUp className="mx-auto max-w-4xl text-center text-base leading-relaxed text-slate-300">
-            We create films and multimedia work that blend mood, movement, and message. From pre-production planning to post-production finishing, our process is collaborative and intentional, built to shape stories that stay with audiences.
-          </FadeUp>
-        </section>
+        <FilmSection id="about">
+          <SectionHeading
+            eyebrow="About Invision"
+            title="A Cinematic Universe, Not Just A Portfolio"
+            subtitle="We shape emotional momentum through narrative, light, rhythm, and atmosphere."
+          />
+          <div className="scene-panel">
+            <p>
+              INVISION Films Productions creates visual experiences designed like cinema: each frame intentional, each
+              movement meaningful, each transition emotional. We orchestrate story from concept to final grade with
+              discipline, daring, and crafted mood.
+            </p>
+          </div>
+        </FilmSection>
 
-        <section id="films" className="section-shell bg-gradient-to-b from-black/0 to-blood/10">
-          <SectionHeading eyebrow="Featured Films" title="Recent Projects" />
-          <div className="bento-grid mx-auto w-[92%] max-w-6xl">
-            {films.map((film) => (
-              <FadeUp key={film.title}>
-                <motion.article whileHover={{ y: -6, scale: 1.02 }} className="modern-card bento-card group h-full p-6">
-                  <div className="mb-5 h-40 rounded-lg bg-gradient-to-br from-blood/40 to-black/80 transition-transform duration-500 group-hover:scale-[1.02]" />
-                  <p className="font-display text-xs uppercase tracking-[0.3em] text-ember">{film.type}</p>
-                  <h3 className="mt-2 font-display text-2xl uppercase text-white">{film.title}</h3>
-                  <p className="mt-2 text-slate-400">{film.year}</p>
-                </motion.article>
-              </FadeUp>
+        <FilmSection id="films">
+          <SectionHeading eyebrow="Featured Films" title="Current Film Chapters" />
+          <div className="bento-grid">
+            {films.map((film, index) => (
+              <motion.article key={film.title} whileHover={{ y: -8, scale: 1.02 }} className={`bento-card film-card ${index === 0 ? 'film-main' : ''}`}>
+                <div className="film-visual" />
+                <p className="film-type">{film.type}</p>
+                <h3>{film.title}</h3>
+                <p className="film-meta">{film.year} • {film.mood}</p>
+              </motion.article>
             ))}
           </div>
-        </section>
+        </FilmSection>
 
-        <section id="services" className="section-shell">
-          <SectionHeading eyebrow="Services" title="Production Capabilities" />
-          <div className="bento-grid mx-auto w-[92%] max-w-6xl">
+        <FilmSection id="services">
+          <SectionHeading eyebrow="Capabilities" title="Production Systems" />
+          <div className="service-grid">
             {services.map((service) => (
-              <FadeUp key={service}>
-                <motion.div whileHover={{ scale: 1.03 }} className="service-chip bento-card"><span>{service}</span></motion.div>
-              </FadeUp>
+              <motion.div key={service} whileHover={{ y: -6 }} className="service-chip">
+                {service}
+              </motion.div>
             ))}
           </div>
-        </section>
+        </FilmSection>
 
-        <section id="team" className="section-shell bg-gradient-to-b from-blood/5 to-black">
-          <SectionHeading eyebrow="Creative Collective" title="The Team" />
-          <div className="mx-auto grid w-[92%] max-w-6xl gap-6 md:grid-cols-3">
+        <FilmSection id="team">
+          <SectionHeading eyebrow="Creative Collective" title="Built By Filmmakers" />
+          <div className="team-grid">
             {team.map((member) => (
-              <FadeUp key={member.name}>
-                <motion.div whileHover={{ y: -4, scale: 1.01 }} className="modern-card p-6">
-                  <h3 className="font-display text-2xl uppercase text-white">{member.name}</h3>
-                  <p className="mt-3 text-slate-300">{member.role}</p>
-                </motion.div>
-              </FadeUp>
+              <motion.div key={member.name} whileHover={{ scale: 1.02 }} className="team-card">
+                <h3>{member.name}</h3>
+                <p>{member.role}</p>
+              </motion.div>
             ))}
           </div>
-        </section>
+        </FilmSection>
 
-        <section id="portfolio" className="section-shell">
-          <SectionHeading eyebrow="Portfolio" title="Cinematic Gallery" subtitle="Hover each frame to reveal a subtle preview glow and motion lift." />
-          <div className="bento-grid mx-auto w-[92%] max-w-6xl">
+        <FilmSection id="portfolio">
+          <SectionHeading eyebrow="Portfolio" title="Cinematic Frames" />
+          <div className="portfolio-grid">
             {gallery.map((item, idx) => (
-              <FadeUp key={item}>
-                <motion.div whileHover={{ scale: 1.03, y: -4 }} className="portfolio-card bento-card group">
-                  <div className="h-52 rounded-lg bg-gradient-to-tr from-black to-blood/60 transition-all duration-500 group-hover:from-blood/30 group-hover:to-black" />
-                  <p className="mt-4 font-display text-lg uppercase tracking-wide text-white">{item}</p>
-                  <p className="text-xs uppercase tracking-[0.22em] text-slate-300">Scene {idx + 1}</p>
-                </motion.div>
-              </FadeUp>
+              <motion.div key={item.name} whileHover={{ y: -8, scale: 1.02 }} className={`portfolio-card ${idx === 2 ? 'portfolio-wide' : ''}`}>
+                <div className="portfolio-visual" />
+                <h3>{item.name}</h3>
+                <p>{item.tag}</p>
+              </motion.div>
             ))}
           </div>
-        </section>
+        </FilmSection>
 
-        <section id="contact" className="section-shell pb-28">
-          <SectionHeading eyebrow="Contact" title="Let's Build The Next Story" />
-          <FadeUp className="modern-card mx-auto w-[92%] max-w-3xl p-8 text-center">
-            <p className="text-base text-slate-300">Email: invisionfilms21@gmail.com</p>
-            <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-              <a className="btn-secondary" href="https://instagram.com/invision.films" target="_blank" rel="noreferrer">Instagram</a>
-              <a className="btn-secondary" href="https://youtube.com" target="_blank" rel="noreferrer">YouTube</a>
-              <a className="btn-secondary" href="mailto:invisionfilms21@gmail.com">Email Us</a>
+        <FilmSection id="contact" className="contact-scene">
+          <SectionHeading eyebrow="Contact" title="Let’s Build The Next Story" />
+          <motion.div whileHover={{ scale: 1.01 }} className="contact-card">
+            <p>Email: invisionfilms21@gmail.com</p>
+            <div className="contact-links">
+              <a href="https://instagram.com/invision.films" target="_blank" rel="noreferrer">Instagram</a>
+              <a href="https://youtube.com" target="_blank" rel="noreferrer">YouTube</a>
+              <a href="mailto:invisionfilms21@gmail.com">Email Us</a>
             </div>
-          </FadeUp>
-        </section>
+          </motion.div>
+        </FilmSection>
       </main>
 
-      <footer className="border-t border-white/10 py-8 text-center">
-        <p className="font-display text-xs uppercase tracking-[0.25em] text-slate-300">INVISION FILMS PRODUCTIONS • SAME INTEREST. SAME VISION.</p>
-      </footer>
+      <footer className="footer-line">INVISION FILMS PRODUCTIONS • SAME INTEREST. SAME VISION.</footer>
     </div>
   )
 }
