@@ -1,137 +1,172 @@
 import React, { useEffect, useRef, useState } from 'react'
+import Lenis from 'lenis'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import SectionHeading from './components/SectionHeading'
 
 const chapters = [
   {
-    title: 'Hulagway',
+    title: 'Merese',
+    chapter: 'Chapter I',
     year: '2026',
     genre: 'Drama / Memory',
-    logline:
-      'A quiet short film about memory, distance, and the things people leave unsaid.'
+    logline: 'A cinematic study of memory, absence, and the language of what remains unspoken.',
+    aura: 'aura-merese'
   },
   {
-    title: 'Sa Daplin',
+    title: 'Somnium',
+    chapter: 'Chapter II',
+    year: '2026',
+    genre: 'Psychological / Poetic',
+    logline: 'A drifting meditation where dream logic and waking guilt fold into one quiet unraveling.',
+    aura: 'aura-somnium'
+  },
+  {
+    title: 'Taphaw',
+    chapter: 'Chapter III',
     year: '2026',
     genre: 'Cebuano / Grounded Drama',
-    logline:
-      'A grounded Cebuano story about waiting, uncertainty, and small choices that change a person.'
+    logline: 'A grounded Cebuano chapter about tension, inheritance, and dignity under pressure.',
+    aura: 'aura-taphaw'
+  }
+]
+
+const awards = [
+  {
+    film: 'Merese',
+    items: ['Best Short Film Placeholder', 'Official Selection Placeholder']
   },
   {
-    title: 'After the Noise',
-    year: '2026',
-    genre: 'Reflective / Human Drama',
-    logline:
-      'A reflective short film about silence after conflict and the emotional weight of moving forward.'
+    film: 'Somnium',
+    items: ['Best Cinematography Placeholder', 'Jury Mention Placeholder']
+  },
+  {
+    film: 'Taphaw',
+    items: ['Best Direction Placeholder', 'Regional Film Festival Placeholder']
   }
 ]
 
 const frames = [
-  'First Light',
-  'Between Rooms',
-  'Night Crossing',
-  'Dust and Neon',
-  'Still Breath',
-  'Last Echo'
+  'Ashes in Light',
+  'Window of Silence',
+  'Liminal Hallway',
+  'Night Geometry',
+  'Beneath Neon Rain',
+  'The Last Breath'
 ]
 
-const filmLanguage = [
+const language = [
   'Short Film Direction',
   'Screenwriting and Story Development',
   'Cinematography',
   'Editing and Color',
   'Sound and Atmosphere',
-  'Film Festival Preparation'
+  'Festival Preparation'
 ]
 
-function Intro({ done }) {
-  return done ? null : (
+function IntroSequence({ phase }) {
+  if (phase === 'done') return null
+
+  return (
     <motion.div
-      className="intro-layer"
+      className={`intro-sequence ${phase === 'black' ? 'is-black' : ''}`}
       initial={{ opacity: 1 }}
-      animate={{ opacity: done ? 0 : 1 }}
-      transition={{ duration: 0.8 }}
+      animate={{ opacity: phase === 'black' ? 1 : 1 }}
+      exit={{ opacity: 0 }}
     >
-      <motion.img
-        src="/invision_logo_transparent.png"
-        alt="INVISION FILMS logo"
-        className="intro-logo"
-        initial={{ opacity: 0, scale: 0.88 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.25, ease: [0.22, 1, 0.36, 1] }}
-      />
-      <motion.p
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.8 }}
-        className="intro-line"
-      >
-        TURNING PERSPECTIVES INTO MOTION.
-      </motion.p>
+      {phase !== 'black' ? (
+        <>
+          <motion.img
+            src="/invision_logo_transparent.png"
+            alt="INVISION FILMS logo intro"
+            className="intro-logo"
+            initial={{ opacity: 0, scale: 0.82 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.15, ease: [0.22, 1, 0.36, 1] }}
+          />
+          <motion.p
+            className="intro-caption"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35, duration: 0.65 }}
+          >
+            TURNING PERSPECTIVES INTO MOTION.
+          </motion.p>
+          <motion.div className="intro-spot" animate={{ opacity: [0.22, 0.4, 0.28] }} transition={{ duration: 2.2, repeat: Infinity }} />
+        </>
+      ) : null}
     </motion.div>
   )
 }
 
-function FilmChapter({ chapter, index }) {
+function FilmChapter({ chapter, idx }) {
   const ref = useRef(null)
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start']
-  })
-  const mediaY = useTransform(scrollYProgress, [0, 1], [38, -38])
-  const textY = useTransform(scrollYProgress, [0, 1], [54, -24])
-  const textOpacity = useTransform(scrollYProgress, [0.1, 0.45, 0.8], [0.35, 1, 0.5])
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const cardY = useTransform(scrollYProgress, [0, 1], [60, -60])
+  const cardZ = useTransform(scrollYProgress, [0, 0.5, 1], [-20, 15, -10])
+  const cardRotateY = useTransform(scrollYProgress, [0, 0.5, 1], [-7, 0, 6])
+  const textY = useTransform(scrollYProgress, [0, 1], [42, -22])
+  const textOpacity = useTransform(scrollYProgress, [0.15, 0.45, 0.86], [0.35, 1, 0.55])
 
   return (
-    <section ref={ref} className={`chapter chapter-${index + 1}`}>
-      <div className="chapter-sticky">
-        <motion.div className="chapter-media-wrap" style={{ y: mediaY }}>
-          <div className="chapter-media">
-            <span>FRAME {String(index + 1).padStart(2, '0')}</span>
+    <section ref={ref} className={`film-chapter ${chapter.aura}`}>
+      <div className="film-sticky">
+        <motion.div
+          className="film-frame-shell"
+          style={{
+            y: cardY,
+            rotateY: cardRotateY,
+            transformPerspective: 1200,
+            z: cardZ
+          }}
+        >
+          <div className="film-frame-card">
+            <div className="film-frame-light" />
+            <span className="film-frame-mark">{chapter.chapter}</span>
+            <strong>{chapter.title}</strong>
           </div>
         </motion.div>
-        <motion.article className="chapter-copy" style={{ y: textY, opacity: textOpacity }}>
-          <p className="chapter-meta">
+        <motion.article className="film-text" style={{ y: textY, opacity: textOpacity }}>
+          <p className="film-meta">
             {chapter.year} • {chapter.genre}
           </p>
           <h3>{chapter.title}</h3>
-          <p className="chapter-logline">{chapter.logline}</p>
+          <p>{chapter.logline}</p>
+          <div className="film-award-mini">Awards Placeholder • Scene {String(idx + 1).padStart(2, '0')}</div>
         </motion.article>
       </div>
     </section>
   )
 }
 
-function FramesRail() {
+function FramesCarousel() {
   const ref = useRef(null)
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start']
-  })
-  const x = useTransform(scrollYProgress, [0, 1], ['6%', '-36%'])
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const trackX = useTransform(scrollYProgress, [0, 1], ['8%', '-40%'])
+  const trackRotate = useTransform(scrollYProgress, [0, 1], ['0deg', '-2deg'])
 
   return (
-    <section id="frames" ref={ref} className="frames-section">
+    <section id="frames" ref={ref} className="frames-scene">
       <SectionHeading
         eyebrow="Frames"
-        title="Moments Between Dialogue"
-        subtitle="A curated sequence of stills that feel like pages from a living film reel."
+        title="Cinematic Frames"
+        subtitle="Floating stills from a moving film world."
       />
-      <div className="frames-mask">
-        <motion.div className="frames-track" style={{ x }}>
+      <div className="frames-sticky-wrap">
+        <motion.div className="frames-track" style={{ x: trackX, rotate: trackRotate }}>
           {frames.map((frame, idx) => (
             <motion.figure
               key={frame}
-              className="frame-card"
-              initial={{ opacity: 0, y: 28 }}
+              className={`frame-item ${idx % 2 === 0 ? 'frame-up' : 'frame-down'}`}
+              initial={{ opacity: 0, y: 26 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.7, delay: idx * 0.04 }}
+              viewport={{ once: true, amount: 0.22 }}
+              transition={{ duration: 0.65, delay: idx * 0.05 }}
+              whileHover={{ rotateY: idx % 2 === 0 ? 7 : -7, rotateX: 4, scale: 1.03 }}
             >
               <div className="frame-visual" />
               <figcaption>
                 <h4>{frame}</h4>
-                <p>Still {String(idx + 1).padStart(2, '0')}</p>
+                <p>Frame {String(idx + 1).padStart(2, '0')}</p>
               </figcaption>
             </motion.figure>
           ))}
@@ -142,32 +177,60 @@ function FramesRail() {
 }
 
 export default function App() {
-  const [introDone, setIntroDone] = useState(false)
+  const [introPhase, setIntroPhase] = useState('reveal')
   const { scrollY } = useScroll()
-  const heroParallax = useTransform(scrollY, [0, 900], [0, -70])
+  const heroDepthY = useTransform(scrollY, [0, 1000], [0, -85])
+  const logoDepth = useTransform(scrollY, [0, 700], [0, -24])
 
   useEffect(() => {
-    const timer = setTimeout(() => setIntroDone(true), 2600)
-    return () => clearTimeout(timer)
+    const lenis = new Lenis({
+      duration: 1.08,
+      smoothWheel: true,
+      touchMultiplier: 1.15
+    })
+
+    let rafId
+    const raf = (time) => {
+      lenis.raf(time)
+      rafId = requestAnimationFrame(raf)
+    }
+    rafId = requestAnimationFrame(raf)
+
+    return () => {
+      cancelAnimationFrame(rafId)
+      lenis.destroy()
+    }
+  }, [])
+
+  useEffect(() => {
+    const pauseTimer = setTimeout(() => setIntroPhase('pause'), 1200)
+    const blackTimer = setTimeout(() => setIntroPhase('black'), 2350)
+    const doneTimer = setTimeout(() => setIntroPhase('done'), 3050)
+
+    return () => {
+      clearTimeout(pauseTimer)
+      clearTimeout(blackTimer)
+      clearTimeout(doneTimer)
+    }
   }, [])
 
   return (
-    <div className="site-shell">
-      <Intro done={introDone} />
-      <div className="film-noise" />
-      <div className="film-bg">
-        <video className="film-video" autoPlay muted loop playsInline preload="auto">
+    <div className="cinematic-root">
+      <IntroSequence phase={introPhase} />
+      <div className="grain-layer" />
+      <div className="bg-video-wrap">
+        <video className="bg-video" autoPlay muted loop playsInline preload="auto">
           <source src="/invision-logo-bg.mp4" type="video/mp4" />
         </video>
       </div>
 
-      <header className="nav-wrap">
-        <nav className="nav">
-          <a href="#hero" className="brand">
+      <header className="top-nav-wrap">
+        <nav className="top-nav">
+          <a href="#hero" className="brand-anchor">
             <img src="/invision_logo_transparent.png" alt="INVISION FILMS logo" />
             <span>INVISION FILMS</span>
           </a>
-          <div className="nav-links">
+          <div className="top-links">
             <a href="#about">About</a>
             <a href="#films">Films</a>
             <a href="#frames">Frames</a>
@@ -177,56 +240,102 @@ export default function App() {
       </header>
 
       <main>
-        <section id="hero" className="hero">
-          <motion.div className="hero-layer" style={{ y: heroParallax }}>
-            <img src="/invision_logo_transparent.png" alt="INVISION FILMS logo" className="hero-logo" />
-            <h1>INVISION FILMS</h1>
-            <p>Turning Perspectives into Motion.</p>
+        <section id="hero" className="hero-scene">
+          <motion.div className="hero-depth-layer" style={{ y: heroDepthY }}>
+            <motion.img
+              src="/invision_logo_transparent.png"
+              alt="INVISION FILMS logo"
+              className="hero-logo"
+              style={{ y: logoDepth }}
+              initial={{ opacity: 0, scale: 0.84 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.1, delay: 0.15 }}
+            />
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.28 }}
+            >
+              INVISION FILMS
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.42 }}
+            >
+              Turning Perspectives into Motion.
+            </motion.p>
           </motion.div>
         </section>
 
-        <section id="about" className="section-block">
+        <section id="about" className="content-section">
           <SectionHeading
             eyebrow="About"
-            title="A Quiet, Cinematic Studio"
-            subtitle="We shape films with restraint, atmosphere, and emotional precision."
+            title="Dark, Minimal, Cinematic Storytelling"
+            subtitle="An indie film studio shaped by atmosphere, silence, and visual restraint."
           />
-          <div className="about-panel">
-            <p>
-              INVISION FILMS crafts short-form cinema rooted in human tension, memory, silence, and movement. Our
-              process prioritizes narrative honesty, visual language, and immersive atmosphere over spectacle.
-            </p>
+          <div className="about-glass">
+            INVISION FILMS builds short films with a cinematic grammar rooted in depth, perspective, and emotional
+            rhythm. Each scene is designed as an experience, not a template.
           </div>
         </section>
 
-        <section id="films" className="films-section">
+        <section id="films" className="chapters-section">
           <SectionHeading
             eyebrow="Films"
             title="Film Chapters"
-            subtitle="Scroll through three chaptered scenes designed as a cinematic progression."
+            subtitle="Scroll through three immersive chapter scenes."
           />
-          {chapters.map((chapter, index) => (
-            <FilmChapter key={chapter.title} chapter={chapter} index={index} />
+          {chapters.map((chapter, idx) => (
+            <FilmChapter key={chapter.title} chapter={chapter} idx={idx} />
           ))}
         </section>
 
-        <FramesRail />
-
-        <section className="section-block">
+        <section className="content-section awards-section">
           <SectionHeading
-            eyebrow="How We Shape Films"
-            title="Our Film Language"
-            subtitle="A focused production language built for cinematic storytelling."
+            eyebrow="Awards"
+            title="Awards & Recognition"
+            subtitle="Placeholder laurels and recognitions presented as cinematic plaques."
+          />
+          <div className="awards-grid">
+            {awards.map((group, idx) => (
+              <motion.article
+                key={group.film}
+                className="award-plaque"
+                initial={{ opacity: 0, y: 22 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.22 }}
+                transition={{ duration: 0.62, delay: idx * 0.08 }}
+                whileHover={{ rotateY: idx % 2 === 0 ? 6 : -6, rotateX: 4, scale: 1.02 }}
+              >
+                <h3>{group.film}</h3>
+                <ul>
+                  {group.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </motion.article>
+            ))}
+          </div>
+        </section>
+
+        <FramesCarousel />
+
+        <section className="content-section">
+          <SectionHeading
+            eyebrow="Our Film Language"
+            title="How We Shape Films"
+            subtitle="A focused cinematic process with no generic service clutter."
           />
           <div className="language-grid">
-            {filmLanguage.map((item) => (
+            {language.map((item) => (
               <motion.div
                 key={item}
-                className="language-chip"
-                initial={{ opacity: 0, y: 20 }}
+                className="language-item"
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.35 }}
-                transition={{ duration: 0.55 }}
+                viewport={{ once: true, amount: 0.24 }}
+                transition={{ duration: 0.52 }}
               >
                 {item}
               </motion.div>
@@ -234,30 +343,30 @@ export default function App() {
           </div>
         </section>
 
-        <section id="team" className="section-block">
+        <section id="team" className="content-section">
           <SectionHeading
             eyebrow="Team"
-            title="Built by Story-Driven Filmmakers"
-            subtitle="A small collective focused on direction, cinematography, and post-production craft."
+            title="A Focused Film Collective"
+            subtitle="Direction, cinematography, and post-production under one cinematic vision."
           />
           <div className="team-grid">
             <article>
               <h3>Direction</h3>
-              <p>Story architecture, emotional pacing, and cinematic intent.</p>
+              <p>Story architecture, emotional flow, and chapter design.</p>
             </article>
             <article>
               <h3>Cinematography</h3>
-              <p>Frame composition, lens language, movement, and texture.</p>
+              <p>Lens language, motion perspective, and visual depth control.</p>
             </article>
             <article>
               <h3>Post</h3>
-              <p>Editing rhythm, color shaping, and atmospheric sonic detail.</p>
+              <p>Editorial rhythm, grading atmosphere, and sonic texture.</p>
             </article>
           </div>
         </section>
       </main>
 
-      <footer className="footer">
+      <footer className="site-footer">
         <p>INVISION FILMS</p>
         <a href="mailto:invisionfilms21@gmail.com">invisionfilms21@gmail.com</a>
       </footer>
