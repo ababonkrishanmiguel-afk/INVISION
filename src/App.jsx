@@ -181,6 +181,7 @@ function FilmChapter({ chapter, idx }) {
 
 function FramesCarousel() {
   const ref = useRef(null)
+  const [isMobile, setIsMobile] = useState(false)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const topX = useTransform(scrollYProgress, [0, 1], ['4%', '-28%'])
   const bottomX = useTransform(scrollYProgress, [0, 1], ['-20%', '8%'])
@@ -189,6 +190,14 @@ function FramesCarousel() {
   const topFrames = frames.slice(0, 3)
   const bottomFrames = frames.slice(3)
 
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 767px)')
+    const update = () => setIsMobile(media.matches)
+    update()
+    media.addEventListener('change', update)
+    return () => media.removeEventListener('change', update)
+  }, [])
+
   return (
     <section id="frames" ref={ref} className="frames-scene">
       <SectionHeading
@@ -196,17 +205,16 @@ function FramesCarousel() {
         title="Cinematic Frames"
         subtitle="Floating stills from a moving film world."
       />
-      <div className="frames-sticky-wrap">
-        <motion.div className="frames-track frames-track-top" style={{ x: topX, rotate: topRotate }}>
-          {topFrames.map((frame, idx) => (
+      {isMobile ? (
+        <div className="frames-mobile-grid">
+          {frames.map((frame, idx) => (
             <motion.figure
               key={frame}
-              className={`frame-item ${idx % 2 === 0 ? 'frame-up' : 'frame-down'}`}
-              initial={{ opacity: 0, y: 26 }}
+              className="frame-item"
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.22 }}
-              transition={{ duration: 0.65, delay: idx * 0.05 }}
-              whileHover={{ rotateY: idx % 2 === 0 ? 7 : -7, rotateX: 4, scale: 1.03 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.45, delay: idx * 0.03 }}
             >
               <div className="frame-visual" />
               <figcaption>
@@ -215,27 +223,49 @@ function FramesCarousel() {
               </figcaption>
             </motion.figure>
           ))}
-        </motion.div>
-        <motion.div className="frames-track frames-track-bottom" style={{ x: bottomX, rotate: bottomRotate }}>
-          {bottomFrames.map((frame, idx) => (
-            <motion.figure
-              key={frame}
-              className={`frame-item ${idx % 2 === 0 ? 'frame-down' : 'frame-up'}`}
-              initial={{ opacity: 0, y: 26 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.22 }}
-              transition={{ duration: 0.65, delay: idx * 0.05 }}
-              whileHover={{ rotateY: idx % 2 === 0 ? -7 : 7, rotateX: 4, scale: 1.03 }}
-            >
-              <div className="frame-visual" />
-              <figcaption>
-                <h4>{frame}</h4>
-                <p>Frame {String(idx + 4).padStart(2, '0')}</p>
-              </figcaption>
-            </motion.figure>
-          ))}
-        </motion.div>
-      </div>
+        </div>
+      ) : (
+        <div className="frames-sticky-wrap">
+          <motion.div className="frames-track frames-track-top" style={{ x: topX, rotate: topRotate }}>
+            {topFrames.map((frame, idx) => (
+              <motion.figure
+                key={frame}
+                className={`frame-item ${idx % 2 === 0 ? 'frame-up' : 'frame-down'}`}
+                initial={{ opacity: 0, y: 26 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.22 }}
+                transition={{ duration: 0.65, delay: idx * 0.05 }}
+                whileHover={{ rotateY: idx % 2 === 0 ? 7 : -7, rotateX: 4, scale: 1.03 }}
+              >
+                <div className="frame-visual" />
+                <figcaption>
+                  <h4>{frame}</h4>
+                  <p>Frame {String(idx + 1).padStart(2, '0')}</p>
+                </figcaption>
+              </motion.figure>
+            ))}
+          </motion.div>
+          <motion.div className="frames-track frames-track-bottom" style={{ x: bottomX, rotate: bottomRotate }}>
+            {bottomFrames.map((frame, idx) => (
+              <motion.figure
+                key={frame}
+                className={`frame-item ${idx % 2 === 0 ? 'frame-down' : 'frame-up'}`}
+                initial={{ opacity: 0, y: 26 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.22 }}
+                transition={{ duration: 0.65, delay: idx * 0.05 }}
+                whileHover={{ rotateY: idx % 2 === 0 ? -7 : 7, rotateX: 4, scale: 1.03 }}
+              >
+                <div className="frame-visual" />
+                <figcaption>
+                  <h4>{frame}</h4>
+                  <p>Frame {String(idx + 4).padStart(2, '0')}</p>
+                </figcaption>
+              </motion.figure>
+            ))}
+          </motion.div>
+        </div>
+      )}
     </section>
   )
 }
@@ -274,11 +304,20 @@ function TeamStack() {
   const ref = useRef(null)
   const [activeCard, setActiveCard] = useState(1)
   const [spreadAmount, setSpreadAmount] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start 85%', 'end 35%'] })
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 767px)')
+    const update = () => setIsMobile(media.matches)
+    update()
+    media.addEventListener('change', update)
+    return () => media.removeEventListener('change', update)
+  }, [])
 
   useMotionValueEvent(scrollYProgress, 'change', (value) => {
     const next = Math.max(0, Math.min(1, (value - 0.42) / 0.3))
-    setSpreadAmount(next)
+    setSpreadAmount(isMobile ? 0 : next)
   })
 
   const stack = [
@@ -306,16 +345,16 @@ function TeamStack() {
         title="A Focused Film Collective"
         subtitle="Three core pillars moving as one cinematic unit."
       />
-      <div className={`team-stack-wrap ${spreadAmount > 0.16 ? 'is-spread' : 'is-stacked'}`}>
+      <div className={`team-stack-wrap ${isMobile ? 'is-mobile-stack' : spreadAmount > 0.16 ? 'is-spread' : 'is-stacked'}`}>
         {stack.map((item, idx) => {
           const isActive = activeCard === idx
           const spreadX = idx === 0 ? -360 : idx === 1 ? 0 : 360
           const spreadRotate = idx === 0 ? -13 : idx === 1 ? 0 : 13
           const stackY = idx * 5
           const spreadY = idx === 0 ? 26 : idx === 1 ? -8 : 22
-          const styleX = spreadX * spreadAmount
-          const styleRotate = spreadRotate * spreadAmount
-          const styleY = stackY + (spreadY - stackY) * spreadAmount + (isActive ? -16 : 0)
+          const styleX = isMobile ? 0 : spreadX * spreadAmount
+          const styleRotate = isMobile ? 0 : spreadRotate * spreadAmount
+          const styleY = isMobile ? 0 : stackY + (spreadY - stackY) * spreadAmount + (isActive ? -16 : 0)
           const stackOpacity = 0.99 - spreadAmount * 0.3
           const glassOpacity = 0.02 + spreadAmount * 0.16
           const redOpacity = 0.03 + spreadAmount * 0.16
@@ -335,7 +374,7 @@ function TeamStack() {
                 '--glass-opacity': glassOpacity,
                 '--red-opacity': redOpacity
               }}
-              whileHover={{ y: isActive ? styleY - 4 : styleY - 10, rotateX: 3, scale: 1.015 }}
+              whileHover={isMobile ? { y: -4, scale: 1.008 } : { y: isActive ? styleY - 4 : styleY - 10, rotateX: 3, scale: 1.015 }}
               transition={{ type: 'spring', stiffness: 170, damping: 20, mass: 0.9 }}
             >
               <span>{String(idx + 1).padStart(2, '0')}</span>

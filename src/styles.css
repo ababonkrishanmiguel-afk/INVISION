@@ -620,6 +620,15 @@ main,
   margin-left: -12%;
 }
 
+.frames-mobile-grid {
+  width: 92%;
+  max-width: 1220px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.7rem;
+}
+
 .frame-item {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -860,37 +869,37 @@ main,
   }
 
   .top-nav-wrap {
-    top: 0.4rem;
+    top: 0.3rem;
   }
 
   .top-nav {
     width: 95%;
-    padding: 0.42rem 0.56rem;
-    border-radius: 0.75rem;
+    padding: 0.38rem 0.5rem;
+    border-radius: 0.7rem;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 0.35rem;
+    gap: 0.28rem;
   }
 
   .brand-anchor span {
-    font-size: 0.78rem;
-    letter-spacing: 0.05em;
+    font-size: 0.74rem;
+    letter-spacing: 0.035em;
   }
 
   .brand-anchor img {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
   }
 
   .top-links {
     justify-content: center;
-    gap: 0.64rem;
+    gap: 0.52rem;
     flex-wrap: wrap;
   }
 
   .top-links a {
-    font-size: 0.52rem;
-    letter-spacing: 0.09em;
+    font-size: 0.56rem;
+    letter-spacing: 0.08em;
   }
 
   .hero-scene {
@@ -969,6 +978,15 @@ main,
     margin-left: -6%;
   }
 
+  .frames-mobile-grid {
+    width: 94%;
+    gap: 0.62rem;
+  }
+
+  .frames-mobile-grid .frame-item {
+    border-radius: 0.85rem;
+  }
+
   .frame-visual {
     height: 152px;
   }
@@ -979,6 +997,10 @@ main,
 
   .frame-item h4 {
     font-size: 0.94rem;
+  }
+
+  .frames-mobile-grid .frame-visual {
+    height: 138px;
   }
 
   .language-rail {
@@ -1007,27 +1029,32 @@ main,
     line-height: 1.45;
   }
 
-  .team-stack-wrap {
+  .team-stack-wrap,
+  .team-stack-wrap.is-mobile-stack {
     height: auto;
     display: grid;
-    gap: 0.75rem;
+    gap: 0.62rem;
     perspective: none;
+    width: 100%;
+    margin-top: 0.1rem;
   }
 
-  .team-stack-card,
-  .team-stack-0,
-  .team-stack-1,
-  .team-stack-2,
-  .team-stack-0.is-active,
-  .team-stack-1.is-active,
-  .team-stack-2.is-active {
+  .team-stack-wrap.is-mobile-stack .team-stack-card {
     position: relative;
     top: auto;
     left: auto;
+    right: auto;
+    margin-inline: 0;
     width: 100%;
-    transform: none;
-    z-index: auto;
-    top: auto;
+    transform: none !important;
+    rotate: 0deg !important;
+    z-index: auto !important;
+    border-radius: 0.85rem;
+    padding: 0.88rem;
+    background:
+      linear-gradient(130deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.72)),
+      linear-gradient(160deg, rgba(152, 19, 25, 0.14), rgba(0, 0, 0, 0.28)),
+      rgba(4, 4, 4, 0.9) !important;
   }
 
   .site-footer {
