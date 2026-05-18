@@ -154,6 +154,11 @@ body {
   left: 0;
   right: 0;
   z-index: 60;
+  opacity: 0;
+  transform: translateY(-120px);
+  filter: blur(8px);
+  pointer-events: none;
+  transition: opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1), transform 0.95s cubic-bezier(0.22, 1, 0.36, 1), filter 0.95s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .top-nav {
@@ -170,66 +175,44 @@ body {
   backdrop-filter: blur(10px);
 }
 
-.home-hidden {
+.nav-pre {
   opacity: 0;
-  visibility: hidden;
+  transform: translateY(-120px);
+  filter: blur(8px);
   pointer-events: none;
 }
 
-.home-reveal {
-  animation: homeReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-@keyframes homeReveal {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-    filter: blur(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
-}
-
 .nav-reveal {
-  animation: navDrop 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  pointer-events: auto;
+}
+
+main,
+.site-footer {
+  opacity: 0;
+  transform: translateY(14px);
+  filter: blur(6px);
+  transition: opacity 1.05s cubic-bezier(0.22, 1, 0.36, 1), transform 1.05s cubic-bezier(0.22, 1, 0.36, 1), filter 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.content-pre {
+  opacity: 0;
+  transform: translateY(14px);
+  filter: blur(6px);
+  pointer-events: none;
 }
 
 .content-reveal {
-  animation: contentFade 1.12s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: 0.08s;
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  pointer-events: auto;
 }
 
 .footer-reveal {
-  animation-delay: 0.16s;
-}
-
-@keyframes navDrop {
-  from {
-    opacity: 0;
-    transform: translateY(-120px);
-    filter: blur(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
-}
-
-@keyframes contentFade {
-  from {
-    opacity: 0;
-    filter: blur(5px);
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    filter: blur(0);
-    transform: translateY(0);
-  }
+  transition-delay: 0.16s;
 }
 
 .cursor-red-glow {
@@ -761,7 +744,9 @@ main,
 .team-stack-card {
   position: absolute;
   top: 68px;
-  left: 50%;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
   width: min(360px, 72vw);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -773,7 +758,6 @@ main,
     linear-gradient(160deg, rgba(152, 19, 25, 0.2), rgba(0, 0, 0, 0.25));
   box-shadow: 0 18px 34px rgba(0, 0, 0, 0.46);
   transition: box-shadow 0.32s ease;
-  transform: translateX(-50%);
 }
 
 .team-stack-card:hover,
@@ -953,11 +937,14 @@ main,
   .hero-title::after,
   .hero-motto span,
   .intro-logo-distort,
-  .home-reveal,
-  .nav-reveal,
-  .content-reveal,
   .auto-left,
   .auto-right {
     animation: none !important;
+  }
+
+  .top-nav-wrap,
+  main,
+  .site-footer {
+    transition: none !important;
   }
 }

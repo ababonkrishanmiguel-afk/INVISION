@@ -64,49 +64,47 @@ const language = [
 ]
 
 function IntroSequence({ phase }) {
-  if (phase === 'done') return null
+  const isFading = phase === 'black' || phase === 'done'
 
   return (
     <motion.div
-      className={`intro-sequence ${phase === 'black' ? 'is-black' : ''}`}
-      initial={{ opacity: 1 }}
-      animate={{ opacity: phase === 'black' ? 0 : 1 }}
+      className={`intro-sequence ${phase === 'black' || phase === 'done' ? 'is-black' : ''}`}
+      initial={false}
+      animate={{ opacity: isFading ? 0 : 1 }}
       transition={{ duration: 1.25, ease: [0.22, 1, 0.36, 1] }}
-      exit={{ opacity: 0 }}
+      style={{ pointerEvents: isFading ? 'none' : 'auto' }}
     >
-      {phase !== 'black' ? (
-        <div className="intro-core">
-          <motion.div
-            className="intro-ray"
-            initial={{ x: '-130%', opacity: 0 }}
-            animate={{ x: '140%', opacity: [0, 0.34, 0] }}
-            transition={{ duration: 2.6, ease: 'easeInOut', delay: 0.2 }}
-          />
-          <motion.img
-            src="/invision_logo_transparent.png"
-            alt="INVISION FILMS logo intro"
-            className="intro-logo intro-logo-distort"
-            initial={{ opacity: 0, scale: 0.7, rotate: -20, x: -14, y: 8 }}
-            animate={{
-              opacity: [0, 1, 1],
-              scale: [0.7, 1.12, 0.98],
-              rotate: [-20, 8, 0],
-              x: [-14, 12, 0],
-              y: [8, -7, 0]
-            }}
-            transition={{ duration: 3.1, ease: [0.22, 1, 0.36, 1] }}
-          />
-          <motion.p
-            className="intro-caption"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35, duration: 0.65 }}
-          >
-            TURNING PERSPECTIVES INTO MOTION.
-          </motion.p>
-          <motion.div className="intro-spot" animate={{ opacity: [0.22, 0.4, 0.28] }} transition={{ duration: 2.2, repeat: Infinity }} />
-        </div>
-      ) : null}
+      <div className="intro-core">
+        <motion.div
+          className="intro-ray"
+          initial={{ x: '-130%', opacity: 0 }}
+          animate={{ x: '140%', opacity: [0, 0.34, 0] }}
+          transition={{ duration: 2.6, ease: 'easeInOut', delay: 0.2 }}
+        />
+        <motion.img
+          src="/invision_logo_transparent.png"
+          alt="INVISION FILMS logo intro"
+          className="intro-logo intro-logo-distort"
+          initial={{ opacity: 0, scale: 0.7, rotate: -20, x: -14, y: 8 }}
+          animate={{
+            opacity: [0, 1, 1],
+            scale: [0.7, 1.12, 0.98],
+            rotate: [-20, 8, 0],
+            x: [-14, 12, 0],
+            y: [8, -7, 0]
+          }}
+          transition={{ duration: 3.1, ease: [0.22, 1, 0.36, 1] }}
+        />
+        <motion.p
+          className="intro-caption"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.65 }}
+        >
+          TURNING PERSPECTIVES INTO MOTION.
+        </motion.p>
+        <motion.div className="intro-spot" animate={{ opacity: [0.22, 0.4, 0.28] }} transition={{ duration: 2.2, repeat: Infinity }} />
+      </div>
     </motion.div>
   )
 }
@@ -342,7 +340,7 @@ function TeamStack() {
 
 export default function App() {
   const [introPhase, setIntroPhase] = useState('reveal')
-  const homeReady = introPhase === 'done'
+  const homeReady = introPhase === 'black' || introPhase === 'done'
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
   const glowX = useSpring(mouseX, { stiffness: 120, damping: 22 })
@@ -385,7 +383,7 @@ export default function App() {
 
   return (
     <div
-      className={`cinematic-root ${!homeReady ? 'intro-active' : ''}`}
+      className={`cinematic-root ${introPhase !== 'done' ? 'intro-active' : ''}`}
       onMouseMove={(e) => {
         mouseX.set(e.clientX - 170)
         mouseY.set(e.clientY - 170)
@@ -400,7 +398,7 @@ export default function App() {
         </video>
       </div>
 
-      <header className={`top-nav-wrap ${!homeReady ? 'home-hidden' : 'nav-reveal'}`}>
+      <header className={`top-nav-wrap ${!homeReady ? 'nav-pre' : 'nav-reveal'}`}>
         <nav className="top-nav">
           <a href="#hero" className="brand-anchor">
             <img src="/invision_logo_transparent.png" alt="INVISION FILMS logo" />
@@ -415,7 +413,7 @@ export default function App() {
         </nav>
       </header>
 
-      <main className={!homeReady ? 'home-hidden' : 'content-reveal'}>
+      <main className={!homeReady ? 'content-pre' : 'content-reveal'}>
         <section id="hero" className="hero-scene">
           <motion.div className="hero-depth-layer" style={{ y: heroDepthY }}>
             <motion.img
@@ -504,7 +502,7 @@ export default function App() {
         <TeamStack />
       </main>
 
-      <footer className={`site-footer ${!homeReady ? 'home-hidden' : 'content-reveal footer-reveal'}`}>
+      <footer className={`site-footer ${!homeReady ? 'content-pre' : 'content-reveal footer-reveal'}`}>
         <p>INVISION FILMS</p>
         <a href="mailto:invisionfilms21@gmail.com">invisionfilms21@gmail.com</a>
       </footer>
