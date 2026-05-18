@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Lenis from 'lenis'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useTransform, useScroll } from 'framer-motion'
 import SectionHeading from './components/SectionHeading'
 
 const chapters = [
@@ -75,13 +75,25 @@ function IntroSequence({ phase }) {
     >
       {phase !== 'black' ? (
         <>
+          <motion.div
+            className="intro-ray"
+            initial={{ x: '-130%', opacity: 0 }}
+            animate={{ x: '140%', opacity: [0, 0.34, 0] }}
+            transition={{ duration: 2.6, ease: 'easeInOut', delay: 0.2 }}
+          />
           <motion.img
             src="/invision_logo_transparent.png"
             alt="INVISION FILMS logo intro"
-            className="intro-logo"
-            initial={{ opacity: 0, scale: 0.82 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.15, ease: [0.22, 1, 0.36, 1] }}
+            className="intro-logo intro-logo-distort"
+            initial={{ opacity: 0, scale: 0.7, rotate: -20, x: -14, y: 8 }}
+            animate={{
+              opacity: [0, 1, 1],
+              scale: [0.7, 1.12, 0.98],
+              rotate: [-20, 8, 0],
+              x: [-14, 12, 0],
+              y: [8, -7, 0]
+            }}
+            transition={{ duration: 3.1, ease: [0.22, 1, 0.36, 1] }}
           />
           <motion.p
             className="intro-caption"
@@ -106,32 +118,58 @@ function FilmChapter({ chapter, idx }) {
   const cardRotateY = useTransform(scrollYProgress, [0, 0.5, 1], [-7, 0, 6])
   const textY = useTransform(scrollYProgress, [0, 1], [42, -22])
   const textOpacity = useTransform(scrollYProgress, [0.15, 0.45, 0.86], [0.35, 1, 0.55])
+  const tiltX = useMotionValue(0)
+  const tiltY = useMotionValue(0)
+  const parallaxX = useMotionValue(0)
+  const parallaxY = useMotionValue(0)
+  const tiltXSmooth = useSpring(tiltX, { stiffness: 150, damping: 18 })
+  const tiltYSmooth = useSpring(tiltY, { stiffness: 150, damping: 18 })
+  const parallaxXSmooth = useSpring(parallaxX, { stiffness: 120, damping: 20 })
+  const parallaxYSmooth = useSpring(parallaxY, { stiffness: 120, damping: 20 })
+  const blendRotateY = useTransform(() => cardRotateY.get() + tiltYSmooth.get())
 
   return (
     <section ref={ref} className={`film-chapter ${chapter.aura}`}>
       <div className="film-sticky">
         <motion.div
           className="film-frame-shell"
+          onMouseMove={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect()
+            const px = (e.clientX - rect.left) / rect.width - 0.5
+            const py = (e.clientY - rect.top) / rect.height - 0.5
+            tiltX.set(py * -8)
+            tiltY.set(px * 10)
+            parallaxX.set(px * 14)
+            parallaxY.set(py * 14)
+          }}
+          onMouseLeave={() => {
+            tiltX.set(0)
+            tiltY.set(0)
+            parallaxX.set(0)
+            parallaxY.set(0)
+          }}
           style={{
             y: cardY,
-            rotateY: cardRotateY,
+            rotateY: blendRotateY,
+            rotateX: tiltXSmooth,
             transformPerspective: 1200,
             z: cardZ
           }}
         >
-          <div className="film-frame-card">
+          <motion.div className="film-frame-card">
             <div className="film-frame-light" />
             <span className="film-frame-mark">{chapter.chapter}</span>
             <strong>{chapter.title}</strong>
-          </div>
+            <motion.div className="film-frame-inner-shift" style={{ x: parallaxXSmooth, y: parallaxYSmooth }} />
+          </motion.div>
         </motion.div>
         <motion.article className="film-text" style={{ y: textY, opacity: textOpacity }}>
           <p className="film-meta">
-            {chapter.year} • {chapter.genre}
+            {chapter.year} | {chapter.genre}
           </p>
           <h3>{chapter.title}</h3>
           <p>{chapter.logline}</p>
-          <div className="film-award-mini">Awards Placeholder • Scene {String(idx + 1).padStart(2, '0')}</div>
+          <div className="film-award-mini">Awards Placeholder | Scene {String(idx + 1).padStart(2, '0')}</div>
         </motion.article>
       </div>
     </section>
@@ -141,8 +179,12 @@ function FilmChapter({ chapter, idx }) {
 function FramesCarousel() {
   const ref = useRef(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const trackX = useTransform(scrollYProgress, [0, 1], ['8%', '-40%'])
-  const trackRotate = useTransform(scrollYProgress, [0, 1], ['0deg', '-2deg'])
+  const topX = useTransform(scrollYProgress, [0, 1], ['4%', '-28%'])
+  const bottomX = useTransform(scrollYProgress, [0, 1], ['-20%', '8%'])
+  const topRotate = useTransform(scrollYProgress, [0, 1], ['0deg', '-1.4deg'])
+  const bottomRotate = useTransform(scrollYProgress, [0, 1], ['0deg', '1.1deg'])
+  const topFrames = frames.slice(0, 3)
+  const bottomFrames = frames.slice(3)
 
   return (
     <section id="frames" ref={ref} className="frames-scene">
@@ -152,8 +194,8 @@ function FramesCarousel() {
         subtitle="Floating stills from a moving film world."
       />
       <div className="frames-sticky-wrap">
-        <motion.div className="frames-track" style={{ x: trackX, rotate: trackRotate }}>
-          {frames.map((frame, idx) => (
+        <motion.div className="frames-track frames-track-top" style={{ x: topX, rotate: topRotate }}>
+          {topFrames.map((frame, idx) => (
             <motion.figure
               key={frame}
               className={`frame-item ${idx % 2 === 0 ? 'frame-up' : 'frame-down'}`}
@@ -171,6 +213,106 @@ function FramesCarousel() {
             </motion.figure>
           ))}
         </motion.div>
+        <motion.div className="frames-track frames-track-bottom" style={{ x: bottomX, rotate: bottomRotate }}>
+          {bottomFrames.map((frame, idx) => (
+            <motion.figure
+              key={frame}
+              className={`frame-item ${idx % 2 === 0 ? 'frame-down' : 'frame-up'}`}
+              initial={{ opacity: 0, y: 26 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.22 }}
+              transition={{ duration: 0.65, delay: idx * 0.05 }}
+              whileHover={{ rotateY: idx % 2 === 0 ? -7 : 7, rotateX: 4, scale: 1.03 }}
+            >
+              <div className="frame-visual" />
+              <figcaption>
+                <h4>{frame}</h4>
+                <p>Frame {String(idx + 4).padStart(2, '0')}</p>
+              </figcaption>
+            </motion.figure>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+function FilmLanguageMarquee() {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const driftLeft = useTransform(scrollYProgress, [0, 1], ['0%', '-10%'])
+  const driftRight = useTransform(scrollYProgress, [0, 1], ['-6%', '4%'])
+  const railItems = [...language, ...language]
+
+  return (
+    <section ref={ref} className="content-section language-section">
+      <SectionHeading
+        eyebrow="Our Film Language"
+        title="How We Shape Films"
+        subtitle="A cinematic process that moves with story, rhythm, and atmosphere."
+      />
+      <div className="language-rail-wrap">
+        <motion.div className="language-rail auto-left" style={{ x: driftLeft }}>
+          {railItems.map((item, idx) => (
+            <span key={`${item}-${idx}`}>{item}</span>
+          ))}
+        </motion.div>
+        <motion.div className="language-rail auto-right" style={{ x: driftRight }}>
+          {railItems.map((item, idx) => (
+            <span key={`${item}-r-${idx}`}>{item}</span>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+function TeamStack() {
+  const [activeCard, setActiveCard] = useState(1)
+
+  const stack = [
+    {
+      id: 0,
+      role: 'Direction',
+      text: 'Story architecture, emotional pacing, and chapter orchestration.'
+    },
+    {
+      id: 1,
+      role: 'Cinematography',
+      text: 'Lens language, movement grammar, and atmosphere-first composition.'
+    },
+    {
+      id: 2,
+      role: 'Post',
+      text: 'Editorial rhythm, color worldbuilding, and sonic depth finishing.'
+    }
+  ]
+
+  return (
+    <section id="team" className="content-section">
+      <SectionHeading
+        eyebrow="Team"
+        title="A Focused Film Collective"
+        subtitle="Three core pillars moving as one cinematic unit."
+      />
+      <div className="team-stack-wrap">
+        {stack.map((item, idx) => {
+          const isActive = activeCard === idx
+          return (
+            <motion.article
+              key={item.role}
+              className={`team-stack-card team-stack-${idx} ${isActive ? 'is-active' : ''}`}
+              onMouseEnter={() => setActiveCard(idx)}
+              onClick={() => setActiveCard(idx)}
+              whileHover={{ y: -18, rotateX: 3, scale: 1.015 }}
+              transition={{ type: 'spring', stiffness: 250, damping: 22 }}
+            >
+              <span>{String(idx + 1).padStart(2, '0')}</span>
+              <h3>{item.role}</h3>
+              <p>{item.text}</p>
+            </motion.article>
+          )
+        })}
       </div>
     </section>
   )
@@ -178,6 +320,10 @@ function FramesCarousel() {
 
 export default function App() {
   const [introPhase, setIntroPhase] = useState('reveal')
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const glowX = useSpring(mouseX, { stiffness: 120, damping: 22 })
+  const glowY = useSpring(mouseY, { stiffness: 120, damping: 22 })
   const { scrollY } = useScroll()
   const heroDepthY = useTransform(scrollY, [0, 1000], [0, -85])
   const logoDepth = useTransform(scrollY, [0, 700], [0, -24])
@@ -203,9 +349,9 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    const pauseTimer = setTimeout(() => setIntroPhase('pause'), 1200)
-    const blackTimer = setTimeout(() => setIntroPhase('black'), 2350)
-    const doneTimer = setTimeout(() => setIntroPhase('done'), 3050)
+    const pauseTimer = setTimeout(() => setIntroPhase('pause'), 2800)
+    const blackTimer = setTimeout(() => setIntroPhase('black'), 5000)
+    const doneTimer = setTimeout(() => setIntroPhase('done'), 6200)
 
     return () => {
       clearTimeout(pauseTimer)
@@ -215,8 +361,15 @@ export default function App() {
   }, [])
 
   return (
-    <div className="cinematic-root">
+    <div
+      className={`cinematic-root ${introPhase !== 'done' ? 'intro-active' : ''}`}
+      onMouseMove={(e) => {
+        mouseX.set(e.clientX - 170)
+        mouseY.set(e.clientY - 170)
+      }}
+    >
       <IntroSequence phase={introPhase} />
+      <motion.div className="cursor-red-glow" style={{ x: glowX, y: glowY }} />
       <div className="grain-layer" />
       <div className="bg-video-wrap">
         <video className="bg-video" autoPlay muted loop playsInline preload="auto">
@@ -224,7 +377,7 @@ export default function App() {
         </video>
       </div>
 
-      <header className="top-nav-wrap">
+      <header className={`top-nav-wrap ${introPhase !== 'done' ? 'home-hidden' : 'home-reveal'}`}>
         <nav className="top-nav">
           <a href="#hero" className="brand-anchor">
             <img src="/invision_logo_transparent.png" alt="INVISION FILMS logo" />
@@ -239,7 +392,7 @@ export default function App() {
         </nav>
       </header>
 
-      <main>
+      <main className={introPhase !== 'done' ? 'home-hidden' : 'home-reveal'}>
         <section id="hero" className="hero-scene">
           <motion.div className="hero-depth-layer" style={{ y: heroDepthY }}>
             <motion.img
@@ -255,6 +408,7 @@ export default function App() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.28 }}
+              className="hero-title"
             >
               INVISION FILMS
             </motion.h1>
@@ -262,8 +416,9 @@ export default function App() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.75, delay: 0.42 }}
+              className="hero-motto"
             >
-              Turning Perspectives into Motion.
+              Turning Perspectives into <span>Motion.</span>
             </motion.p>
           </motion.div>
         </section>
@@ -271,12 +426,13 @@ export default function App() {
         <section id="about" className="content-section">
           <SectionHeading
             eyebrow="About"
-            title="Dark, Minimal, Cinematic Storytelling"
-            subtitle="An indie film studio shaped by atmosphere, silence, and visual restraint."
+            title="From Student Roots to Award-Winning Films"
+            subtitle="Founded in 2021 as a student multimedia body, we grew into a team producing award-winning cinematic films."
           />
           <div className="about-glass">
-            INVISION FILMS builds short films with a cinematic grammar rooted in depth, perspective, and emotional
-            rhythm. Each scene is designed as an experience, not a template.
+            INVISION FILMS was founded in 2021 as a student multimedia body and rose through persistence, craft, and
+            collaboration into producing award-winning films. We stay cinematic, but our visual language adapts to the
+            theme, mood, and emotional world of each story.
           </div>
         </section>
 
@@ -321,52 +477,11 @@ export default function App() {
 
         <FramesCarousel />
 
-        <section className="content-section">
-          <SectionHeading
-            eyebrow="Our Film Language"
-            title="How We Shape Films"
-            subtitle="A focused cinematic process with no generic service clutter."
-          />
-          <div className="language-grid">
-            {language.map((item) => (
-              <motion.div
-                key={item}
-                className="language-item"
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.24 }}
-                transition={{ duration: 0.52 }}
-              >
-                {item}
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        <section id="team" className="content-section">
-          <SectionHeading
-            eyebrow="Team"
-            title="A Focused Film Collective"
-            subtitle="Direction, cinematography, and post-production under one cinematic vision."
-          />
-          <div className="team-grid">
-            <article>
-              <h3>Direction</h3>
-              <p>Story architecture, emotional flow, and chapter design.</p>
-            </article>
-            <article>
-              <h3>Cinematography</h3>
-              <p>Lens language, motion perspective, and visual depth control.</p>
-            </article>
-            <article>
-              <h3>Post</h3>
-              <p>Editorial rhythm, grading atmosphere, and sonic texture.</p>
-            </article>
-          </div>
-        </section>
+        <FilmLanguageMarquee />
+        <TeamStack />
       </main>
 
-      <footer className="site-footer">
+      <footer className={`site-footer ${introPhase !== 'done' ? 'home-hidden' : 'home-reveal'}`}>
         <p>INVISION FILMS</p>
         <a href="mailto:invisionfilms21@gmail.com">invisionfilms21@gmail.com</a>
       </footer>
