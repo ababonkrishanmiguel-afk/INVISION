@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Lenis from 'lenis'
-import { motion, useMotionValue, useSpring, useTransform, useScroll } from 'framer-motion'
+import { motion, useMotionValue, useMotionValueEvent, useSpring, useTransform, useScroll } from 'framer-motion'
 import SectionHeading from './components/SectionHeading'
 
 const chapters = [
@@ -74,7 +74,7 @@ function IntroSequence({ phase }) {
       exit={{ opacity: 0 }}
     >
       {phase !== 'black' ? (
-        <>
+        <div className="intro-core">
           <motion.div
             className="intro-ray"
             initial={{ x: '-130%', opacity: 0 }}
@@ -104,7 +104,7 @@ function IntroSequence({ phase }) {
             TURNING PERSPECTIVES INTO MOTION.
           </motion.p>
           <motion.div className="intro-spot" animate={{ opacity: [0.22, 0.4, 0.28] }} transition={{ duration: 2.2, repeat: Infinity }} />
-        </>
+        </div>
       ) : null}
     </motion.div>
   )
@@ -116,6 +116,8 @@ function FilmChapter({ chapter, idx }) {
   const cardY = useTransform(scrollYProgress, [0, 1], [60, -60])
   const cardZ = useTransform(scrollYProgress, [0, 0.5, 1], [-20, 15, -10])
   const cardRotateY = useTransform(scrollYProgress, [0, 0.5, 1], [-7, 0, 6])
+  const cardScale = useTransform(scrollYProgress, [0.05, 0.5, 0.95], [0.9, 1.02, 0.92])
+  const cardOpacity = useTransform(scrollYProgress, [0.05, 0.45, 0.95], [0.36, 1, 0.44])
   const textY = useTransform(scrollYProgress, [0, 1], [42, -22])
   const textOpacity = useTransform(scrollYProgress, [0.15, 0.45, 0.86], [0.35, 1, 0.55])
   const tiltX = useMotionValue(0)
@@ -150,6 +152,8 @@ function FilmChapter({ chapter, idx }) {
           }}
           style={{
             y: cardY,
+            scale: cardScale,
+            opacity: cardOpacity,
             rotateY: blendRotateY,
             rotateX: tiltXSmooth,
             transformPerspective: 1200,
@@ -268,7 +272,14 @@ function FilmLanguageMarquee() {
 }
 
 function TeamStack() {
+  const ref = useRef(null)
   const [activeCard, setActiveCard] = useState(1)
+  const [spread, setSpread] = useState(false)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 85%', 'end 35%'] })
+
+  useMotionValueEvent(scrollYProgress, 'change', (value) => {
+    setSpread(value > 0.36)
+  })
 
   const stack = [
     {
@@ -289,22 +300,30 @@ function TeamStack() {
   ]
 
   return (
-    <section id="team" className="content-section">
+    <section id="team" ref={ref} className="content-section">
       <SectionHeading
         eyebrow="Team"
         title="A Focused Film Collective"
         subtitle="Three core pillars moving as one cinematic unit."
       />
-      <div className="team-stack-wrap">
+      <div className={`team-stack-wrap ${spread ? 'is-spread' : 'is-stacked'}`}>
         {stack.map((item, idx) => {
           const isActive = activeCard === idx
+          const spreadX = idx === 0 ? -255 : idx === 1 ? 0 : 255
+          const spreadRotate = idx === 0 ? -12 : idx === 1 ? -1.5 : 12
+          const baseY = spread ? (idx === 1 ? -6 : 20) : idx * 4
+          const styleX = spread ? spreadX : 0
+          const styleRotate = spread ? spreadRotate : 0
+          const styleY = baseY + (isActive ? (spread ? -18 : -8) : 0)
+
           return (
             <motion.article
               key={item.role}
-              className={`team-stack-card team-stack-${idx} ${isActive ? 'is-active' : ''}`}
+              className={`team-stack-card team-stack-${idx} ${isActive ? 'is-active' : ''} ${spread ? 'is-transparent' : 'is-solid'}`}
               onMouseEnter={() => setActiveCard(idx)}
               onClick={() => setActiveCard(idx)}
-              whileHover={{ y: -18, rotateX: 3, scale: 1.015 }}
+              style={{ x: styleX, y: styleY, rotate: styleRotate, zIndex: isActive ? 8 : 3 - Math.abs(1 - idx) }}
+              whileHover={{ y: spread ? -20 : -10, rotateX: 3, scale: 1.015 }}
               transition={{ type: 'spring', stiffness: 250, damping: 22 }}
             >
               <span>{String(idx + 1).padStart(2, '0')}</span>
@@ -377,7 +396,7 @@ export default function App() {
         </video>
       </div>
 
-      <header className={`top-nav-wrap ${introPhase !== 'done' ? 'home-hidden' : 'home-reveal'}`}>
+      <header className={`top-nav-wrap ${introPhase !== 'done' ? 'home-hidden' : 'nav-reveal'}`}>
         <nav className="top-nav">
           <a href="#hero" className="brand-anchor">
             <img src="/invision_logo_transparent.png" alt="INVISION FILMS logo" />
@@ -392,7 +411,7 @@ export default function App() {
         </nav>
       </header>
 
-      <main className={introPhase !== 'done' ? 'home-hidden' : 'home-reveal'}>
+      <main className={introPhase !== 'done' ? 'home-hidden' : 'content-reveal'}>
         <section id="hero" className="hero-scene">
           <motion.div className="hero-depth-layer" style={{ y: heroDepthY }}>
             <motion.img
@@ -481,7 +500,7 @@ export default function App() {
         <TeamStack />
       </main>
 
-      <footer className={`site-footer ${introPhase !== 'done' ? 'home-hidden' : 'home-reveal'}`}>
+      <footer className={`site-footer ${introPhase !== 'done' ? 'home-hidden' : 'content-reveal footer-reveal'}`}>
         <p>INVISION FILMS</p>
         <a href="mailto:invisionfilms21@gmail.com">invisionfilms21@gmail.com</a>
       </footer>
