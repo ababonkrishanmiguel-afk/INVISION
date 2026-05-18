@@ -55,6 +55,7 @@ export default function App() {
   const [introExiting, setIntroExiting] = useState(false)
   const [introDone, setIntroDone] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [lowPower, setLowPower] = useState(false)
   const { scrollY } = useScroll()
   const heroY = useTransform(scrollY, [0, 800], [0, -90])
 
@@ -63,11 +64,20 @@ export default function App() {
     syncViewport()
     window.addEventListener('resize', syncViewport)
 
-    const exitTimer = setTimeout(() => setIntroExiting(true), 1100)
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const lowCPU = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4
+    const lowRAM = navigator.deviceMemory && navigator.deviceMemory <= 4
+    const lowDevice = prefersReduced || lowCPU || lowRAM
+    setLowPower(Boolean(lowDevice))
+
+    const exitAt = window.innerWidth < 768 ? 2400 : 3000
+    const endAt = window.innerWidth < 768 ? 3600 : 4300
+
+    const exitTimer = setTimeout(() => setIntroExiting(true), lowDevice ? Math.floor(exitAt * 0.72) : exitAt)
     const doneTimer = setTimeout(() => {
       setShowIntro(false)
       setIntroDone(true)
-    }, 2200)
+    }, lowDevice ? Math.floor(endAt * 0.72) : endAt)
 
     return () => {
       window.removeEventListener('resize', syncViewport)
@@ -77,8 +87,8 @@ export default function App() {
   }, [])
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-ink text-smoke">
-      <CinematicVideoBg />
+    <div className={`relative min-h-screen overflow-x-hidden bg-ink text-smoke ${lowPower ? 'low-power' : ''}`}>
+      {!lowPower ? <CinematicVideoBg /> : null}
 
       {showIntro ? (
         <motion.div
@@ -87,11 +97,11 @@ export default function App() {
           animate={{ opacity: introExiting ? 0 : 1 }}
           transition={{ duration: 0.85, ease: 'easeOut' }}
         >
-          <div className="intro-spotlight" />
+          <div className={`intro-spotlight ${lowPower ? 'intro-spotlight-lite' : ''}`} />
           <motion.img
             src="/invision_logo_transparent.png"
             alt="INVISION logo intro"
-            className="intro-logo"
+            className="intro-logo intro-pulse"
             initial={{ opacity: 0, scale: 0.84 }}
             animate={
               introExiting
@@ -143,7 +153,7 @@ export default function App() {
 
       <main>
         <section id="hero" className="section-shell relative flex min-h-screen items-center">
-          <motion.div style={{ y: heroY }} className={`mx-auto grid w-[92%] max-w-6xl items-center gap-10 py-28 lg:grid-cols-[1.1fr_1fr] ${introDone ? 'hero-ready' : 'hero-hidden'}`}>
+          <motion.div style={{ y: lowPower ? 0 : heroY }} className={`mx-auto grid w-[92%] max-w-6xl items-center gap-10 py-28 lg:grid-cols-[1.1fr_1fr] ${introDone ? 'hero-ready' : 'hero-hidden'}`}>
             <motion.div
               initial={{ opacity: 0, scale: 0.78 }}
               animate={{ opacity: 1, scale: 1 }}

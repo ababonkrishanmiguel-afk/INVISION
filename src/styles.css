@@ -106,6 +106,10 @@ body {
   will-change: transform, opacity;
 }
 
+.intro-pulse {
+  animation: audioPulse 2.2s ease-in-out infinite;
+}
+
 .intro-ring {
   position: absolute;
   width: min(56vw, 440px);
@@ -143,6 +147,11 @@ body {
   filter: blur(20px);
   animation: spotlightSweep 2.1s ease-in-out forwards;
   pointer-events: none;
+}
+
+.intro-spotlight-lite {
+  filter: blur(12px);
+  opacity: 0.55;
 }
 
 .hero-hidden {
@@ -267,6 +276,11 @@ body {
   width: 100%;
   height: auto;
   filter: drop-shadow(0 0 22px rgba(179, 13, 18, 0.45));
+}
+
+.logo-hero:hover,
+.brand-logo-nav:hover {
+  filter: drop-shadow(0 0 26px rgba(179, 13, 18, 0.58));
 }
 
 .section-shell {
@@ -480,6 +494,41 @@ body {
     transform: translateX(16vw) translateY(4vh) scale(1.05);
     opacity: 0.06;
   }
+}
+
+@keyframes audioPulse {
+  0% {
+    transform: scale(0.995);
+    filter: drop-shadow(0 0 10px rgba(179, 13, 18, 0.24));
+  }
+  40% {
+    transform: scale(1.015);
+    filter: drop-shadow(0 0 28px rgba(179, 13, 18, 0.6));
+  }
+  70% {
+    transform: scale(1.006);
+    filter: drop-shadow(0 0 16px rgba(179, 13, 18, 0.34));
+  }
+  100% {
+    transform: scale(0.995);
+    filter: drop-shadow(0 0 10px rgba(179, 13, 18, 0.24));
+  }
+}
+
+.low-power .grain-overlay {
+  opacity: 0.12;
+}
+
+.low-power .glass-nav {
+  backdrop-filter: blur(10px) saturate(115%);
+  -webkit-backdrop-filter: blur(10px) saturate(115%);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.26);
+}
+
+.low-power .modern-card,
+.low-power .portfolio-card,
+.low-power .service-chip {
+  box-shadow: 6px 6px 16px rgba(0, 0, 0, 0.36), -4px -4px 10px rgba(255, 255, 255, 0.018), inset 1px 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 @media (min-width: 768px) {
