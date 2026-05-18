@@ -154,11 +154,6 @@ body {
   left: 0;
   right: 0;
   z-index: 60;
-  opacity: 0;
-  transform: translateY(-180px);
-  filter: blur(8px);
-  pointer-events: none;
-  transition: opacity 1.3s cubic-bezier(0.22, 1, 0.36, 1), transform 1.3s cubic-bezier(0.22, 1, 0.36, 1), filter 1.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .top-nav {
@@ -864,38 +859,100 @@ main,
     display: none;
   }
 
+  .top-nav-wrap {
+    top: 0.4rem;
+  }
+
   .top-nav {
-    padding: 0.46rem 0.58rem;
+    width: 95%;
+    padding: 0.42rem 0.56rem;
+    border-radius: 0.75rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
   }
 
   .brand-anchor span {
-    font-size: 0.9rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
   }
 
   .brand-anchor img {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
   }
 
   .top-links {
-    gap: 0.55rem;
+    justify-content: center;
+    gap: 0.64rem;
+    flex-wrap: wrap;
   }
 
   .top-links a {
-    font-size: 0.55rem;
-    letter-spacing: 0.11em;
+    font-size: 0.52rem;
+    letter-spacing: 0.09em;
   }
 
   .hero-scene {
-    padding-top: 4.7rem;
+    padding-top: 6.4rem;
+    min-height: 88vh;
+  }
+
+  .hero-logo {
+    width: min(240px, 72vw);
+    margin-bottom: 0.65rem;
+  }
+
+  .hero-depth-layer h1 {
+    font-size: clamp(1.75rem, 10vw, 2.65rem);
+    line-height: 0.95;
+  }
+
+  .hero-depth-layer p {
+    font-size: clamp(0.88rem, 4.3vw, 1.12rem);
+    max-width: 90%;
+    margin: 0.7rem auto 0;
+  }
+
+  .content-section {
+    width: 93%;
+    padding: 3.4rem 0;
+  }
+
+  .about-glass {
+    padding: 1rem;
+    line-height: 1.58;
+    font-size: 0.92rem;
   }
 
   .film-chapter {
-    min-height: 135vh;
+    min-height: 124vh;
   }
 
   .film-sticky {
-    top: 10vh;
+    top: 8.5vh;
+    gap: 0.72rem;
+  }
+
+  .film-frame-card {
+    aspect-ratio: 1.32 / 1;
+  }
+
+  .film-frame-card strong {
+    font-size: clamp(1.15rem, 7vw, 1.7rem);
+  }
+
+  .film-text {
+    padding: 0.9rem;
+  }
+
+  .film-text h3 {
+    font-size: clamp(1.4rem, 8.2vw, 2.1rem);
+  }
+
+  .film-text p {
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 
   .awards-grid,
@@ -904,11 +961,50 @@ main,
   }
 
   .frames-track {
-    width: 240%;
+    width: 188%;
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+  }
+
+  .frames-track-bottom {
+    margin-left: -6%;
   }
 
   .frame-visual {
-    height: 180px;
+    height: 152px;
+  }
+
+  .frame-item figcaption {
+    padding: 0.62rem;
+  }
+
+  .frame-item h4 {
+    font-size: 0.94rem;
+  }
+
+  .language-rail {
+    gap: 0.75rem;
+  }
+
+  .language-rail span {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+  }
+
+  .team-stack-wrap {
+    margin-top: 0;
+  }
+
+  .team-stack-card {
+    padding: 0.95rem;
+  }
+
+  .team-stack-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .team-stack-card p {
+    font-size: 0.8rem;
+    line-height: 1.45;
   }
 
   .team-stack-wrap {

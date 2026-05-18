@@ -440,7 +440,17 @@ export default function App() {
         </video>
       </div>
 
-      <header className={`top-nav-wrap ${!navReady ? 'nav-pre' : 'nav-reveal'}`}>
+      <motion.header
+        className="top-nav-wrap"
+        initial={false}
+        animate={
+          navReady
+            ? { opacity: 1, y: 0, filter: 'blur(0px)' }
+            : { opacity: 0, y: -180, filter: 'blur(8px)' }
+        }
+        transition={{ duration: 1.15, ease: [0.22, 1, 0.36, 1] }}
+        style={{ pointerEvents: navReady ? 'auto' : 'none' }}
+      >
         <nav className="top-nav">
           <a href="#hero" className="brand-anchor">
             <img src="/invision_logo_transparent.png" alt="INVISION FILMS logo" />
@@ -453,7 +463,7 @@ export default function App() {
             <a href="#team">Team</a>
           </div>
         </nav>
-      </header>
+      </motion.header>
 
       <main className={!contentReady ? 'content-pre' : 'content-reveal'}>
         <section id="hero" className="hero-scene">
