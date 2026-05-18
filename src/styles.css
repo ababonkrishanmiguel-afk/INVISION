@@ -293,6 +293,12 @@ main,
   filter: drop-shadow(0 0 20px rgba(207, 37, 44, 0.46));
 }
 
+.hero-logo-3d {
+  transform-style: preserve-3d;
+  will-change: transform;
+  filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 22px rgba(207, 37, 44, 0.42));
+}
+
 .hero-depth-layer h1 {
   margin: 0;
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
@@ -753,11 +759,15 @@ main,
   padding: 1.25rem;
   transform-style: preserve-3d;
   cursor: pointer;
+  --stack-opacity: 0.99;
+  --glass-opacity: 0.02;
+  --red-opacity: 0.03;
   background:
-    linear-gradient(130deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.72)),
-    linear-gradient(160deg, rgba(152, 19, 25, 0.2), rgba(0, 0, 0, 0.25));
+    linear-gradient(130deg, rgba(255, 255, 255, var(--glass-opacity)), rgba(0, 0, 0, 0.74)),
+    linear-gradient(160deg, rgba(152, 19, 25, var(--red-opacity)), rgba(0, 0, 0, 0.32)),
+    rgba(4, 4, 4, var(--stack-opacity));
   box-shadow: 0 18px 34px rgba(0, 0, 0, 0.46);
-  transition: box-shadow 0.32s ease;
+  transition: box-shadow 0.32s ease, background 0.52s ease, border-color 0.52s ease;
 }
 
 .team-stack-card:hover,
@@ -766,14 +776,11 @@ main,
 }
 
 .team-stack-wrap.is-stacked .team-stack-card {
-  background: rgba(4, 4, 4, 0.99);
   border-color: rgba(255, 255, 255, 0.18);
 }
 
 .team-stack-wrap.is-spread .team-stack-card {
-  background:
-    linear-gradient(130deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.74)),
-    linear-gradient(160deg, rgba(152, 19, 25, 0.17), rgba(0, 0, 0, 0.32));
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .team-stack-card span {

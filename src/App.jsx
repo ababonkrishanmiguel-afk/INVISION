@@ -309,21 +309,32 @@ function TeamStack() {
       <div className={`team-stack-wrap ${spreadAmount > 0.16 ? 'is-spread' : 'is-stacked'}`}>
         {stack.map((item, idx) => {
           const isActive = activeCard === idx
-          const spreadX = idx === 0 ? -270 : idx === 1 ? 0 : 270
-          const spreadRotate = idx === 0 ? -11 : idx === 1 ? -1 : 11
+          const spreadX = idx === 0 ? -360 : idx === 1 ? 0 : 360
+          const spreadRotate = idx === 0 ? -13 : idx === 1 ? 0 : 13
           const stackY = idx * 5
-          const spreadY = idx === 1 ? -2 : 20
+          const spreadY = idx === 0 ? 26 : idx === 1 ? -8 : 22
           const styleX = spreadX * spreadAmount
           const styleRotate = spreadRotate * spreadAmount
           const styleY = stackY + (spreadY - stackY) * spreadAmount + (isActive ? -16 : 0)
+          const stackOpacity = 0.99 - spreadAmount * 0.3
+          const glassOpacity = 0.02 + spreadAmount * 0.16
+          const redOpacity = 0.03 + spreadAmount * 0.16
 
           return (
             <motion.article
               key={item.role}
-              className={`team-stack-card team-stack-${idx} ${isActive ? 'is-active' : ''} ${spreadAmount > 0.16 ? 'is-transparent' : 'is-solid'}`}
+              className={`team-stack-card team-stack-${idx} ${isActive ? 'is-active' : ''}`}
               onMouseEnter={() => setActiveCard(idx)}
               onClick={() => setActiveCard(idx)}
-              style={{ x: styleX, y: styleY, rotate: styleRotate, zIndex: isActive ? 8 : 3 - Math.abs(1 - idx) }}
+              style={{
+                x: styleX,
+                y: styleY,
+                rotate: styleRotate,
+                zIndex: isActive ? 8 : 3 - Math.abs(1 - idx),
+                '--stack-opacity': stackOpacity,
+                '--glass-opacity': glassOpacity,
+                '--red-opacity': redOpacity
+              }}
               whileHover={{ y: isActive ? styleY - 4 : styleY - 10, rotateX: 3, scale: 1.015 }}
               transition={{ type: 'spring', stiffness: 170, damping: 20, mass: 0.9 }}
             >
@@ -344,11 +355,19 @@ export default function App() {
   const [contentReady, setContentReady] = useState(false)
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
+  const pointerX = useMotionValue(0)
+  const pointerY = useMotionValue(0)
   const glowX = useSpring(mouseX, { stiffness: 120, damping: 22 })
   const glowY = useSpring(mouseY, { stiffness: 120, damping: 22 })
   const { scrollY } = useScroll()
   const heroDepthY = useTransform(scrollY, [0, 1000], [0, -85])
   const logoDepth = useTransform(scrollY, [0, 700], [0, -24])
+  const logoGlideX = useSpring(useTransform(pointerX, [-0.5, 0.5], [-24, 24]), { stiffness: 95, damping: 20 })
+  const logoGlideY = useSpring(useTransform(pointerY, [-0.5, 0.5], [-16, 16]), { stiffness: 95, damping: 20 })
+  const logoRotateY = useSpring(useTransform(pointerX, [-0.5, 0.5], [-11, 11]), { stiffness: 110, damping: 20 })
+  const logoRotateX = useSpring(useTransform(pointerY, [-0.5, 0.5], [8, -8]), { stiffness: 110, damping: 20 })
+  const logoScaleHover = useSpring(useTransform(pointerY, [-0.5, 0.5], [1.035, 0.985]), { stiffness: 90, damping: 18 })
+  const logoCombinedY = useTransform(() => logoDepth.get() + logoGlideY.get())
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -406,6 +425,10 @@ export default function App() {
       onMouseMove={(e) => {
         mouseX.set(e.clientX - 170)
         mouseY.set(e.clientY - 170)
+        const w = typeof window !== 'undefined' ? window.innerWidth : 1
+        const h = typeof window !== 'undefined' ? window.innerHeight : 1
+        pointerX.set(e.clientX / w - 0.5)
+        pointerY.set(e.clientY / h - 0.5)
       }}
     >
       <IntroSequence phase={introPhase} />
@@ -438,10 +461,17 @@ export default function App() {
             <motion.img
               src="/invision_logo_transparent.png"
               alt="INVISION FILMS logo"
-              className="hero-logo"
-              style={{ y: logoDepth }}
+              className="hero-logo hero-logo-3d"
+              style={{
+                x: logoGlideX,
+                y: logoCombinedY,
+                rotateY: logoRotateY,
+                rotateX: logoRotateX,
+                scale: logoScaleHover,
+                transformPerspective: 1200
+              }}
               initial={false}
-              animate={contentReady ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.86 }}
+              animate={contentReady ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 1.05, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
             />
             <motion.h1
