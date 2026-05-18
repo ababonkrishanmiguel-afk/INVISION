@@ -70,7 +70,8 @@ function IntroSequence({ phase }) {
     <motion.div
       className={`intro-sequence ${phase === 'black' ? 'is-black' : ''}`}
       initial={{ opacity: 1 }}
-      animate={{ opacity: phase === 'black' ? 1 : 1 }}
+      animate={{ opacity: phase === 'black' ? 0 : 1 }}
+      transition={{ duration: 1.25, ease: [0.22, 1, 0.36, 1] }}
       exit={{ opacity: 0 }}
     >
       {phase !== 'black' ? (
@@ -274,11 +275,12 @@ function FilmLanguageMarquee() {
 function TeamStack() {
   const ref = useRef(null)
   const [activeCard, setActiveCard] = useState(1)
-  const [spread, setSpread] = useState(false)
+  const [spreadAmount, setSpreadAmount] = useState(0)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start 85%', 'end 35%'] })
 
   useMotionValueEvent(scrollYProgress, 'change', (value) => {
-    setSpread(value > 0.36)
+    const next = Math.max(0, Math.min(1, (value - 0.42) / 0.3))
+    setSpreadAmount(next)
   })
 
   const stack = [
@@ -306,25 +308,26 @@ function TeamStack() {
         title="A Focused Film Collective"
         subtitle="Three core pillars moving as one cinematic unit."
       />
-      <div className={`team-stack-wrap ${spread ? 'is-spread' : 'is-stacked'}`}>
+      <div className={`team-stack-wrap ${spreadAmount > 0.16 ? 'is-spread' : 'is-stacked'}`}>
         {stack.map((item, idx) => {
           const isActive = activeCard === idx
-          const spreadX = idx === 0 ? -255 : idx === 1 ? 0 : 255
-          const spreadRotate = idx === 0 ? -12 : idx === 1 ? -1.5 : 12
-          const baseY = spread ? (idx === 1 ? -6 : 20) : idx * 4
-          const styleX = spread ? spreadX : 0
-          const styleRotate = spread ? spreadRotate : 0
-          const styleY = baseY + (isActive ? (spread ? -18 : -8) : 0)
+          const spreadX = idx === 0 ? -270 : idx === 1 ? 0 : 270
+          const spreadRotate = idx === 0 ? -11 : idx === 1 ? -1 : 11
+          const stackY = idx * 5
+          const spreadY = idx === 1 ? -2 : 20
+          const styleX = spreadX * spreadAmount
+          const styleRotate = spreadRotate * spreadAmount
+          const styleY = stackY + (spreadY - stackY) * spreadAmount + (isActive ? -16 : 0)
 
           return (
             <motion.article
               key={item.role}
-              className={`team-stack-card team-stack-${idx} ${isActive ? 'is-active' : ''} ${spread ? 'is-transparent' : 'is-solid'}`}
+              className={`team-stack-card team-stack-${idx} ${isActive ? 'is-active' : ''} ${spreadAmount > 0.16 ? 'is-transparent' : 'is-solid'}`}
               onMouseEnter={() => setActiveCard(idx)}
               onClick={() => setActiveCard(idx)}
               style={{ x: styleX, y: styleY, rotate: styleRotate, zIndex: isActive ? 8 : 3 - Math.abs(1 - idx) }}
-              whileHover={{ y: spread ? -20 : -10, rotateX: 3, scale: 1.015 }}
-              transition={{ type: 'spring', stiffness: 250, damping: 22 }}
+              whileHover={{ y: isActive ? styleY - 4 : styleY - 10, rotateX: 3, scale: 1.015 }}
+              transition={{ type: 'spring', stiffness: 170, damping: 20, mass: 0.9 }}
             >
               <span>{String(idx + 1).padStart(2, '0')}</span>
               <h3>{item.role}</h3>
@@ -339,6 +342,7 @@ function TeamStack() {
 
 export default function App() {
   const [introPhase, setIntroPhase] = useState('reveal')
+  const homeReady = introPhase === 'done'
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
   const glowX = useSpring(mouseX, { stiffness: 120, damping: 22 })
@@ -370,7 +374,7 @@ export default function App() {
   useEffect(() => {
     const pauseTimer = setTimeout(() => setIntroPhase('pause'), 2800)
     const blackTimer = setTimeout(() => setIntroPhase('black'), 5000)
-    const doneTimer = setTimeout(() => setIntroPhase('done'), 6200)
+    const doneTimer = setTimeout(() => setIntroPhase('done'), 6600)
 
     return () => {
       clearTimeout(pauseTimer)
@@ -381,7 +385,7 @@ export default function App() {
 
   return (
     <div
-      className={`cinematic-root ${introPhase !== 'done' ? 'intro-active' : ''}`}
+      className={`cinematic-root ${!homeReady ? 'intro-active' : ''}`}
       onMouseMove={(e) => {
         mouseX.set(e.clientX - 170)
         mouseY.set(e.clientY - 170)
@@ -396,7 +400,7 @@ export default function App() {
         </video>
       </div>
 
-      <header className={`top-nav-wrap ${introPhase !== 'done' ? 'home-hidden' : 'nav-reveal'}`}>
+      <header className={`top-nav-wrap ${!homeReady ? 'home-hidden' : 'nav-reveal'}`}>
         <nav className="top-nav">
           <a href="#hero" className="brand-anchor">
             <img src="/invision_logo_transparent.png" alt="INVISION FILMS logo" />
@@ -411,7 +415,7 @@ export default function App() {
         </nav>
       </header>
 
-      <main className={introPhase !== 'done' ? 'home-hidden' : 'content-reveal'}>
+      <main className={!homeReady ? 'home-hidden' : 'content-reveal'}>
         <section id="hero" className="hero-scene">
           <motion.div className="hero-depth-layer" style={{ y: heroDepthY }}>
             <motion.img
@@ -419,22 +423,22 @@ export default function App() {
               alt="INVISION FILMS logo"
               className="hero-logo"
               style={{ y: logoDepth }}
-              initial={{ opacity: 0, scale: 0.84 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.1, delay: 0.15 }}
+              initial={false}
+              animate={homeReady ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.86 }}
+              transition={{ duration: 1.05, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
             />
             <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.28 }}
+              initial={false}
+              animate={homeReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
+              transition={{ duration: 0.9, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
               className="hero-title"
             >
               INVISION FILMS
             </motion.h1>
             <motion.p
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.42 }}
+              initial={false}
+              animate={homeReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.88, delay: 0.44, ease: [0.22, 1, 0.36, 1] }}
               className="hero-motto"
             >
               Turning Perspectives into <span>Motion.</span>
@@ -500,7 +504,7 @@ export default function App() {
         <TeamStack />
       </main>
 
-      <footer className={`site-footer ${introPhase !== 'done' ? 'home-hidden' : 'content-reveal footer-reveal'}`}>
+      <footer className={`site-footer ${!homeReady ? 'home-hidden' : 'content-reveal footer-reveal'}`}>
         <p>INVISION FILMS</p>
         <a href="mailto:invisionfilms21@gmail.com">invisionfilms21@gmail.com</a>
       </footer>
