@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Lenis from 'lenis'
-import { motion, useMotionTemplate, useMotionValue, useMotionValueEvent, useSpring, useTransform, useScroll } from 'framer-motion'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { AnimatePresence, motion, useMotionValue, useMotionValueEvent, useSpring, useTransform, useScroll } from 'framer-motion'
 import SectionHeading from './components/SectionHeading'
 
 const driveSrc = (id) => `https://drive.google.com/uc?export=view&id=${id}`
@@ -227,167 +225,39 @@ function IntroSequence({ phase }) {
   )
 }
 
-function FilmographySlide({ chapter, index, total, scrollYProgress }) {
-  const center = total === 1 ? 0 : index / (total - 1)
-  const segment = total > 1 ? 1 / (total - 1) : 1
-  const x = useTransform(scrollYProgress, (v) => {
-    const d = v - center
-    const t = Math.min(Math.abs(d) / (segment * 1.2), 1)
-    const eased = Math.pow(t, 1.2)
-    if (d < 0) return eased * 420
-    return -eased * 380
-  })
-  const y = useTransform(scrollYProgress, (v) => {
-    const d = Math.abs(v - center)
-    const t = Math.min(d / (segment * 1.15), 1)
-    return t * 32
-  })
-  const rotateZ = useTransform(scrollYProgress, (v) => {
-    const d = v - center
-    const t = Math.min(Math.abs(d) / (segment * 1.18), 1)
-    return (d < 0 ? 1 : -1) * t * 10
-  })
-  const rotateY = useTransform(scrollYProgress, (v) => {
-    const d = v - center
-    const t = Math.min(Math.abs(d) / (segment * 1.12), 1)
-    return (d < 0 ? -1 : 1) * t * 17
-  })
-  const scale = useTransform(scrollYProgress, (v) => {
-    const d = Math.abs(v - center)
-    const t = Math.min(d / (segment * 1.16), 1)
-    return 1.08 - t * 0.2
-  })
-  const opacity = useTransform(scrollYProgress, (v) => {
-    const d = Math.abs(v - center)
-    const t = Math.min(d / (segment * 1.14), 1)
-    return 1 - t * 0.62
-  })
-  const z = useTransform(scrollYProgress, (v) => {
-    const d = Math.abs(v - center)
-    const t = Math.min(d / (segment * 1.14), 1)
-    return 190 - t * 260
-  })
-  const blur = useTransform(scrollYProgress, (v) => {
-    const d = Math.abs(v - center)
-    const t = Math.min(d / (segment * 1.16), 1)
-    const handoffNorm = segment > 0 ? d / (segment * 0.5) : 0
-    const handoffBand = Math.max(0, 1 - Math.abs(handoffNorm - 1) / 0.34)
-    return t * 1.8 + handoffBand * 4.8
-  })
-  const filter = useMotionTemplate`blur(${blur}px)`
-
-  const detailsX = useTransform(scrollYProgress, (v) => {
-    const d = v - center
-    const t = Math.min(Math.abs(d) / 0.36, 1)
-    return d < 0 ? 52 * t : -42 * t
-  })
-  const detailsY = useTransform(scrollYProgress, (v) => {
-    const d = Math.abs(v - center)
-    const t = Math.min(d / 0.36, 1)
-    return 24 * t
-  })
-  const detailsRotateY = useTransform(scrollYProgress, (v) => {
-    const d = v - center
-    const t = Math.min(Math.abs(d) / 0.36, 1)
-    return (d < 0 ? 1 : -1) * 12 * t
-  })
-  const detailsScale = useTransform(scrollYProgress, (v) => {
-    const d = Math.abs(v - center)
-    const t = Math.min(d / 0.36, 1)
-    return 1 - 0.16 * t
-  })
-  const detailsOpacity = useTransform(scrollYProgress, (v) => {
-    const d = Math.abs(v - center)
-    const t = Math.min(d / 0.36, 1)
-    return 1 - 0.75 * t
-  })
-  const detailsBlur = useTransform(scrollYProgress, (v) => {
-    const d = Math.abs(v - center)
-    const t = Math.min(d / (segment * 1.08), 1)
-    const handoffNorm = segment > 0 ? d / (segment * 0.5) : 0
-    const handoffBand = Math.max(0, 1 - Math.abs(handoffNorm - 1) / 0.38)
-    return t * 1.2 + handoffBand * 3.2
-  })
-  const detailsFilter = useMotionTemplate`blur(${detailsBlur}px)`
-
-  const [awardTitle, awardEvent] = chapter.awardLine.split('|').map((v) => v.trim())
-  const cardIndex = total - index
-
-  return (
-    <motion.article
-      className={`filmography-slide ${chapter.aura}`}
-      style={{
-        x,
-        y,
-        z,
-        scale,
-        rotateZ,
-        rotateY,
-        opacity,
-        filter,
-        transformPerspective: 1500,
-        zIndex: cardIndex
-      }}
-    >
-      <div className="filmography-poster-shell">
-        <div className="filmography-poster-card">
-          <DriveImage src={chapter.poster} alt={`${chapter.title} poster`} className="film-frame-poster" />
-          <div className="film-frame-light" />
-          <span className="film-frame-mark">{chapter.chapter}</span>
-        </div>
-      </div>
-
-      <motion.div
-        className="filmography-detail-shell"
-        style={{
-          x: detailsX,
-          y: detailsY,
-          rotateY: detailsRotateY,
-          scale: detailsScale,
-          opacity: detailsOpacity,
-          filter: detailsFilter,
-          transformPerspective: 1200
-        }}
-      >
-        <article className="film-text">
-          <p className="film-meta">
-            {chapter.year} | {chapter.genre}
-          </p>
-          <h3>{chapter.title}</h3>
-          <p>{chapter.logline}</p>
-          <div className="film-award-mini">
-            <div className="laurette-badge">
-              <div className="laurette-wing laurette-wing-left">
-                {Array.from({ length: 9 }).map((_, leafIndex) => (
-                  <span key={`left-${leafIndex}`} className="laurette-leaf" style={{ '--i': leafIndex }} />
-                ))}
-              </div>
-              <div className="laurette-core">
-                <span className="laurette-label">Film Award</span>
-                <strong>{awardTitle}</strong>
-                <span className="laurette-sub">{chapter.title}</span>
-              </div>
-              <div className="laurette-wing laurette-wing-right">
-                {Array.from({ length: 9 }).map((_, leafIndex) => (
-                  <span key={`right-${leafIndex}`} className="laurette-leaf" style={{ '--i': leafIndex }} />
-                ))}
-              </div>
-            </div>
-            <p className="film-award-event">{awardEvent}</p>
-          </div>
-        </article>
-      </motion.div>
-    </motion.article>
-  )
-}
-
 function FilmographyShowcase() {
-  const ref = useRef(null)
-  const progress = useMotionValue(0)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [direction, setDirection] = useState(1)
   const [isMobile, setIsMobile] = useState(false)
-  const stageRotateX = useTransform(progress, [0, 0.5, 1], [2.5, 0, -2.5])
-  const stageRotateY = useTransform(progress, [0, 0.5, 1], [-2.5, 0, 2.5])
-  const stageY = useTransform(progress, [0, 1], [10, -10])
+
+  const wrap = (value) => {
+    const total = chapters.length
+    return (value + total) % total
+  }
+
+  const goNext = () => {
+    setDirection(1)
+    setActiveIndex((prev) => wrap(prev + 1))
+  }
+
+  const goPrev = () => {
+    setDirection(-1)
+    setActiveIndex((prev) => wrap(prev - 1))
+  }
+
+  const goTo = (index) => {
+    if (index === activeIndex) return
+    setDirection(index > activeIndex ? 1 : -1)
+    setActiveIndex(index)
+  }
+
+  const relativePosition = (index) => {
+    const total = chapters.length
+    const raw = index - activeIndex
+    if (raw > total / 2) return raw - total
+    if (raw < -total / 2) return raw + total
+    return raw
+  }
 
   useEffect(() => {
     const media = window.matchMedia('(max-width: 767px)')
@@ -397,64 +267,118 @@ function FilmographyShowcase() {
     return () => media.removeEventListener('change', update)
   }, [])
 
-  useEffect(() => {
-    if (!ref.current || isMobile) {
-      progress.set(0)
-      return
-    }
-
-    gsap.registerPlugin(ScrollTrigger)
-    const section = ref.current
-    const mm = gsap.matchMedia()
-
-    mm.add('(min-width: 768px)', () => {
-      const trigger = ScrollTrigger.create({
-        trigger: section,
-        start: 'top top',
-        end: '+=2600',
-        pin: true,
-        pinSpacing: true,
-        scrub: 1.1,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          progress.set(self.progress)
-        }
-      })
-      ScrollTrigger.refresh()
-
-      return () => {
-        trigger.kill()
-      }
-    })
-
-    return () => {
-      mm.revert()
-    }
-  }, [isMobile, progress])
-
   return (
-    <section id="films" ref={ref} className="chapters-section filmography-scene">
+    <section id="films" className="chapters-section filmography-scene">
       <SectionHeading
         eyebrow="INVISION"
         title="FILMOGRAPHY"
-        subtitle="Merese, Somnium, and Taphaw - a layered cinematic showcase in motion."
+        subtitle="Featured film carousel: Merese, Somnium, and Taphaw."
       />
-      <div className="filmography-pin-frame">
-        <motion.div
-          className="filmography-stage"
-          style={{ rotateX: stageRotateX, rotateY: stageRotateY, y: stageY, transformPerspective: 1800 }}
-        >
+      <div className="film-carousel-shell">
+        <button className="film-carousel-arrow film-carousel-arrow-left" onClick={goPrev} aria-label="Previous film">
+          <span>&lsaquo;</span>
+        </button>
+        <button className="film-carousel-arrow film-carousel-arrow-right" onClick={goNext} aria-label="Next film">
+          <span>&rsaquo;</span>
+        </button>
+
+        <div className="film-carousel-stage">
+          {chapters.map((chapter, idx) => {
+            const rel = relativePosition(idx)
+            const isActive = rel === 0
+            const hidden = Math.abs(rel) > 1
+            const [awardTitle, awardEvent] = chapter.awardLine.split('|').map((v) => v.trim())
+
+            const x = isMobile ? (isActive ? 0 : rel < 0 ? -28 : 28) : rel === 0 ? 0 : rel < 0 ? -330 : 330
+            const y = isMobile ? (isActive ? 0 : 16) : isActive ? 0 : 14
+            const scale = isActive ? 1 : isMobile ? 0.9 : 0.84
+            const opacity = hidden ? 0 : isActive ? 1 : 0.5
+            const rotateY = isMobile ? 0 : rel < 0 ? 22 : -22
+            const rotateZ = isMobile ? 0 : rel < 0 ? -3.5 : 3.5
+            const blur = isActive ? 0 : 2.8
+            const zIndex = isActive ? 10 : rel < 0 ? 6 : 5
+
+            return (
+              <motion.article
+                key={chapter.title}
+                className={`film-carousel-card ${isActive ? 'is-active' : 'is-inactive'} ${chapter.aura}`}
+                animate={{
+                  x,
+                  y,
+                  scale,
+                  opacity,
+                  rotateY: hidden ? 0 : rotateY,
+                  rotateZ: hidden ? 0 : rotateZ,
+                  zIndex,
+                  filter: `blur(${hidden ? 6 : blur}px) brightness(${isActive ? 1 : 0.62})`
+                }}
+                initial={false}
+                transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
+                style={{ pointerEvents: isActive ? 'auto' : 'none' }}
+              >
+                <div className="film-carousel-poster-shell">
+                  <div className="filmography-poster-card">
+                    <DriveImage src={chapter.poster} alt={`${chapter.title} poster`} className="film-frame-poster" />
+                    <div className="film-frame-light" />
+                    <span className="film-frame-mark">{chapter.chapter}</span>
+                  </div>
+                </div>
+
+                <AnimatePresence mode="wait">
+                  {isActive ? (
+                    <motion.div
+                      key={`${chapter.title}-details-${direction}`}
+                      className="film-carousel-detail"
+                      initial={{ opacity: 0, x: direction > 0 ? 36 : -36, y: 12, rotateY: direction > 0 ? 10 : -10 }}
+                      animate={{ opacity: 1, x: 0, y: 0, rotateY: 0 }}
+                      exit={{ opacity: 0, x: direction > 0 ? -24 : 24, y: 8, rotateY: direction > 0 ? -8 : 8 }}
+                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <article className="film-text">
+                        <p className="film-meta">
+                          {chapter.year} | {chapter.genre}
+                        </p>
+                        <h3>{chapter.title}</h3>
+                        <p>{chapter.logline}</p>
+                        <div className="film-award-mini">
+                          <div className="laurette-badge">
+                            <div className="laurette-wing laurette-wing-left">
+                              {Array.from({ length: 9 }).map((_, leafIndex) => (
+                                <span key={`left-${leafIndex}`} className="laurette-leaf" style={{ '--i': leafIndex }} />
+                              ))}
+                            </div>
+                            <div className="laurette-core">
+                              <span className="laurette-label">Film Award</span>
+                              <strong>{awardTitle}</strong>
+                              <span className="laurette-sub">{chapter.title}</span>
+                            </div>
+                            <div className="laurette-wing laurette-wing-right">
+                              {Array.from({ length: 9 }).map((_, leafIndex) => (
+                                <span key={`right-${leafIndex}`} className="laurette-leaf" style={{ '--i': leafIndex }} />
+                              ))}
+                            </div>
+                          </div>
+                          <p className="film-award-event">{awardEvent}</p>
+                        </div>
+                      </article>
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
+              </motion.article>
+            )
+          })}
+        </div>
+
+        <div className="film-carousel-indicators">
           {chapters.map((chapter, idx) => (
-            <FilmographySlide
+            <button
               key={chapter.title}
-              chapter={chapter}
-              index={idx}
-              total={chapters.length}
-              scrollYProgress={progress}
+              className={`film-dot ${idx === activeIndex ? 'is-active' : ''}`}
+              onClick={() => goTo(idx)}
+              aria-label={`Show ${chapter.title}`}
             />
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )
@@ -766,10 +690,6 @@ export default function App() {
       smoothWheel: true,
       touchMultiplier: 1.15
     })
-    const onLenisScroll = () => {
-      ScrollTrigger.update()
-    }
-    lenis.on('scroll', onLenisScroll)
 
     let rafId
     const raf = (time) => {
@@ -780,7 +700,6 @@ export default function App() {
 
     return () => {
       cancelAnimationFrame(rafId)
-      if (lenis.off) lenis.off('scroll', onLenisScroll)
       lenis.destroy()
     }
   }, [])
@@ -800,12 +719,10 @@ export default function App() {
   useEffect(() => {
     let navTimer
     let contentTimer
-    let refreshTimer
 
     if (introPhase === 'done') {
       navTimer = setTimeout(() => setNavReady(true), 140)
       contentTimer = setTimeout(() => setContentReady(true), 420)
-      refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 700)
     } else {
       setNavReady(false)
       setContentReady(false)
@@ -814,7 +731,6 @@ export default function App() {
     return () => {
       clearTimeout(navTimer)
       clearTimeout(contentTimer)
-      clearTimeout(refreshTimer)
     }
   }, [introPhase])
 
