@@ -1822,13 +1822,13 @@ main,
   }
 
   .team-stack-wrap {
-    margin-top: 1.35rem;
-    height: 650px;
+    margin-top: 2rem;
+    height: 690px;
   }
 
   .team-stack-card {
     padding: 0.95rem;
-    top: 56px;
+    top: 96px;
   }
 
   .team-stack-card h3 {
@@ -1878,16 +1878,12 @@ main,
 
 @media (max-width: 520px) {
   .team-stack-wrap {
-    margin-top: 1.15rem;
-    height: 620px;
+    margin-top: 2.2rem;
+    height: 820px;
   }
 
   .team-stack-card {
-    top: 52px;
-  }
-
-  .team-stack-card {
-    top: 112px;
+    top: 118px;
   }
 
   .film-carousel-shell {

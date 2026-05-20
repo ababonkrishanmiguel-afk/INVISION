@@ -872,8 +872,10 @@ function TeamStack() {
     const raw = Math.max(0, Math.min(1, (value - 0.02) / 0.58))
     const eased = Math.pow(raw, 0.82)
     if (isMobile) {
-      const mobileStart = 0.02
-      const mobileEnd = 0.42
+      // Spread earlier and finish earlier on mobile so cards are fully
+      // separated when this section is in focus.
+      const mobileStart = 0.0
+      const mobileEnd = 0.26
       const mobileProgress = Math.max(0, Math.min(1, (value - mobileStart) / (mobileEnd - mobileStart)))
       setSpreadAmount(Math.pow(mobileProgress, 0.9))
       return
@@ -915,8 +917,9 @@ function TeamStack() {
           const styleRotate = isMobile ? 0 : spreadRotate * spreadAmount
           const desktopStackY = idx * 5
           const desktopSpreadY = idx === 0 ? -210 : idx === 1 ? 0 : 210
-          const mobileStackY = [0, 24, 48][idx]
-          const mobileSpreadY = [-20, 164, 348][idx]
+          const mobileStackY = [0, 18, 36][idx]
+          // Fixed vertical slots with clear gaps (no touching/overlap).
+          const mobileSpreadY = [0, 224, 448][idx]
           const styleY = isMobile
             ? mobileStackY + (mobileSpreadY - mobileStackY) * spreadAmount
             : desktopStackY + (desktopSpreadY - desktopStackY) * spreadAmount + (isActive ? -10 : 0)
