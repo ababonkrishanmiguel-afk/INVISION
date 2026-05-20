@@ -111,7 +111,7 @@ body {
 }
 
 .intro-logo {
-  width: min(290px, 70vw);
+  width: min(430px, 84vw);
   filter: drop-shadow(0 0 20px rgba(207, 37, 44, 0.4));
 }
 
@@ -129,14 +129,6 @@ body {
   100% {
     filter: drop-shadow(0 0 16px rgba(207, 37, 44, 0.4));
   }
-}
-
-.intro-caption {
-  margin-top: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.28em;
-  font-size: 0.7rem;
-  color: rgba(245, 245, 245, 0.86);
 }
 
 .intro-spot {
@@ -354,12 +346,14 @@ main,
 
 .hero-motto span {
   display: inline-block;
-  background: linear-gradient(110deg, #ffd7d8 0%, #ff4f56 42%, #ffffff 74%, #ff4f56 100%);
-  background-size: 220% 100%;
+  background: linear-gradient(110deg, #ffe7e7 0%, #ff5f65 30%, #ffffff 52%, #ff5f65 74%, #ffe7e7 100%);
+  background-size: 280% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: motionShimmer 3.2s ease-in-out infinite;
+  text-shadow: 0 0 16px rgba(255, 98, 106, 0.28);
+  filter: drop-shadow(0 0 10px rgba(255, 92, 98, 0.22));
+  animation: motionShimmer 2.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 
 @keyframes motionShimmer {
@@ -419,7 +413,7 @@ main,
 }
 
 .film-chapter {
-  min-height: 150vh;
+  min-height: 124vh;
   position: relative;
 }
 
@@ -542,11 +536,92 @@ main,
 }
 
 .film-award-mini {
-  margin-top: 0.95rem;
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
+  margin-top: 1rem;
+}
+
+.laurette-badge {
+  position: relative;
+  width: min(320px, 100%);
+  min-height: 132px;
+  margin: 0;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(255, 222, 170, 0.26);
+  background:
+    radial-gradient(circle at 50% 12%, rgba(255, 213, 151, 0.24), transparent 50%),
+    linear-gradient(170deg, rgba(31, 18, 8, 0.86), rgba(8, 8, 8, 0.94));
+  box-shadow: inset 0 1px 0 rgba(255, 236, 186, 0.16), 0 12px 22px rgba(0, 0, 0, 0.36);
+  display: grid;
+  grid-template-columns: 72px 1fr 72px;
+  align-items: center;
+  overflow: hidden;
+}
+
+.laurette-core {
+  text-align: center;
+  display: grid;
+  gap: 0.16rem;
+  z-index: 2;
+}
+
+.laurette-label {
   text-transform: uppercase;
-  color: rgba(232, 232, 232, 0.72);
+  letter-spacing: 0.19em;
+  font-size: 0.58rem;
+  color: rgba(255, 220, 168, 0.92);
+}
+
+.laurette-core strong {
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: clamp(0.84rem, 2vw, 1.2rem);
+  color: #ffe4bb;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+}
+
+.laurette-sub {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.56rem;
+  color: rgba(255, 226, 186, 0.78);
+}
+
+.laurette-wing {
+  position: relative;
+  height: 100%;
+}
+
+.laurette-wing::before,
+.laurette-wing::after {
+  content: '';
+  position: absolute;
+  inset: 16px 14px;
+  border: 2px solid rgba(255, 216, 152, 0.55);
+  border-radius: 120px;
+  filter: drop-shadow(0 0 5px rgba(255, 205, 126, 0.24));
+}
+
+.laurette-wing::after {
+  inset: 24px 20px;
+  border-color: rgba(255, 228, 186, 0.44);
+}
+
+.laurette-wing-left::before,
+.laurette-wing-left::after {
+  border-right: 0;
+}
+
+.laurette-wing-right::before,
+.laurette-wing-right::after {
+  border-left: 0;
+}
+
+.film-award-event {
+  margin: 0.62rem 0 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(232, 232, 232, 0.74);
 }
 
 .aura-merese::before,
@@ -832,6 +907,11 @@ main,
   transition: box-shadow 0.32s ease, background 0.52s ease, border-color 0.52s ease;
 }
 
+.team-stack-card.is-featured {
+  border-color: rgba(255, 120, 125, 0.42);
+  box-shadow: 0 26px 46px rgba(0, 0, 0, 0.58), 0 0 38px rgba(207, 37, 44, 0.3);
+}
+
 .team-stack-card:hover,
 .team-stack-card.is-active {
   box-shadow: 0 24px 40px rgba(0, 0, 0, 0.52), 0 0 26px rgba(175, 26, 33, 0.22);
@@ -889,6 +969,7 @@ main,
   width: 100%;
   height: 160px;
   object-fit: cover;
+  object-position: center 22%;
   display: block;
 }
 
@@ -1033,7 +1114,7 @@ main,
   }
 
   .film-chapter {
-    min-height: 124vh;
+    min-height: 110vh;
   }
 
   .film-sticky {
@@ -1060,6 +1141,15 @@ main,
   .film-text p {
     font-size: 0.9rem;
     line-height: 1.5;
+  }
+
+  .laurette-badge {
+    min-height: 112px;
+    grid-template-columns: 56px 1fr 56px;
+  }
+
+  .laurette-core strong {
+    font-size: 0.9rem;
   }
 
   .awards-grid,
@@ -1167,6 +1257,7 @@ main,
 
   .team-photo {
     height: 180px;
+    object-position: center 20%;
   }
 
   .award-photo {

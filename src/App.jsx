@@ -174,10 +174,10 @@ const language = [
 
 const teamMembers = [
   { name: 'Far Spencer', role: 'Film Director & Producer', photo: driveSrc('1BvqNS7hVta210DoVUuOniYfjYSUxgq84') },
-  { name: 'Micah Jirah Mendoza', role: 'Production Secretary & Actress', photo: driveSrc('1WRYwPWr4poKH3WOh5Sk3jEc1-xk3gC99') },
+  { name: 'John Lloyd Caramihan', role: 'Production Secretary & Actor', photo: driveSrc('1e3uzy5UlqATC5Ify3B3FR1s-9BNo0O2f') },
   { name: 'Jade Lagasca', role: 'Director of Cinematography & Editor', photo: driveSrc('1HXOKJ6U7GsbMqEA-vnreqKIEtOThz9Fj') },
   { name: 'Denver Hoybia', role: 'Assistant Director & Actor', photo: driveSrc('1drFQkJs_U74Ni2uArCDGHrIjCEI2bomX') },
-  { name: 'John Lloyd Caramihan', role: 'Production Designer & Actor', photo: driveSrc('1e3uzy5UlqATC5Ify3B3FR1s-9BNo0O2f') },
+  { name: 'Cris Vinuya', role: 'Production Designer & Actor', photo: driveSrc('1e3uzy5UlqATC5Ify3B3FR1s-9BNo0O2f') },
   { name: 'Krishan Miguel', role: 'Editor Assist & Web Dev', photo: driveSrc('1dCFr7Ya4KyfjR4aHKNoLnc7DqMIXCjog') },
   { name: 'Ella Sigue', role: 'Sound Recordist & Camera Operator', photo: driveSrc('1F1KKL110WBdHVNWILurqjxH_H8kyXR-J') },
   { name: 'Ken Martinez', role: 'Editor & Assistant Cinematographer', photo: driveSrc('1ebAMwZqvw7OJjp7Nx6qB0Urs9qz5MVpE') },
@@ -209,24 +209,16 @@ function IntroSequence({ phase }) {
           src="/invision_logo_transparent.png"
           alt="INVISION FILMS logo intro"
           className="intro-logo intro-logo-distort"
-          initial={{ opacity: 0, scale: 0.7, rotate: -20, x: -14, y: 8 }}
+          initial={{ opacity: 0, scale: 0.45, rotate: -24, x: -20, y: 12 }}
           animate={{
             opacity: [0, 1, 1],
-            scale: [0.7, 1.12, 0.98],
-            rotate: [-20, 8, 0],
-            x: [-14, 12, 0],
-            y: [8, -7, 0]
+            scale: [0.45, 1.36, 1.02],
+            rotate: [-24, 10, 0],
+            x: [-20, 14, 0],
+            y: [12, -9, 0]
           }}
           transition={{ duration: 3.1, ease: [0.22, 1, 0.36, 1] }}
         />
-        <motion.p
-          className="intro-caption"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.65 }}
-        >
-          TURNING PERSPECTIVES INTO MOTION.
-        </motion.p>
         <motion.div className="intro-spot" animate={{ opacity: [0.22, 0.4, 0.28] }} transition={{ duration: 2.2, repeat: Infinity }} />
       </div>
     </motion.div>
@@ -252,6 +244,7 @@ function FilmChapter({ chapter, idx }) {
   const parallaxXSmooth = useSpring(parallaxX, { stiffness: 120, damping: 20 })
   const parallaxYSmooth = useSpring(parallaxY, { stiffness: 120, damping: 20 })
   const blendRotateY = useTransform(() => cardRotateY.get() + tiltYSmooth.get())
+  const [awardTitle, awardEvent] = chapter.awardLine.split('|').map((v) => v.trim())
 
   return (
     <section ref={ref} className={`film-chapter ${chapter.aura}`}>
@@ -297,7 +290,18 @@ function FilmChapter({ chapter, idx }) {
           </p>
           <h3>{chapter.title}</h3>
           <p>{chapter.logline}</p>
-          <div className="film-award-mini">{chapter.awardLine}</div>
+          <div className="film-award-mini">
+            <div className="laurette-badge">
+              <div className="laurette-wing laurette-wing-left" />
+              <div className="laurette-core">
+                <span className="laurette-label">Film Award</span>
+                <strong>{awardTitle}</strong>
+                <span className="laurette-sub">{chapter.title}</span>
+              </div>
+              <div className="laurette-wing laurette-wing-right" />
+            </div>
+            <p className="film-award-event">{awardEvent}</p>
+          </div>
         </motion.article>
       </div>
     </section>
@@ -436,7 +440,7 @@ function TeamStack() {
   const [activeCard, setActiveCard] = useState(1)
   const [spreadAmount, setSpreadAmount] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 85%', 'end 35%'] })
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 94%', 'end 38%'] })
 
   useEffect(() => {
     const media = window.matchMedia('(max-width: 767px)')
@@ -447,59 +451,64 @@ function TeamStack() {
   }, [])
 
   useMotionValueEvent(scrollYProgress, 'change', (value) => {
-    const next = Math.max(0, Math.min(1, (value - 0.42) / 0.3))
+    const next = Math.max(0, Math.min(1, (value - 0.08) / 0.24))
     setSpreadAmount(isMobile ? 0 : next)
   })
 
   const stack = [
     {
       id: 0,
-      role: 'Far Spencer',
-      text: 'Film Director & Producer'
+      role: 'FAR SPENCER',
+      text: 'Founder | Film direction, story architecture, and chapter orchestration.'
     },
     {
       id: 1,
-      role: 'Jade Lagasca',
-      text: 'Director of Cinematography & Editor'
+      role: 'Krishan Miguel',
+      text: 'Founder | Editorial rhythm, digital craft, and post-production systems.',
+      featured: true
     },
     {
       id: 2,
-      role: 'Micah Jirah Mendoza',
-      text: 'Production Secretary & Actress'
+      role: 'Micah Jirah Mendoza & Jade Lagasca',
+      text: 'Founders | Production leadership, cinematography language, and visual execution.'
     }
   ]
 
   return (
     <section id="team" ref={ref} className="content-section">
       <SectionHeading
-        eyebrow="Team"
-        title="A Focused Film Collective"
-        subtitle="Three core pillars moving as one cinematic unit."
+        eyebrow="INVISION"
+        title="Founders"
+        subtitle="Built by the founding creatives who shaped INVISION FILMS from first concept to final frame."
       />
-      <div className={`team-stack-wrap ${isMobile ? 'is-mobile-stack' : spreadAmount > 0.16 ? 'is-spread' : 'is-stacked'}`}>
+      <div className={`team-stack-wrap ${isMobile ? 'is-mobile-stack' : spreadAmount > 0.03 ? 'is-spread' : 'is-stacked'}`}>
         {stack.map((item, idx) => {
           const isActive = activeCard === idx
-          const spreadX = idx === 0 ? -360 : idx === 1 ? 0 : 360
-          const spreadRotate = idx === 0 ? -13 : idx === 1 ? 0 : 13
+          const spreadX = idx === 0 ? -410 : idx === 1 ? 0 : 410
+          const spreadRotate = idx === 0 ? -15 : idx === 1 ? 0 : 15
           const stackY = idx * 5
-          const spreadY = idx === 0 ? 26 : idx === 1 ? -8 : 22
+          const spreadY = idx === 0 ? 24 : idx === 1 ? -16 : 24
           const styleX = isMobile ? 0 : spreadX * spreadAmount
           const styleRotate = isMobile ? 0 : spreadRotate * spreadAmount
           const styleY = isMobile ? 0 : stackY + (spreadY - stackY) * spreadAmount + (isActive ? -16 : 0)
           const stackOpacity = 0.99 - spreadAmount * 0.3
           const glassOpacity = 0.02 + spreadAmount * 0.16
           const redOpacity = 0.03 + spreadAmount * 0.16
+          const tiltY = isMobile ? 0 : (idx === 1 ? 7 : 4) * spreadAmount
+          const tiltX = isMobile ? 0 : (idx === 1 ? -4 : -2) * spreadAmount
 
           return (
             <motion.article
               key={item.role}
-              className={`team-stack-card team-stack-${idx} ${isActive ? 'is-active' : ''}`}
+              className={`team-stack-card team-stack-${idx} ${isActive ? 'is-active' : ''} ${item.featured ? 'is-featured' : ''}`}
               onMouseEnter={() => setActiveCard(idx)}
               onClick={() => setActiveCard(idx)}
               style={{
                 x: styleX,
                 y: styleY,
                 rotate: styleRotate,
+                rotateY: tiltY,
+                rotateX: tiltX,
                 zIndex: isActive ? 8 : 3 - Math.abs(1 - idx),
                 '--stack-opacity': stackOpacity,
                 '--glass-opacity': glassOpacity,
@@ -686,7 +695,7 @@ export default function App() {
 
         <section id="about" className="content-section">
           <SectionHeading
-            eyebrow="About"
+            eyebrow="INVISION"
             title={aboutContent.title}
             subtitle={aboutContent.subtitle}
           />
@@ -695,9 +704,9 @@ export default function App() {
 
         <section id="films" className="chapters-section">
           <SectionHeading
-            eyebrow="Films"
-            title="Film Chapters"
-            subtitle="Merese, Somnium, and Taphaw — each chapter grounded in the official filmography."
+            eyebrow="INVISION"
+            title="FILMOGRAPHY"
+            subtitle="Merese, Somnium, and Taphaw - each chapter grounded in the official filmography."
           />
           {chapters.map((chapter, idx) => (
             <FilmChapter key={chapter.title} chapter={chapter} idx={idx} />
@@ -706,8 +715,8 @@ export default function App() {
 
         <section className="content-section awards-section">
           <SectionHeading
-            eyebrow="Awards"
-            title="Awards & Recognition"
+            eyebrow="INVISION"
+            title="RECOGNITION"
             subtitle="Recognition and festival features sourced from the INVISION FILMS dossier."
           />
           <div className="awards-grid">
@@ -749,3 +758,4 @@ export default function App() {
     </div>
   )
 }
+
