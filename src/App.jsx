@@ -869,8 +869,6 @@ function TeamStack() {
   }, [])
 
   useMotionValueEvent(scrollYProgress, 'change', (value) => {
-    const raw = Math.max(0, Math.min(1, (value - 0.02) / 0.58))
-    const eased = Math.pow(raw, 0.82)
     if (isMobile) {
       // Spread earlier and finish earlier on mobile so cards are fully
       // separated when this section is in focus.
@@ -880,7 +878,9 @@ function TeamStack() {
       setSpreadAmount(Math.pow(mobileProgress, 0.9))
       return
     }
-    setSpreadAmount(eased)
+    // Desktop/tablet: keep cards clearly in horizontal spread (left/center/right)
+    // and avoid mobile-style stacked overlap.
+    setSpreadAmount(1)
   })
 
   const stack = [
