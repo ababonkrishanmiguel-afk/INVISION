@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Lenis from 'lenis'
-import { motion, useMotionValue, useMotionValueEvent, useSpring, useTransform, useScroll } from 'framer-motion'
+import { motion, useMotionTemplate, useMotionValue, useMotionValueEvent, useSpring, useTransform, useScroll } from 'framer-motion'
 import SectionHeading from './components/SectionHeading'
 
 const driveSrc = (id) => `https://drive.google.com/uc?export=view&id=${id}`
@@ -225,66 +225,129 @@ function IntroSequence({ phase }) {
   )
 }
 
-function FilmChapter({ chapter, idx }) {
-  const ref = useRef(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const cardY = useTransform(scrollYProgress, [0, 1], [60, -60])
-  const cardZ = useTransform(scrollYProgress, [0, 0.5, 1], [-20, 15, -10])
-  const cardRotateY = useTransform(scrollYProgress, [0, 0.5, 1], [-7, 0, 6])
-  const cardScale = useTransform(scrollYProgress, [0.05, 0.5, 0.95], [0.9, 1.02, 0.92])
-  const cardOpacity = useTransform(scrollYProgress, [0.05, 0.45, 0.95], [0.36, 1, 0.44])
-  const textY = useTransform(scrollYProgress, [0, 1], [42, -22])
-  const textOpacity = useTransform(scrollYProgress, [0.15, 0.45, 0.86], [0.35, 1, 0.55])
-  const tiltX = useMotionValue(0)
-  const tiltY = useMotionValue(0)
-  const parallaxX = useMotionValue(0)
-  const parallaxY = useMotionValue(0)
-  const tiltXSmooth = useSpring(tiltX, { stiffness: 150, damping: 18 })
-  const tiltYSmooth = useSpring(tiltY, { stiffness: 150, damping: 18 })
-  const parallaxXSmooth = useSpring(parallaxX, { stiffness: 120, damping: 20 })
-  const parallaxYSmooth = useSpring(parallaxY, { stiffness: 120, damping: 20 })
-  const blendRotateY = useTransform(() => cardRotateY.get() + tiltYSmooth.get())
+function FilmographySlide({ chapter, index, total, scrollYProgress }) {
+  const center = total === 1 ? 0 : index / (total - 1)
+  const segment = total > 1 ? 1 / (total - 1) : 1
+  const x = useTransform(scrollYProgress, (v) => {
+    const d = v - center
+    const t = Math.min(Math.abs(d) / (segment * 1.2), 1)
+    const eased = Math.pow(t, 1.2)
+    if (d < 0) return eased * 420
+    return -eased * 380
+  })
+  const y = useTransform(scrollYProgress, (v) => {
+    const d = Math.abs(v - center)
+    const t = Math.min(d / (segment * 1.15), 1)
+    return t * 32
+  })
+  const rotateZ = useTransform(scrollYProgress, (v) => {
+    const d = v - center
+    const t = Math.min(Math.abs(d) / (segment * 1.18), 1)
+    return (d < 0 ? 1 : -1) * t * 10
+  })
+  const rotateY = useTransform(scrollYProgress, (v) => {
+    const d = v - center
+    const t = Math.min(Math.abs(d) / (segment * 1.12), 1)
+    return (d < 0 ? -1 : 1) * t * 17
+  })
+  const scale = useTransform(scrollYProgress, (v) => {
+    const d = Math.abs(v - center)
+    const t = Math.min(d / (segment * 1.16), 1)
+    return 1.08 - t * 0.2
+  })
+  const opacity = useTransform(scrollYProgress, (v) => {
+    const d = Math.abs(v - center)
+    const t = Math.min(d / (segment * 1.14), 1)
+    return 1 - t * 0.62
+  })
+  const z = useTransform(scrollYProgress, (v) => {
+    const d = Math.abs(v - center)
+    const t = Math.min(d / (segment * 1.14), 1)
+    return 190 - t * 260
+  })
+  const blur = useTransform(scrollYProgress, (v) => {
+    const d = Math.abs(v - center)
+    const t = Math.min(d / (segment * 1.16), 1)
+    const handoffNorm = segment > 0 ? d / (segment * 0.5) : 0
+    const handoffBand = Math.max(0, 1 - Math.abs(handoffNorm - 1) / 0.34)
+    return t * 1.8 + handoffBand * 4.8
+  })
+  const filter = useMotionTemplate`blur(${blur}px)`
+
+  const detailsX = useTransform(scrollYProgress, (v) => {
+    const d = v - center
+    const t = Math.min(Math.abs(d) / 0.36, 1)
+    return d < 0 ? 52 * t : -42 * t
+  })
+  const detailsY = useTransform(scrollYProgress, (v) => {
+    const d = Math.abs(v - center)
+    const t = Math.min(d / 0.36, 1)
+    return 24 * t
+  })
+  const detailsRotateY = useTransform(scrollYProgress, (v) => {
+    const d = v - center
+    const t = Math.min(Math.abs(d) / 0.36, 1)
+    return (d < 0 ? 1 : -1) * 12 * t
+  })
+  const detailsScale = useTransform(scrollYProgress, (v) => {
+    const d = Math.abs(v - center)
+    const t = Math.min(d / 0.36, 1)
+    return 1 - 0.16 * t
+  })
+  const detailsOpacity = useTransform(scrollYProgress, (v) => {
+    const d = Math.abs(v - center)
+    const t = Math.min(d / 0.36, 1)
+    return 1 - 0.75 * t
+  })
+  const detailsBlur = useTransform(scrollYProgress, (v) => {
+    const d = Math.abs(v - center)
+    const t = Math.min(d / (segment * 1.08), 1)
+    const handoffNorm = segment > 0 ? d / (segment * 0.5) : 0
+    const handoffBand = Math.max(0, 1 - Math.abs(handoffNorm - 1) / 0.38)
+    return t * 1.2 + handoffBand * 3.2
+  })
+  const detailsFilter = useMotionTemplate`blur(${detailsBlur}px)`
+
   const [awardTitle, awardEvent] = chapter.awardLine.split('|').map((v) => v.trim())
+  const cardIndex = total - index
 
   return (
-    <section ref={ref} className={`film-chapter ${chapter.aura}`}>
-      <div className="film-sticky">
-        <motion.div
-          className="film-frame-shell"
-          onMouseMove={(e) => {
-            const rect = e.currentTarget.getBoundingClientRect()
-            const px = (e.clientX - rect.left) / rect.width - 0.5
-            const py = (e.clientY - rect.top) / rect.height - 0.5
-            tiltX.set(py * -8)
-            tiltY.set(px * 10)
-            parallaxX.set(px * 14)
-            parallaxY.set(py * 14)
-          }}
-          onMouseLeave={() => {
-            tiltX.set(0)
-            tiltY.set(0)
-            parallaxX.set(0)
-            parallaxY.set(0)
-          }}
-          style={{
-            y: cardY,
-            scale: cardScale,
-            opacity: cardOpacity,
-            rotateY: blendRotateY,
-            rotateX: tiltXSmooth,
-            transformPerspective: 1200,
-            z: cardZ
-          }}
-        >
-          <motion.div className="film-frame-card">
-            <DriveImage src={chapter.poster} alt={`${chapter.title} poster`} className="film-frame-poster" />
-            <div className="film-frame-light" />
-            <span className="film-frame-mark">{chapter.chapter}</span>
-            <strong>{chapter.title}</strong>
-            <motion.div className="film-frame-inner-shift" style={{ x: parallaxXSmooth, y: parallaxYSmooth }} />
-          </motion.div>
-        </motion.div>
-        <motion.article className="film-text" style={{ y: textY, opacity: textOpacity }}>
+    <motion.article
+      className={`filmography-slide ${chapter.aura}`}
+      style={{
+        x,
+        y,
+        z,
+        scale,
+        rotateZ,
+        rotateY,
+        opacity,
+        filter,
+        transformPerspective: 1500,
+        zIndex: cardIndex
+      }}
+    >
+      <div className="filmography-poster-shell">
+        <div className="filmography-poster-card">
+          <DriveImage src={chapter.poster} alt={`${chapter.title} poster`} className="film-frame-poster" />
+          <div className="film-frame-light" />
+          <span className="film-frame-mark">{chapter.chapter}</span>
+        </div>
+      </div>
+
+      <motion.div
+        className="filmography-detail-shell"
+        style={{
+          x: detailsX,
+          y: detailsY,
+          rotateY: detailsRotateY,
+          scale: detailsScale,
+          opacity: detailsOpacity,
+          filter: detailsFilter,
+          transformPerspective: 1200
+        }}
+      >
+        <article className="film-text">
           <p className="film-meta">
             {chapter.year} | {chapter.genre}
           </p>
@@ -310,7 +373,43 @@ function FilmChapter({ chapter, idx }) {
             </div>
             <p className="film-award-event">{awardEvent}</p>
           </div>
-        </motion.article>
+        </article>
+      </motion.div>
+    </motion.article>
+  )
+}
+
+function FilmographyShowcase() {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
+  const stageRotateX = useTransform(scrollYProgress, [0, 0.5, 1], [2.5, 0, -2.5])
+  const stageRotateY = useTransform(scrollYProgress, [0, 0.5, 1], [-2.5, 0, 2.5])
+  const stageY = useTransform(scrollYProgress, [0, 1], [10, -10])
+
+  return (
+    <section id="films" ref={ref} className="chapters-section filmography-scene">
+      <SectionHeading
+        eyebrow="INVISION"
+        title="FILMOGRAPHY"
+        subtitle="Merese, Somnium, and Taphaw - a layered cinematic showcase in motion."
+      />
+      <div className="filmography-scroll-space">
+        <div className="filmography-sticky-wrap">
+          <motion.div
+            className="filmography-stage"
+            style={{ rotateX: stageRotateX, rotateY: stageRotateY, y: stageY, transformPerspective: 1800 }}
+          >
+            {chapters.map((chapter, idx) => (
+              <FilmographySlide
+                key={chapter.title}
+                chapter={chapter}
+                index={idx}
+                total={chapters.length}
+                scrollYProgress={scrollYProgress}
+              />
+            ))}
+          </motion.div>
+        </div>
       </div>
     </section>
   )
@@ -759,16 +858,7 @@ export default function App() {
           <div className="about-glass">{aboutContent.body}</div>
         </section>
 
-        <section id="films" className="chapters-section">
-          <SectionHeading
-            eyebrow="INVISION"
-            title="FILMOGRAPHY"
-            subtitle="Merese, Somnium, and Taphaw - each chapter grounded in the official filmography."
-          />
-          {chapters.map((chapter, idx) => (
-            <FilmChapter key={chapter.title} chapter={chapter} idx={idx} />
-          ))}
-        </section>
+        <FilmographyShowcase />
 
         <section className="content-section awards-section">
           <SectionHeading

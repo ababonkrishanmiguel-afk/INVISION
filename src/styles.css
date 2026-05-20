@@ -412,40 +412,61 @@ main,
   margin: 0 auto;
 }
 
-.film-chapter {
-  min-height: 94vh;
-  position: relative;
+.filmography-scene {
+  overflow: clip;
 }
 
-.film-sticky {
+.filmography-scroll-space {
+  position: relative;
+  height: 300vh;
+}
+
+.filmography-sticky-wrap {
   position: sticky;
-  top: 10vh;
+  top: 9vh;
+  height: 82vh;
   width: 92%;
   max-width: 1220px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.2rem;
-  align-items: center;
-  perspective: 1200px;
+  perspective: 1800px;
 }
 
-.film-frame-shell {
+.filmography-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
   transform-style: preserve-3d;
-  will-change: transform;
 }
 
-.film-frame-card {
+.filmography-slide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(280px, 450px) minmax(340px, 1fr);
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 3vw, 2.3rem);
+  transform-style: preserve-3d;
+  will-change: transform, opacity, filter;
+}
+
+.filmography-poster-shell {
+  width: min(430px, 100%);
+  margin-inline: auto;
+  transform-style: preserve-3d;
+}
+
+.filmography-poster-card {
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 1rem;
-  aspect-ratio: 1.42 / 1;
+  aspect-ratio: 2 / 3;
   background:
     linear-gradient(130deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.6)),
     linear-gradient(150deg, rgba(152, 19, 25, 0.35), rgba(0, 0, 0, 0.84));
   display: grid;
   place-items: center;
-  box-shadow: 0 20px 38px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow: 0 24px 46px rgba(0, 0, 0, 0.46), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   transform-style: preserve-3d;
 }
 
@@ -489,15 +510,6 @@ main,
   color: rgba(241, 241, 241, 0.78);
 }
 
-.film-frame-card strong {
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  font-size: clamp(1.5rem, 3.2vw, 2.7rem);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  text-shadow: 0 8px 22px rgba(0, 0, 0, 0.8);
-  z-index: 2;
-}
-
 .film-frame-light {
   position: absolute;
   inset: 0;
@@ -507,12 +519,21 @@ main,
   z-index: 1;
 }
 
+.filmography-detail-shell {
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
 .film-text {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
   padding: 1.2rem;
   background: linear-gradient(140deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.64));
   backdrop-filter: blur(7px);
+  transform-style: preserve-3d;
+  will-change: transform, filter, opacity;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.34);
+  max-width: 620px;
 }
 
 .film-meta {
@@ -592,32 +613,48 @@ main,
   position: relative;
   height: 100%;
   width: 100%;
+  overflow: hidden;
+}
+
+.laurette-wing::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 74px;
+  bottom: 18px;
+  background: linear-gradient(180deg, rgba(255, 232, 191, 0.8), rgba(185, 126, 52, 0.78));
+  opacity: 0.5;
 }
 
 .laurette-leaf {
   position: absolute;
-  width: 10px;
-  height: 24px;
-  border-radius: 12px 12px 12px 12px;
-  background: linear-gradient(160deg, rgba(255, 236, 196, 0.95), rgba(214, 156, 76, 0.88));
-  box-shadow: 0 0 8px rgba(255, 205, 126, 0.26);
+  width: 11px;
+  height: 22px;
+  clip-path: polygon(50% 0%, 96% 36%, 72% 100%, 50% 83%, 28% 100%, 4% 36%);
+  background: linear-gradient(155deg, rgba(255, 236, 196, 0.96), rgba(217, 155, 75, 0.88));
+  box-shadow: 0 0 7px rgba(255, 205, 126, 0.26);
 }
 
 .laurette-wing-left .laurette-leaf {
-  top: calc(14px + (var(--i) * 9px));
-  left: calc(36px - (var(--i) * 2.7px));
-  transform: rotate(calc(-42deg + (var(--i) * 8deg)));
+  bottom: calc(12px + (var(--i) * 6px));
+  left: calc(40px - (var(--i) * 4px));
+  transform: rotate(calc(-42deg + (var(--i) * 6.8deg)));
 }
 
 .laurette-wing-right .laurette-leaf {
-  top: calc(14px + (var(--i) * 9px));
-  right: calc(36px - (var(--i) * 2.7px));
-  transform: rotate(calc(42deg - (var(--i) * 8deg)));
+  bottom: calc(12px + (var(--i) * 6px));
+  right: calc(40px - (var(--i) * 4px));
+  transform: rotate(calc(42deg - (var(--i) * 6.8deg)));
 }
 
-.laurette-wing-left,
-.laurette-wing-right {
-  overflow: hidden;
+.laurette-wing-left::after {
+  left: 24px;
+  transform: rotate(-18deg);
+}
+
+.laurette-wing-right::after {
+  right: 24px;
+  transform: rotate(18deg);
 }
 
 .film-award-event {
@@ -1054,7 +1091,6 @@ main,
 }
 
 @media (max-width: 1023px) {
-  .film-sticky,
   .hero-depth-layer {
     grid-template-columns: 1fr;
   }
@@ -1070,6 +1106,16 @@ main,
 
   .frames-track {
     width: 150%;
+  }
+
+  .filmography-sticky-wrap {
+    top: 8vh;
+    height: 84vh;
+  }
+
+  .filmography-slide {
+    grid-template-columns: minmax(240px, 360px) minmax(300px, 1fr);
+    gap: 1rem;
   }
 }
 
@@ -1144,21 +1190,44 @@ main,
     font-size: 0.92rem;
   }
 
-  .film-chapter {
-    min-height: 84vh;
+  .filmography-scroll-space {
+    height: auto;
   }
 
-  .film-sticky {
-    top: 7.5vh;
-    gap: 0.72rem;
+  .filmography-sticky-wrap {
+    position: relative;
+    top: auto;
+    height: auto;
+    perspective: none;
   }
 
-  .film-frame-card {
-    aspect-ratio: 1.32 / 1;
+  .filmography-stage {
+    display: grid;
+    gap: 0.7rem;
+    transform: none !important;
   }
 
-  .film-frame-card strong {
-    font-size: clamp(1.15rem, 7vw, 1.7rem);
+  .filmography-slide {
+    position: relative;
+    inset: auto;
+    grid-template-columns: 1fr;
+    gap: 0.62rem;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
+  .filmography-poster-shell {
+    width: min(310px, 86vw);
+  }
+
+  .filmography-poster-card {
+    aspect-ratio: 2 / 3;
+  }
+
+  .filmography-detail-shell {
+    transform: none !important;
+    opacity: 1 !important;
   }
 
   .film-text {
@@ -1181,17 +1250,30 @@ main,
 
   .laurette-leaf {
     width: 8px;
-    height: 19px;
+    height: 17px;
   }
 
   .laurette-wing-left .laurette-leaf {
-    top: calc(18px + (var(--i) * 7px));
-    left: calc(29px - (var(--i) * 2.2px));
+    bottom: calc(12px + (var(--i) * 5px));
+    left: calc(30px - (var(--i) * 3px));
   }
 
   .laurette-wing-right .laurette-leaf {
-    top: calc(18px + (var(--i) * 7px));
-    right: calc(29px - (var(--i) * 2.2px));
+    bottom: calc(12px + (var(--i) * 5px));
+    right: calc(30px - (var(--i) * 3px));
+  }
+
+  .laurette-wing::after {
+    height: 54px;
+    bottom: 18px;
+  }
+
+  .laurette-wing-left::after {
+    left: 18px;
+  }
+
+  .laurette-wing-right::after {
+    right: 18px;
   }
 
   .laurette-core strong {
