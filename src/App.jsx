@@ -225,10 +225,127 @@ function IntroSequence({ phase }) {
   )
 }
 
+function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile }) {
+  const tiltX = useMotionValue(0)
+  const tiltY = useMotionValue(0)
+  const sx = useSpring(tiltX, { stiffness: 170, damping: 20, mass: 0.7 })
+  const sy = useSpring(tiltY, { stiffness: 170, damping: 20, mass: 0.7 })
+  const [mx, setMx] = useState(50)
+  const [my, setMy] = useState(50)
+
+  const [awardTitle, awardEvent] = chapter.awardLine.split('|').map((v) => v.trim())
+  const x = isMobile ? (isActive ? 0 : rel < 0 ? -28 : 28) : isActive ? 0 : rel < 0 ? -360 : 360
+  const y = isMobile ? (isActive ? 0 : 16) : isActive ? 0 : 14
+  const scale = isActive ? 1 : isMobile ? 0.9 : 0.82
+  const opacity = hidden ? 0 : isActive ? 1 : 0.5
+  const rotateYBase = isActive ? 0 : isMobile ? 0 : rel < 0 ? 22 : -22
+  const rotateZBase = isActive ? 0 : isMobile ? 0 : rel < 0 ? -3.5 : 3.5
+  const blur = isActive ? 0 : 2.8
+  const zIndex = isActive ? 10 : rel < 0 ? 6 : 5
+
+  return (
+    <motion.article
+      className={`film-carousel-card ${isActive ? 'is-active' : 'is-inactive'} ${chapter.aura}`}
+      animate={{
+        x,
+        y,
+        scale,
+        opacity,
+        rotateY: hidden ? 0 : rotateYBase,
+        rotateZ: hidden ? 0 : rotateZBase,
+        zIndex,
+        filter: `blur(${hidden ? 6 : blur}px) brightness(${isActive ? 1 : 0.62})`
+      }}
+      initial={false}
+      transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
+      style={{ pointerEvents: hidden ? 'none' : 'auto' }}
+      onMouseMove={(e) => {
+        if (!isActive || isMobile) return
+        const rect = e.currentTarget.getBoundingClientRect()
+        const px = ((e.clientX - rect.left) / rect.width) * 100
+        const py = ((e.clientY - rect.top) / rect.height) * 100
+        setMx(px)
+        setMy(py)
+        tiltY.set(((px / 100) - 0.5) * 9)
+        tiltX.set(((py / 100) - 0.5) * -8)
+      }}
+      onMouseLeave={() => {
+        tiltX.set(0)
+        tiltY.set(0)
+        setMx(50)
+        setMy(50)
+      }}
+    >
+      <motion.div
+        className="film-carousel-card-inner"
+        style={{
+          rotateX: sx,
+          rotateY: sy,
+          transformPerspective: 1200,
+          '--mx': `${mx}%`,
+          '--my': `${my}%`
+        }}
+      >
+        <div className="film-carousel-poster-shell">
+          <div className="filmography-poster-card">
+            <DriveImage src={chapter.poster} alt={`${chapter.title} poster`} className="film-frame-poster" />
+            <div className="film-frame-light" />
+            <span className="film-frame-mark">{chapter.chapter}</span>
+          </div>
+        </div>
+
+        <AnimatePresence mode="wait">
+          {isActive ? (
+            <motion.div
+              key={`${chapter.title}-details-${direction}`}
+              className="film-carousel-detail"
+              initial={{ opacity: 0, x: direction > 0 ? 36 : -36, y: 12 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
+              exit={{ opacity: 0, x: direction > 0 ? -24 : 24, y: 8 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <article className="film-text">
+                <p className="film-meta">
+                  {chapter.year} | {chapter.genre}
+                </p>
+                <h3>{chapter.title}</h3>
+                <p>{chapter.logline}</p>
+                <div className="film-award-mini">
+                  <div className="laurette-badge">
+                    <div className="laurette-wing laurette-wing-left">
+                      {Array.from({ length: 9 }).map((_, leafIndex) => (
+                        <span key={`left-${leafIndex}`} className="laurette-leaf" style={{ '--i': leafIndex }} />
+                      ))}
+                    </div>
+                    <div className="laurette-core">
+                      <span className="laurette-label">Film Award</span>
+                      <strong>{awardTitle}</strong>
+                      <span className="laurette-sub">{chapter.title}</span>
+                    </div>
+                    <div className="laurette-wing laurette-wing-right">
+                      {Array.from({ length: 9 }).map((_, leafIndex) => (
+                        <span key={`right-${leafIndex}`} className="laurette-leaf" style={{ '--i': leafIndex }} />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="film-award-event">{awardEvent}</p>
+                </div>
+              </article>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+      </motion.div>
+    </motion.article>
+  )
+}
+
 function FilmographyShowcase() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [direction, setDirection] = useState(1)
   const [isMobile, setIsMobile] = useState(false)
+  const [isHovering, setIsHovering] = useState(false)
+  const [autoEnabled, setAutoEnabled] = useState(true)
+  const resumeTimerRef = useRef(null)
 
   const wrap = (value) => {
     const total = chapters.length
@@ -251,6 +368,14 @@ function FilmographyShowcase() {
     setActiveIndex(index)
   }
 
+  const pauseAutoscroll = (resumeInMs = 7000) => {
+    setAutoEnabled(false)
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
+    resumeTimerRef.current = setTimeout(() => {
+      setAutoEnabled(true)
+    }, resumeInMs)
+  }
+
   const relativePosition = (index) => {
     const total = chapters.length
     const raw = index - activeIndex
@@ -267,6 +392,21 @@ function FilmographyShowcase() {
     return () => media.removeEventListener('change', update)
   }, [])
 
+  useEffect(() => {
+    if (isHovering || !autoEnabled) return
+    const id = setInterval(() => {
+      setDirection(1)
+      setActiveIndex((prev) => wrap(prev + 1))
+    }, 6200)
+    return () => clearInterval(id)
+  }, [isHovering, autoEnabled])
+
+  useEffect(() => {
+    return () => {
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
+    }
+  }, [])
+
   return (
     <section id="films" className="chapters-section filmography-scene">
       <SectionHeading
@@ -274,11 +414,36 @@ function FilmographyShowcase() {
         title="FILMOGRAPHY"
         subtitle="Featured film carousel: Merese, Somnium, and Taphaw."
       />
-      <div className="film-carousel-shell">
-        <button className="film-carousel-arrow film-carousel-arrow-left" onClick={goPrev} aria-label="Previous film">
+      <div
+        className="film-carousel-shell"
+        onMouseEnter={() => {
+          setIsHovering(true)
+          setAutoEnabled(false)
+          if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
+        }}
+        onMouseLeave={() => {
+          setIsHovering(false)
+          pauseAutoscroll(3200)
+        }}
+      >
+        <button
+          className="film-carousel-arrow film-carousel-arrow-left"
+          onClick={() => {
+            pauseAutoscroll(7000)
+            goPrev()
+          }}
+          aria-label="Previous film"
+        >
           <span>&lsaquo;</span>
         </button>
-        <button className="film-carousel-arrow film-carousel-arrow-right" onClick={goNext} aria-label="Next film">
+        <button
+          className="film-carousel-arrow film-carousel-arrow-right"
+          onClick={() => {
+            pauseAutoscroll(7000)
+            goNext()
+          }}
+          aria-label="Next film"
+        >
           <span>&rsaquo;</span>
         </button>
 
@@ -287,84 +452,16 @@ function FilmographyShowcase() {
             const rel = relativePosition(idx)
             const isActive = rel === 0
             const hidden = Math.abs(rel) > 1
-            const [awardTitle, awardEvent] = chapter.awardLine.split('|').map((v) => v.trim())
-
-            const x = isMobile ? (isActive ? 0 : rel < 0 ? -28 : 28) : rel === 0 ? 0 : rel < 0 ? -330 : 330
-            const y = isMobile ? (isActive ? 0 : 16) : isActive ? 0 : 14
-            const scale = isActive ? 1 : isMobile ? 0.9 : 0.84
-            const opacity = hidden ? 0 : isActive ? 1 : 0.5
-            const rotateY = isMobile ? 0 : rel < 0 ? 22 : -22
-            const rotateZ = isMobile ? 0 : rel < 0 ? -3.5 : 3.5
-            const blur = isActive ? 0 : 2.8
-            const zIndex = isActive ? 10 : rel < 0 ? 6 : 5
-
             return (
-              <motion.article
+              <FilmCarouselItem
                 key={chapter.title}
-                className={`film-carousel-card ${isActive ? 'is-active' : 'is-inactive'} ${chapter.aura}`}
-                animate={{
-                  x,
-                  y,
-                  scale,
-                  opacity,
-                  rotateY: hidden ? 0 : rotateY,
-                  rotateZ: hidden ? 0 : rotateZ,
-                  zIndex,
-                  filter: `blur(${hidden ? 6 : blur}px) brightness(${isActive ? 1 : 0.62})`
-                }}
-                initial={false}
-                transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
-                style={{ pointerEvents: isActive ? 'auto' : 'none' }}
-              >
-                <div className="film-carousel-poster-shell">
-                  <div className="filmography-poster-card">
-                    <DriveImage src={chapter.poster} alt={`${chapter.title} poster`} className="film-frame-poster" />
-                    <div className="film-frame-light" />
-                    <span className="film-frame-mark">{chapter.chapter}</span>
-                  </div>
-                </div>
-
-                <AnimatePresence mode="wait">
-                  {isActive ? (
-                    <motion.div
-                      key={`${chapter.title}-details-${direction}`}
-                      className="film-carousel-detail"
-                      initial={{ opacity: 0, x: direction > 0 ? 36 : -36, y: 12, rotateY: direction > 0 ? 10 : -10 }}
-                      animate={{ opacity: 1, x: 0, y: 0, rotateY: 0 }}
-                      exit={{ opacity: 0, x: direction > 0 ? -24 : 24, y: 8, rotateY: direction > 0 ? -8 : 8 }}
-                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                      <article className="film-text">
-                        <p className="film-meta">
-                          {chapter.year} | {chapter.genre}
-                        </p>
-                        <h3>{chapter.title}</h3>
-                        <p>{chapter.logline}</p>
-                        <div className="film-award-mini">
-                          <div className="laurette-badge">
-                            <div className="laurette-wing laurette-wing-left">
-                              {Array.from({ length: 9 }).map((_, leafIndex) => (
-                                <span key={`left-${leafIndex}`} className="laurette-leaf" style={{ '--i': leafIndex }} />
-                              ))}
-                            </div>
-                            <div className="laurette-core">
-                              <span className="laurette-label">Film Award</span>
-                              <strong>{awardTitle}</strong>
-                              <span className="laurette-sub">{chapter.title}</span>
-                            </div>
-                            <div className="laurette-wing laurette-wing-right">
-                              {Array.from({ length: 9 }).map((_, leafIndex) => (
-                                <span key={`right-${leafIndex}`} className="laurette-leaf" style={{ '--i': leafIndex }} />
-                              ))}
-                            </div>
-                          </div>
-                          <p className="film-award-event">{awardEvent}</p>
-                        </div>
-                      </article>
-                    </motion.div>
-                  ) : null}
-                </AnimatePresence>
-              </motion.article>
+                chapter={chapter}
+                isActive={isActive}
+                rel={rel}
+                hidden={hidden}
+                direction={direction}
+                isMobile={isMobile}
+              />
             )
           })}
         </div>
@@ -374,7 +471,10 @@ function FilmographyShowcase() {
             <button
               key={chapter.title}
               className={`film-dot ${idx === activeIndex ? 'is-active' : ''}`}
-              onClick={() => goTo(idx)}
+              onClick={() => {
+                pauseAutoscroll(7000)
+                goTo(idx)
+              }}
               aria-label={`Show ${chapter.title}`}
             />
           ))}
