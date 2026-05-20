@@ -1823,12 +1823,12 @@ main,
 
   .team-stack-wrap {
     margin-top: 0;
-    height: 540px;
+    height: 650px;
   }
 
   .team-stack-card {
     padding: 0.95rem;
-    top: 124px;
+    top: 162px;
   }
 
   .team-stack-card h3 {
@@ -1878,7 +1878,11 @@ main,
 
 @media (max-width: 520px) {
   .team-stack-wrap {
-    height: 500px;
+    height: 620px;
+  }
+
+  .team-stack-card {
+    top: 150px;
   }
 
   .team-stack-card {

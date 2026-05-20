@@ -831,16 +831,16 @@ function TeamStack() {
           const spreadX = idx === 0 ? -36 : idx === 1 ? 0 : 36
           const spreadRotate = idx === 0 ? -7 : idx === 1 ? 0 : 7
           const stackY = idx * 5
-          const verticalDistance = isMobile ? 156 : 210
+          const verticalDistance = isMobile ? 190 : 210
           const spreadY = idx === 0 ? -verticalDistance : idx === 1 ? 0 : verticalDistance
-          const styleX = spreadX * spreadAmount * (isMobile ? 0.66 : 1)
-          const styleRotate = spreadRotate * spreadAmount * (isMobile ? 0.72 : 1)
-          const styleY = stackY + (spreadY - stackY) * spreadAmount + (isActive ? (isMobile ? -6 : -10) : 0)
+          const styleX = isMobile ? 0 : spreadX * spreadAmount
+          const styleRotate = isMobile ? 0 : spreadRotate * spreadAmount
+          const styleY = stackY + (spreadY - stackY) * spreadAmount + (isActive ? (isMobile ? 0 : -10) : 0)
           const stackOpacity = 0.99 - spreadAmount * 0.3
           const glassOpacity = 0.02 + spreadAmount * 0.16
           const redOpacity = 0.03 + spreadAmount * 0.16
-          const tiltY = (idx === 1 ? 7 : 4) * spreadAmount * (isMobile ? 0.45 : 1)
-          const tiltX = (idx === 1 ? -4 : -2) * spreadAmount * (isMobile ? 0.45 : 1)
+          const tiltY = isMobile ? 0 : (idx === 1 ? 7 : 4) * spreadAmount
+          const tiltX = isMobile ? 0 : (idx === 1 ? -4 : -2) * spreadAmount
 
           return (
             <motion.article
