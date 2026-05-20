@@ -94,7 +94,7 @@ const chapters = [
     logline: 'A dreamlike love too fragile for reality, where John is somehow everywhere but nowhere in sight.',
     aura: 'aura-specter',
     poster: driveSrc('13TZHAFBpOIjeMvQ-qJhfoZtRMyijOVUG'),
-    awardImage: '/specterdream%20awards.png',
+    awardImage: '/specterdream-awards.png',
     awards: [
       'CINEU "Catorce" Film Festival - Best Director, Best Production Design, Best Actor, Best Supporting Actor'
     ]
@@ -107,7 +107,7 @@ const chapters = [
     logline: 'In blindness and love, Isabel discovers a reality she was never meant to see.',
     aura: 'aura-pasaglawom',
     poster: driveSrc('1sqswls2-xbSKB4emFtok9_GxImYMKY2i'),
-    awardImage: '/pasaglawom%20awards.png',
+    awardImage: '/pasaglawom-awards.png',
     awards: [
       'SINEDISIPULO "XI" Film Exhibition - Official Selection'
     ]
@@ -120,7 +120,7 @@ const chapters = [
     logline: 'Five friends join a 48-hour film challenge, but with no script in hand, imagination takes over and reality begins to unravel.',
     aura: 'aura-merese',
     poster: driveSrc('1POrIhcBCBpT0p7hEmUrF-weF1LYMaV7I'),
-    awardImage: '/merese%20awards.png',
+    awardImage: '/merese-awards.png',
     awards: [
       "DTI's Fiesta Kucha Film Festival 2025 - Best Editing"
     ]
@@ -133,7 +133,7 @@ const chapters = [
     logline: 'At the center is Elaine De Gracia, a student nurse in a Catholic school whose mind quietly unravels as sanity begins to expire.',
     aura: 'aura-somnium',
     poster: driveSrc('1oNOu2PlykdDlNn-ByDzXrVSrpEUkLwNk'),
-    awardImage: '/somnium%20awards.png',
+    awardImage: '/somnium-awards.png',
     awards: [
       '3rd University of Wollongong in Dubai Film Festival 2025 - Top 10 Official Selection'
     ]
@@ -146,7 +146,7 @@ const chapters = [
     logline: 'In the quiet of the unseen, Elsie Daayon fights tirelessly for her dreams, climbing through struggle and sacrifice. Can hope guide her to the top?',
     aura: 'aura-taphaw',
     poster: driveSrc('1OhwFBCW1V15OWkTJqapGA40XZMMXhXjH'),
-    awardImage: '/taphaw%20awards.png',
+    awardImage: '/taphaw-awards.png',
     awards: [
       'Sinulog Film Festival 2026 - Best Film, Best Screenplay, Best Director, Best Cinematography, Best Production Design, Best Playbill, Best Actress',
       'Sinepiyu XVIII Diwa: Sa Lente Ng Katauhan - Best Actress'
@@ -356,6 +356,13 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile 
         <div className="film-carousel-poster-shell">
           <div className="filmography-poster-card">
             <DriveImage src={chapter.poster} alt={`${chapter.title} poster`} className="film-frame-poster" />
+            <div className="film-poster-award">
+              {chapter.awardImage ? (
+                <img src={chapter.awardImage} alt={`${chapter.title} awards`} className="film-poster-award-img" loading="lazy" />
+              ) : (
+                <div className="film-poster-award-fallback">{chapter.awards?.[0] || 'Award Pending'}</div>
+              )}
+            </div>
             <div className="film-frame-light" />
             <span className="film-frame-mark">{chapter.chapter}</span>
           </div>
@@ -377,15 +384,6 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile 
                 </p>
                 <h3>{chapter.title}</h3>
                 <p>{chapter.logline}</p>
-                {chapter.awardImage ? (
-                  <div className={`film-award-image-wrap ${chapter.title === '11:11' || chapter.title === 'Taphaw' ? 'is-large-award' : ''}`}>
-                    <img src={chapter.awardImage} alt={`${chapter.title} awards`} className="film-award-image" loading="lazy" />
-                  </div>
-                ) : (
-                  <div className="film-award-text-fallback">
-                    <span>{chapter.awards?.[0] || 'Award pending'}</span>
-                  </div>
-                )}
               </article>
             </motion.div>
           ) : null}
@@ -746,10 +744,11 @@ function TeamProfileCard({ member, isMobile }) {
 
 function TeamStack() {
   const ref = useRef(null)
+  const stackRef = useRef(null)
   const [activeCard, setActiveCard] = useState(1)
   const [spreadAmount, setSpreadAmount] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 94%', 'end 38%'] })
+  const { scrollYProgress } = useScroll({ target: stackRef, offset: ['start 88%', 'end 45%'] })
 
   useEffect(() => {
     const media = window.matchMedia('(max-width: 767px)')
@@ -760,8 +759,9 @@ function TeamStack() {
   }, [])
 
   useMotionValueEvent(scrollYProgress, 'change', (value) => {
-    const next = Math.max(0, Math.min(1, (value - 0.08) / 0.24))
-    setSpreadAmount(next)
+    const raw = Math.max(0, Math.min(1, (value - 0.02) / 0.58))
+    const eased = Math.pow(raw, 0.82)
+    setSpreadAmount(eased)
   })
 
   const stack = [
@@ -789,7 +789,7 @@ function TeamStack() {
         title="The Team who made it happen"
         subtitle="Built by storytellers, directors, editors, cinematographers, and creatives who shared the same vision from concept to final frame."
       />
-      <div className={`team-stack-wrap ${spreadAmount > 0.03 ? 'is-spread' : 'is-stacked'}`}>
+      <div ref={stackRef} className={`team-stack-wrap ${spreadAmount > 0.03 ? 'is-spread' : 'is-stacked'}`}>
         {stack.map((item, idx) => {
           const isActive = activeCard === idx
           const spreadX = idx === 0 ? -36 : idx === 1 ? 0 : 36
