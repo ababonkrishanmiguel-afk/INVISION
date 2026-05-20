@@ -402,6 +402,8 @@ function FilmographyShowcase() {
   const [isHovering, setIsHovering] = useState(false)
   const [autoEnabled, setAutoEnabled] = useState(true)
   const resumeTimerRef = useRef(null)
+  const touchStartXRef = useRef(0)
+  const touchDeltaXRef = useRef(0)
 
   const wrap = (value) => {
     const total = chapters.length
@@ -482,6 +484,23 @@ function FilmographyShowcase() {
         onMouseLeave={() => {
           setIsHovering(false)
           pauseAutoscroll(3200)
+        }}
+        onTouchStart={(e) => {
+          const x = e.changedTouches?.[0]?.clientX ?? 0
+          touchStartXRef.current = x
+          touchDeltaXRef.current = 0
+        }}
+        onTouchMove={(e) => {
+          const x = e.changedTouches?.[0]?.clientX ?? 0
+          touchDeltaXRef.current = x - touchStartXRef.current
+        }}
+        onTouchEnd={() => {
+          const delta = touchDeltaXRef.current
+          if (Math.abs(delta) < 44) return
+          pauseAutoscroll(7000)
+          if (delta < 0) goNext()
+          else goPrev()
+          touchDeltaXRef.current = 0
         }}
       >
         <button
@@ -773,13 +792,14 @@ function TeamStack() {
       <div className={`team-stack-wrap ${spreadAmount > 0.03 ? 'is-spread' : 'is-stacked'}`}>
         {stack.map((item, idx) => {
           const isActive = activeCard === idx
-          const spreadX = idx === 0 ? -410 : idx === 1 ? 0 : 410
-          const spreadRotate = idx === 0 ? -15 : idx === 1 ? 0 : 15
+          const spreadX = idx === 0 ? -36 : idx === 1 ? 0 : 36
+          const spreadRotate = idx === 0 ? -7 : idx === 1 ? 0 : 7
           const stackY = idx * 5
-          const spreadY = idx === 0 ? 24 : idx === 1 ? -16 : 24
-          const styleX = spreadX * spreadAmount * (isMobile ? 0.52 : 1)
-          const styleRotate = spreadRotate * spreadAmount * (isMobile ? 0.55 : 1)
-          const styleY = stackY + (spreadY - stackY) * spreadAmount + (isActive ? (isMobile ? -8 : -16) : 0)
+          const verticalDistance = isMobile ? 156 : 210
+          const spreadY = idx === 0 ? -verticalDistance : idx === 1 ? 0 : verticalDistance
+          const styleX = spreadX * spreadAmount * (isMobile ? 0.66 : 1)
+          const styleRotate = spreadRotate * spreadAmount * (isMobile ? 0.72 : 1)
+          const styleY = stackY + (spreadY - stackY) * spreadAmount + (isActive ? (isMobile ? -6 : -10) : 0)
           const stackOpacity = 0.99 - spreadAmount * 0.3
           const glassOpacity = 0.02 + spreadAmount * 0.16
           const redOpacity = 0.03 + spreadAmount * 0.16
