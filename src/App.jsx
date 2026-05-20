@@ -768,6 +768,8 @@ export default function App() {
   const [introPhase, setIntroPhase] = useState('reveal')
   const [navReady, setNavReady] = useState(false)
   const [contentReady, setContentReady] = useState(false)
+  const [compactNav, setCompactNav] = useState(false)
+  const [navOpen, setNavOpen] = useState(false)
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
   const pointerX = useMotionValue(0)
@@ -834,6 +836,17 @@ export default function App() {
     }
   }, [introPhase])
 
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 900px)')
+    const update = () => {
+      setCompactNav(media.matches)
+      if (!media.matches) setNavOpen(false)
+    }
+    update()
+    media.addEventListener('change', update)
+    return () => media.removeEventListener('change', update)
+  }, [])
+
   return (
     <div
       className={`cinematic-root ${introPhase !== 'done' ? 'intro-active' : ''}`}
@@ -871,11 +884,21 @@ export default function App() {
             <img src="/invision_logo_transparent.png" alt="INVISION FILMS logo" />
             <span>INVISION FILMS</span>
           </a>
-          <div className="top-links">
-            <a href="#about">About</a>
-            <a href="#films">Films</a>
-            <a href="#frames">Frames</a>
-            <a href="#team">Team</a>
+          <button
+            className={`nav-toggle ${navOpen ? 'is-open' : ''}`}
+            aria-label="Toggle navigation menu"
+            aria-expanded={navOpen}
+            onClick={() => setNavOpen((v) => !v)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+          <div className={`top-links ${compactNav ? 'is-compact' : ''} ${navOpen ? 'is-open' : ''}`}>
+            <a href="#about" onClick={() => setNavOpen(false)}>About</a>
+            <a href="#films" onClick={() => setNavOpen(false)}>Films</a>
+            <a href="#frames" onClick={() => setNavOpen(false)}>Frames</a>
+            <a href="#team" onClick={() => setNavOpen(false)}>Team</a>
           </div>
         </nav>
       </motion.header>
