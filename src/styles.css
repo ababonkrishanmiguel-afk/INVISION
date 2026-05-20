@@ -728,6 +728,22 @@ main,
   margin-top: 1rem;
 }
 
+.film-award-image-wrap {
+  margin-top: 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0.9rem;
+  overflow: hidden;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.72));
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.34);
+}
+
+.film-award-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
 .wreath-award-card {
   position: relative;
   width: min(360px, 100%);

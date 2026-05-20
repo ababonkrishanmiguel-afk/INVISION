@@ -67,6 +67,7 @@ const chapters = [
     logline: 'Every so often, time is unpredictable and destiny is inescapable.',
     aura: 'aura-1975',
     poster: driveSrc('1S2Senewo9YubCPs3L78lV8htFvZapQ2T'),
+    awardImage: '',
     awards: [
       'Debut Film'
     ]
@@ -79,6 +80,7 @@ const chapters = [
     logline: 'Claire, a skeptic who dismissed superstition, opens a doorway between the 3rd and 6th dimensions where reality unravels into something unholy.',
     aura: 'aura-1111',
     poster: driveSrc('1crhqiQolAGGtdFK7sCraY4WCg3WelfRc'),
+    awardImage: '/1111awards.png',
     awards: [
       'SINEDISIPULO "X" Film Festival - Most Viewed Film',
       'CINEU "Catorce" Film Festival - Best Film, Best Picture, Best Editing, Best Cinematography, Best Sound Design, Jury Prize Award, Best Actress'
@@ -92,6 +94,7 @@ const chapters = [
     logline: 'A dreamlike love too fragile for reality, where John is somehow everywhere but nowhere in sight.',
     aura: 'aura-specter',
     poster: driveSrc('1Mxsn0UFH6MoZF0A4mqRLXeTjBdk1mg67'),
+    awardImage: '/specterdream%20awards.png',
     awards: [
       'CINEU "Catorce" Film Festival - Best Director, Best Production Design, Best Actor, Best Supporting Actor'
     ]
@@ -104,6 +107,7 @@ const chapters = [
     logline: 'In blindness and love, Isabel discovers a reality she was never meant to see.',
     aura: 'aura-pasaglawom',
     poster: driveSrc('12yLct-g_yKebVI-SVOhzNE56eDgmt7nb'),
+    awardImage: '/pasaglawom%20awards.png',
     awards: [
       'SINEDISIPULO "XI" Film Exhibition - Official Selection'
     ]
@@ -116,6 +120,7 @@ const chapters = [
     logline: 'Five friends join a 48-hour film challenge, but with no script in hand, imagination takes over and reality begins to unravel.',
     aura: 'aura-merese',
     poster: driveSrc('1POrIhcBCBpT0p7hEmUrF-weF1LYMaV7I'),
+    awardImage: '/merese%20awards.png',
     awards: [
       "DTI's Fiesta Kucha Film Festival 2025 - Best Editing"
     ]
@@ -128,6 +133,7 @@ const chapters = [
     logline: 'At the center is Elaine De Gracia, a student nurse in a Catholic school whose mind quietly unravels as sanity begins to expire.',
     aura: 'aura-somnium',
     poster: driveSrc('1oNOu2PlykdDlNn-ByDzXrVSrpEUkLwNk'),
+    awardImage: '/somnium%20awards.png',
     awards: [
       '3rd University of Wollongong in Dubai Film Festival 2025 - Top 10 Official Selection'
     ]
@@ -140,6 +146,7 @@ const chapters = [
     logline: 'In the quiet of the unseen, Elsie Daayon fights tirelessly for her dreams, climbing through struggle and sacrifice. Can hope guide her to the top?',
     aura: 'aura-taphaw',
     poster: driveSrc('1OhwFBCW1V15OWkTJqapGA40XZMMXhXjH'),
+    awardImage: '/taphaw%20awards.png',
     awards: [
       'Sinulog Film Festival 2026 - Best Film, Best Screenplay, Best Director, Best Cinematography, Best Production Design, Best Playbill, Best Actress',
       'Sinepiyu XVIII Diwa: Sa Lente Ng Katauhan - Best Actress'
@@ -199,9 +206,9 @@ const frames = [
     image: driveSrc('1crhqiQolAGGtdFK7sCraY4WCg3WelfRc')
   },
   {
-    title: 'Waves In A Dream',
-    film: 'Specter Dream (2022)',
-    image: driveSrc('1Mxsn0UFH6MoZF0A4mqRLXeTjBdk1mg67')
+    title: 'Heart Of Padayon',
+    film: 'Taphaw (2026)',
+    image: driveSrc('1Z_pPnp2uied3DpdyKVBxMwuxY_clL1c9')
   },
   {
     title: 'It Is What It Is',
@@ -214,9 +221,9 @@ const frames = [
     image: driveSrc('1_W1d_yRlHhQeFdqIf0KqDc9ai1F9mcWd')
   },
   {
-    title: 'Heart Of Padayon',
-    film: 'Taphaw (2026)',
-    image: driveSrc('1Z_pPnp2uied3DpdyKVBxMwuxY_clL1c9')
+    title: 'Waves In A Dream',
+    film: 'Specter Dream (2022)',
+    image: driveSrc('1Mxsn0UFH6MoZF0A4mqRLXeTjBdk1mg67')
   },
   {
     title: 'Fragile Corridor',
@@ -236,7 +243,7 @@ const language = [
 
 const teamMembers = [
   { name: 'Far Spencer', role: 'Film Director & Producer', photo: driveSrc('1BvqNS7hVta210DoVUuOniYfjYSUxgq84') },
-  { name: 'Micah Jirah Mendoza', role: 'Production Secretary & Actress', photo: driveSrc('1e3uzy5UlqATC5Ify3B3FR1s-9BNo0O2f') },
+  { name: 'Micah Jirah Mendoza', role: 'Production Secretary & Actress', photo: driveSrc('1WRYwPWr4poKH3WOh5Sk3jEc1-xk3gC99') },
   { name: 'Jade Lagasca', role: 'Director of Cinematography & Editor', photo: driveSrc('1HXOKJ6U7GsbMqEA-vnreqKIEtOThz9Fj') },
   { name: 'Denver Hoybia', role: 'Assistant Director & Actor', photo: driveSrc('1drFQkJs_U74Ni2uArCDGHrIjCEI2bomX') },
   { name: 'John Lloyd Caramihan', role: 'Production Designer & Actor', photo: driveSrc('1e3uzy5UlqATC5Ify3B3FR1s-9BNo0O2f') },
@@ -370,20 +377,11 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile 
                 </p>
                 <h3>{chapter.title}</h3>
                 <p>{chapter.logline}</p>
-                <div className="film-award-mini">
-                  <div className="wreath-award-card">
-                    <img src="/wreath-awards.webp" alt="Film award wreath" className="wreath-award-graphic" />
-                    <div className="wreath-award-copy">
-                      <span>Film Awards</span>
-                      <strong>{chapter.title}</strong>
-                    </div>
+                {chapter.awardImage ? (
+                  <div className="film-award-image-wrap">
+                    <img src={chapter.awardImage} alt={`${chapter.title} awards`} className="film-award-image" loading="lazy" />
                   </div>
-                  <ul className="film-award-list">
-                    {chapter.awards.map((award) => (
-                      <li key={award}>{award}</li>
-                    ))}
-                  </ul>
-                </div>
+                ) : null}
               </article>
             </motion.div>
           ) : null}
