@@ -294,22 +294,76 @@ function IntroSequence({ phase }) {
   )
 }
 
-function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile, dragOffset = 0 }) {
+function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile, dragOffset = 0, isDragging = false }) {
   const tiltX = useMotionValue(0)
   const tiltY = useMotionValue(0)
   const sx = useSpring(tiltX, { stiffness: 170, damping: 20, mass: 0.7 })
   const sy = useSpring(tiltY, { stiffness: 170, damping: 20, mass: 0.7 })
   const [mx, setMx] = useState(50)
   const [my, setMy] = useState(50)
-  const baseX = isMobile ? (isActive ? 0 : rel < 0 ? -28 : 28) : isActive ? 0 : rel < 0 ? -360 : 360
-  const x = isMobile ? baseX + dragOffset : baseX
-  const y = isMobile ? (isActive ? 0 : 16) : isActive ? 0 : 14
-  const scale = isActive ? 1 : isMobile ? 0.9 : 0.82
-  const opacity = hidden ? 0 : isActive ? 1 : 0.5
-  const rotateYBase = isActive ? 0 : isMobile ? 0 : rel < 0 ? 22 : -22
-  const rotateZBase = isActive ? 0 : isMobile ? 0 : rel < 0 ? -3.5 : 3.5
-  const blur = isActive ? 0 : 2.8
-  const zIndex = isActive ? 10 : rel < 0 ? 6 : 5
+  const mobileMaxDrag = 140
+  const dragNorm = isMobile ? Math.max(-1, Math.min(1, dragOffset / mobileMaxDrag)) : 0
+  const dragPower = Math.abs(dragNorm)
+  const dragToNext = dragNorm < 0
+  const dragToPrev = dragNorm > 0
+
+  let x = isMobile ? (isActive ? 0 : rel < 0 ? -34 : 34) : isActive ? 0 : rel < 0 ? -360 : 360
+  let y = isMobile ? (isActive ? 0 : 16) : isActive ? 0 : 14
+  let scale = isActive ? 1 : isMobile ? 0.9 : 0.82
+  let opacity = hidden ? 0 : isActive ? 1 : 0.5
+  let rotateYBase = isActive ? 0 : isMobile ? 0 : rel < 0 ? 22 : -22
+  let rotateZBase = isActive ? 0 : isMobile ? 0 : rel < 0 ? -3.5 : 3.5
+  let blur = isActive ? 0 : 2.8
+  let zIndex = isActive ? 10 : rel < 0 ? 6 : 5
+
+  if (isMobile) {
+    const baseLeft = -102
+    const baseRight = 102
+    if (isActive) {
+      x = dragOffset * 0.78
+      y = dragPower * 6
+      scale = 1 - dragPower * 0.045
+      opacity = 1
+      blur = dragPower * 0.55
+      rotateYBase = dragNorm * 3.8
+      rotateZBase = dragNorm * 1.4
+      zIndex = 10
+    } else if (rel === 1) {
+      if (isDragging && dragToNext) {
+        x = baseRight - dragPower * 94
+        y = 14 - dragPower * 8
+        scale = 0.86 + dragPower * 0.14
+        opacity = 0.42 + dragPower * 0.54
+        blur = 3.4 - dragPower * 2.9
+        rotateYBase = -9 + dragPower * 9
+        rotateZBase = 2.4 - dragPower * 2.4
+        zIndex = 9
+      } else {
+        x = 38
+        y = 16
+        scale = 0.9
+        opacity = 0.5
+        blur = 2.8
+      }
+    } else if (rel === -1) {
+      if (isDragging && dragToPrev) {
+        x = baseLeft + dragPower * 94
+        y = 14 - dragPower * 8
+        scale = 0.86 + dragPower * 0.14
+        opacity = 0.42 + dragPower * 0.54
+        blur = 3.4 - dragPower * 2.9
+        rotateYBase = 9 - dragPower * 9
+        rotateZBase = -2.4 + dragPower * 2.4
+        zIndex = 9
+      } else {
+        x = -38
+        y = 16
+        scale = 0.9
+        opacity = 0.5
+        blur = 2.8
+      }
+    }
+  }
 
   return (
     <motion.article
@@ -325,7 +379,7 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile,
         filter: `blur(${hidden ? 6 : blur}px) brightness(${isActive ? 1 : 0.62})`
       }}
       initial={false}
-      transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: isDragging && isMobile ? 0.12 : 0.68, ease: [0.22, 1, 0.36, 1] }}
       style={{ pointerEvents: hidden ? 'none' : 'auto' }}
       onMouseMove={(e) => {
         if (!isActive || isMobile) return
@@ -511,7 +565,7 @@ function FilmographyShowcase() {
           const x = e.changedTouches?.[0]?.clientX ?? 0
           const delta = x - touchStartXRef.current
           touchDeltaXRef.current = delta
-          setDragOffset(Math.max(-68, Math.min(68, delta * 0.32)))
+          setDragOffset(Math.max(-140, Math.min(140, delta * 0.6)))
         }}
         onTouchEnd={() => {
           const delta = touchDeltaXRef.current
@@ -567,6 +621,7 @@ function FilmographyShowcase() {
                 direction={direction}
                 isMobile={isMobile}
                 dragOffset={dragOffset}
+                isDragging={isDragging}
               />
             )
           })}
@@ -833,8 +888,8 @@ function TeamStack() {
           const spreadX = idx === 0 ? -36 : idx === 1 ? 0 : 36
           const spreadRotate = idx === 0 ? -7 : idx === 1 ? 0 : 7
           const stackY = idx * 5
-          const verticalDistance = isMobile ? 190 : 210
-          const mobileBaseOffset = isMobile ? 94 : 0
+          const verticalDistance = isMobile ? 158 : 210
+          const mobileBaseOffset = isMobile ? 124 : 0
           const spreadY = idx === 0 ? -verticalDistance : idx === 1 ? 0 : verticalDistance
           const styleX = isMobile ? 0 : spreadX * spreadAmount
           const styleRotate = isMobile ? 0 : spreadRotate * spreadAmount
