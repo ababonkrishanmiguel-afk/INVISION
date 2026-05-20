@@ -742,7 +742,7 @@ function TeamStack() {
 
   useMotionValueEvent(scrollYProgress, 'change', (value) => {
     const next = Math.max(0, Math.min(1, (value - 0.08) / 0.24))
-    setSpreadAmount(isMobile ? 0 : next)
+    setSpreadAmount(next)
   })
 
   const stack = [
@@ -770,21 +770,21 @@ function TeamStack() {
         title="The Team who made it happen"
         subtitle="Built by storytellers, directors, editors, cinematographers, and creatives who shared the same vision from concept to final frame."
       />
-      <div className={`team-stack-wrap ${isMobile ? 'is-mobile-stack' : spreadAmount > 0.03 ? 'is-spread' : 'is-stacked'}`}>
+      <div className={`team-stack-wrap ${spreadAmount > 0.03 ? 'is-spread' : 'is-stacked'}`}>
         {stack.map((item, idx) => {
           const isActive = activeCard === idx
           const spreadX = idx === 0 ? -410 : idx === 1 ? 0 : 410
           const spreadRotate = idx === 0 ? -15 : idx === 1 ? 0 : 15
           const stackY = idx * 5
           const spreadY = idx === 0 ? 24 : idx === 1 ? -16 : 24
-          const styleX = isMobile ? 0 : spreadX * spreadAmount
-          const styleRotate = isMobile ? 0 : spreadRotate * spreadAmount
-          const styleY = isMobile ? 0 : stackY + (spreadY - stackY) * spreadAmount + (isActive ? -16 : 0)
+          const styleX = spreadX * spreadAmount * (isMobile ? 0.52 : 1)
+          const styleRotate = spreadRotate * spreadAmount * (isMobile ? 0.55 : 1)
+          const styleY = stackY + (spreadY - stackY) * spreadAmount + (isActive ? (isMobile ? -8 : -16) : 0)
           const stackOpacity = 0.99 - spreadAmount * 0.3
           const glassOpacity = 0.02 + spreadAmount * 0.16
           const redOpacity = 0.03 + spreadAmount * 0.16
-          const tiltY = isMobile ? 0 : (idx === 1 ? 7 : 4) * spreadAmount
-          const tiltX = isMobile ? 0 : (idx === 1 ? -4 : -2) * spreadAmount
+          const tiltY = (idx === 1 ? 7 : 4) * spreadAmount * (isMobile ? 0.45 : 1)
+          const tiltX = (idx === 1 ? -4 : -2) * spreadAmount * (isMobile ? 0.45 : 1)
 
           return (
             <motion.article
