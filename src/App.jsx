@@ -53,41 +53,97 @@ function DriveImage({ src, alt, className }) {
 }
 
 const aboutContent = {
-  title: 'From Cebuano Roots to Award-Winning Films',
+  title: 'From Cebuano Roots to Award‑winning Films',
   subtitle: 'Founded in 2021 as a Cebuano student multimedia body, we have since evolved into a professional creative team producing award-winning films.',
   body: 'INVISION FILMS was founded in 2021 as a Cebuano student multimedia collective driven by a shared passion for storytelling and filmmaking. Through years of persistence, collaboration, and creative growth, we evolved into a professional team producing award-winning films. We remain rooted in cinematic storytelling, and our visual language adapts to the emotion, atmosphere, and identity of every story we choose to tell.'
 }
 
 const chapters = [
   {
-    title: 'Merese',
+    title: '1975',
     chapter: 'Chapter I',
+    year: '2021',
+    genre: 'Romantic Drama',
+    logline: 'Every so often, time is unpredictable and destiny is inescapable.',
+    aura: 'aura-1975',
+    poster: driveSrc('1S2Senewo9YubCPs3L78lV8htFvZapQ2T'),
+    awards: [
+      'Debut Film'
+    ]
+  },
+  {
+    title: '11:11',
+    chapter: 'Chapter II',
+    year: '2022',
+    genre: 'Horror',
+    logline: 'Claire, a skeptic who dismissed superstition, opens a doorway between the 3rd and 6th dimensions where reality unravels into something unholy.',
+    aura: 'aura-1111',
+    poster: driveSrc('1crhqiQolAGGtdFK7sCraY4WCg3WelfRc'),
+    awards: [
+      'SINEDISIPULO "X" Film Festival - Most Viewed Film',
+      'CINEU "Catorce" Film Festival - Best Film, Best Picture, Best Editing, Best Cinematography, Best Sound Design, Jury Prize Award, Best Actress'
+    ]
+  },
+  {
+    title: 'Specter Dream',
+    chapter: 'Chapter III',
+    year: '2022',
+    genre: 'Romantic BL Drama',
+    logline: 'A dreamlike love too fragile for reality, where John is somehow everywhere but nowhere in sight.',
+    aura: 'aura-specter',
+    poster: driveSrc('1Mxsn0UFH6MoZF0A4mqRLXeTjBdk1mg67'),
+    awards: [
+      'CINEU "Catorce" Film Festival - Best Director, Best Production Design, Best Actor, Best Supporting Actor'
+    ]
+  },
+  {
+    title: 'PASAGLAWOM',
+    chapter: 'Chapter IV',
+    year: '2022',
+    genre: 'Romantic Drama',
+    logline: 'In blindness and love, Isabel discovers a reality she was never meant to see.',
+    aura: 'aura-pasaglawom',
+    poster: driveSrc('12yLct-g_yKebVI-SVOhzNE56eDgmt7nb'),
+    awards: [
+      'SINEDISIPULO "XI" Film Exhibition - Official Selection'
+    ]
+  },
+  {
+    title: 'Merese',
+    chapter: 'Chapter V',
     year: '2023',
     genre: 'Comedy',
     logline: 'Five friends join a 48-hour film challenge, but with no script in hand, imagination takes over and reality begins to unravel.',
     aura: 'aura-merese',
     poster: driveSrc('1POrIhcBCBpT0p7hEmUrF-weF1LYMaV7I'),
-    awardLine: "DTI's Fiesta Kucha Film Festival 2025 | Best Editing"
+    awards: [
+      "DTI's Fiesta Kucha Film Festival 2025 - Best Editing"
+    ]
   },
   {
     title: 'Somnium',
-    chapter: 'Chapter II',
+    chapter: 'Chapter VI',
     year: '2025',
     genre: 'Psychological Horror',
     logline: 'At the center is Elaine De Gracia, a student nurse in a Catholic school whose mind quietly unravels as sanity begins to expire.',
     aura: 'aura-somnium',
     poster: driveSrc('1oNOu2PlykdDlNn-ByDzXrVSrpEUkLwNk'),
-    awardLine: '3rd University of Wollongong in Dubai | Top 10 Official Selection'
+    awards: [
+      '3rd University of Wollongong in Dubai Film Festival 2025 - Top 10 Official Selection'
+    ]
   },
   {
     title: 'Taphaw',
-    chapter: 'Chapter III',
+    chapter: 'Chapter VII',
     year: '2026',
     genre: 'Drama',
     logline: 'In the quiet of the unseen, Elsie Daayon fights tirelessly for her dreams, climbing through struggle and sacrifice. Can hope guide her to the top?',
     aura: 'aura-taphaw',
     poster: driveSrc('1OhwFBCW1V15OWkTJqapGA40XZMMXhXjH'),
-    awardLine: 'Sinulog Film Festival 2026 | Best Film, Best Screenplay, Best Director, Best Cinematography'
+    awards: [
+      'Sinulog Film Festival 2026 - Best Film, Best Screenplay, Best Director, Best Cinematography, Best Production Design, Best Playbill, Best Actress',
+      'Sinepiyu XVIII Diwa: Sa Lente Ng Katauhan - Best Actress'
+    ]
   }
 ]
 
@@ -127,6 +183,12 @@ const awards = [
     items: ['Official lineup feature', 'Sinepiyu XVIII Diwa'],
     photo: driveSrc('1z1-KcjeuwTs1j-EV7r7kvcO1sdQu8bVT'),
     article: 'https://www.facebook.com/share/p/1H1a3L3ZJN/'
+  },
+  {
+    film: 'Taphaw Winners Screening and Talkback',
+    items: ['Featured on Sinegang.ph', 'Cinematheque Centre - Manila (FDCP)'],
+    photo: driveSrc('1z1-KcjeuwTs1j-EV7r7kvcO1sdQu8bVT'),
+    article: 'https://www.sinegang.ph/'
   }
 ]
 
@@ -137,9 +199,9 @@ const frames = [
     image: driveSrc('1crhqiQolAGGtdFK7sCraY4WCg3WelfRc')
   },
   {
-    title: 'Waves In A Dream',
-    film: 'Specter Dream (2022)',
-    image: driveSrc('1Mxsn0UFH6MoZF0A4mqRLXeTjBdk1mg67')
+    title: 'Heart Of Padayon',
+    film: 'Taphaw (2026)',
+    image: driveSrc('1Z_pPnp2uied3DpdyKVBxMwuxY_clL1c9')
   },
   {
     title: 'It Is What It Is',
@@ -152,9 +214,9 @@ const frames = [
     image: driveSrc('1_W1d_yRlHhQeFdqIf0KqDc9ai1F9mcWd')
   },
   {
-    title: 'Heart Of Padayon',
-    film: 'Taphaw (2026)',
-    image: driveSrc('1Z_pPnp2uied3DpdyKVBxMwuxY_clL1c9')
+    title: 'Waves In A Dream',
+    film: 'Specter Dream (2022)',
+    image: driveSrc('1Mxsn0UFH6MoZF0A4mqRLXeTjBdk1mg67')
   },
   {
     title: 'Fragile Corridor',
@@ -174,10 +236,10 @@ const language = [
 
 const teamMembers = [
   { name: 'Far Spencer', role: 'Film Director & Producer', photo: driveSrc('1BvqNS7hVta210DoVUuOniYfjYSUxgq84') },
-  { name: 'John Lloyd Caramihan', role: 'Production Secretary & Actor', photo: driveSrc('1e3uzy5UlqATC5Ify3B3FR1s-9BNo0O2f') },
+  { name: 'Micah Jirah Mendoza', role: 'Production Secretary & Actress', photo: driveSrc('1e3uzy5UlqATC5Ify3B3FR1s-9BNo0O2f') },
   { name: 'Jade Lagasca', role: 'Director of Cinematography & Editor', photo: driveSrc('1HXOKJ6U7GsbMqEA-vnreqKIEtOThz9Fj') },
   { name: 'Denver Hoybia', role: 'Assistant Director & Actor', photo: driveSrc('1drFQkJs_U74Ni2uArCDGHrIjCEI2bomX') },
-  { name: 'Cris Vinuya', role: 'Production Designer & Actor', photo: driveSrc('1e3uzy5UlqATC5Ify3B3FR1s-9BNo0O2f') },
+  { name: 'John Lloyd Caramihan', role: 'Production Designer & Actor', photo: driveSrc('1e3uzy5UlqATC5Ify3B3FR1s-9BNo0O2f') },
   { name: 'Krishan Miguel', role: 'Editor Assist & Web Dev', photo: driveSrc('1dCFr7Ya4KyfjR4aHKNoLnc7DqMIXCjog') },
   { name: 'Ella Sigue', role: 'Sound Recordist & Camera Operator', photo: driveSrc('1F1KKL110WBdHVNWILurqjxH_H8kyXR-J') },
   { name: 'Ken Martinez', role: 'Editor & Assistant Cinematographer', photo: driveSrc('1ebAMwZqvw7OJjp7Nx6qB0Urs9qz5MVpE') },
@@ -232,8 +294,6 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile 
   const sy = useSpring(tiltY, { stiffness: 170, damping: 20, mass: 0.7 })
   const [mx, setMx] = useState(50)
   const [my, setMy] = useState(50)
-
-  const [awardTitle, awardEvent] = chapter.awardLine.split('|').map((v) => v.trim())
   const x = isMobile ? (isActive ? 0 : rel < 0 ? -28 : 28) : isActive ? 0 : rel < 0 ? -360 : 360
   const y = isMobile ? (isActive ? 0 : 16) : isActive ? 0 : 14
   const scale = isActive ? 1 : isMobile ? 0.9 : 0.82
@@ -311,24 +371,18 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile 
                 <h3>{chapter.title}</h3>
                 <p>{chapter.logline}</p>
                 <div className="film-award-mini">
-                  <div className="laurette-badge">
-                    <div className="laurette-wing laurette-wing-left">
-                      {Array.from({ length: 9 }).map((_, leafIndex) => (
-                        <span key={`left-${leafIndex}`} className="laurette-leaf" style={{ '--i': leafIndex }} />
-                      ))}
-                    </div>
-                    <div className="laurette-core">
-                      <span className="laurette-label">Film Award</span>
-                      <strong>{awardTitle}</strong>
-                      <span className="laurette-sub">{chapter.title}</span>
-                    </div>
-                    <div className="laurette-wing laurette-wing-right">
-                      {Array.from({ length: 9 }).map((_, leafIndex) => (
-                        <span key={`right-${leafIndex}`} className="laurette-leaf" style={{ '--i': leafIndex }} />
-                      ))}
+                  <div className="wreath-award-card">
+                    <img src="/Wreath%20awards.webp" alt="Film award wreath" className="wreath-award-graphic" />
+                    <div className="wreath-award-copy">
+                      <span>Film Awards</span>
+                      <strong>{chapter.title}</strong>
                     </div>
                   </div>
-                  <p className="film-award-event">{awardEvent}</p>
+                  <ul className="film-award-list">
+                    {chapter.awards.map((award) => (
+                      <li key={award}>{award}</li>
+                    ))}
+                  </ul>
                 </div>
               </article>
             </motion.div>
@@ -412,7 +466,7 @@ function FilmographyShowcase() {
       <SectionHeading
         eyebrow="INVISION"
         title="FILMOGRAPHY"
-        subtitle="Featured film carousel: Merese, Somnium, and Taphaw."
+        subtitle="A curated journey through stories shaped by memory, identity, emotion, and motion."
       />
       <div
         className="film-carousel-shell"
@@ -506,7 +560,7 @@ function FramesCarousel() {
   return (
     <section id="frames" ref={ref} className="frames-scene">
       <SectionHeading
-        eyebrow="Frames"
+        eyebrow="INVISION"
         title="Cinematic Frames"
         subtitle="Floating stills from a moving film world."
       />
@@ -591,7 +645,7 @@ function FilmLanguageMarquee() {
   return (
     <section ref={ref} className="content-section language-section">
       <SectionHeading
-        eyebrow="Our Film Language"
+        eyebrow="INVISION"
         title="How We Shape Films"
         subtitle="A cinematic process that moves with story, rhythm, and atmosphere."
       />
@@ -690,18 +744,18 @@ function TeamStack() {
   const stack = [
     {
       id: 0,
-      role: 'FAR SPENCER',
-      text: 'Founder | Film direction, story architecture, and chapter orchestration.'
+      role: 'JADE LAGASCA + KRISHAN MIGUEL',
+      text: 'Founders | Cinematography, editorial systems, and web craft shaping the visual language of every chapter.'
     },
     {
       id: 1,
-      role: 'Jade Lagasca',
-      text: 'Founder | Lens language, movement grammar, and atmosphere-first composition.'
+      role: 'FAR SPENCER',
+      text: 'Founder | Film direction, story architecture, and chapter orchestration across concept to final frame.'
     },
     {
       id: 2,
-      role: 'Krishan Miguel & Micah Jirah Mendoza',
-      text: 'Founders | Editorial systems, production leadership, and final-frame execution.'
+      role: 'MICAH JIRAH + VALERIE DEMICILLO',
+      text: 'Founders | Production leadership, performance energy, and animated visual finishing.'
     }
   ]
 
@@ -731,7 +785,7 @@ function TeamStack() {
           return (
             <motion.article
               key={item.role}
-              className={`team-stack-card team-stack-${idx} ${isActive ? 'is-active' : ''}`}
+              className={`team-stack-card team-stack-${idx} ${idx === 1 ? 'is-featured' : ''} ${isActive ? 'is-active' : ''}`}
               onMouseEnter={() => setActiveCard(idx)}
               onClick={() => setActiveCard(idx)}
               style={{
@@ -748,7 +802,6 @@ function TeamStack() {
               whileHover={isMobile ? { y: -4, scale: 1.008 } : { y: isActive ? styleY - 4 : styleY - 10, rotateX: 3, scale: 1.015 }}
               transition={{ type: 'spring', stiffness: 170, damping: 20, mass: 0.9 }}
             >
-              <span>{String(idx + 1).padStart(2, '0')}</span>
               <h3>{item.role}</h3>
               <p>{item.text}</p>
             </motion.article>
@@ -955,8 +1008,8 @@ export default function App() {
         <section className="content-section awards-section">
           <SectionHeading
             eyebrow="INVISION"
-            title="RECOGNITION"
-            subtitle="Recognition and festival features sourced from the INVISION FILMS dossier."
+            title="RECOGNITIONS"
+            subtitle="Recognitions and festival features sourced from the INVISION FILMS dossier."
           />
           <div className="awards-grid">
             {awards.map((group, idx) => (
@@ -992,7 +1045,27 @@ export default function App() {
 
       <footer className={`site-footer ${!contentReady ? 'content-pre' : 'content-reveal footer-reveal'}`}>
         <p>INVISION FILMS</p>
-        <a href="mailto:invisionfilms21@gmail.com">invisionfilms21@gmail.com</a>
+        <div className="footer-right">
+          <a href="mailto:invisionfilms21@gmail.com">invisionfilms21@gmail.com</a>
+          <div className="footer-socials">
+            <a href="https://www.facebook.com/INVISION.Films" target="_blank" rel="noreferrer" aria-label="INVISION Facebook">
+              <span className="footer-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img">
+                  <path d="M13.5 8.4V6.9c0-.9.6-1.1 1-1.1h1.4V3.2h-1.9c-2.3 0-2.8 1.7-2.8 2.9v2.3H9.3v2.8h1.9v7h2.3v-7h1.9l.3-2.8h-2.2z" fill="currentColor" />
+                </svg>
+              </span>
+              <span>INVISION</span>
+            </a>
+            <a href="https://www.instagram.com/invision.films/" target="_blank" rel="noreferrer" aria-label="INVISION Instagram">
+              <span className="footer-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img">
+                  <path d="M7.8 3h8.4A4.8 4.8 0 0 1 21 7.8v8.4a4.8 4.8 0 0 1-4.8 4.8H7.8A4.8 4.8 0 0 1 3 16.2V7.8A4.8 4.8 0 0 1 7.8 3zm0 1.9A2.9 2.9 0 0 0 4.9 7.8v8.4a2.9 2.9 0 0 0 2.9 2.9h8.4a2.9 2.9 0 0 0 2.9-2.9V7.8a2.9 2.9 0 0 0-2.9-2.9H7.8zm8.8 1.4a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.9a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2z" fill="currentColor" />
+                </svg>
+              </span>
+              <span>INVISION</span>
+            </a>
+          </div>
+        </div>
       </footer>
     </div>
   )
