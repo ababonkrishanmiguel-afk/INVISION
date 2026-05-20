@@ -1272,7 +1272,7 @@ main,
 
 .team-stack-wrap {
   position: relative;
-  height: 620px;
+  height: 500px;
   width: min(980px, 100%);
   margin: 0.5rem auto 0;
   perspective: 1400px;
@@ -1373,7 +1373,7 @@ main,
 }
 
 .team-roster-grid {
-  margin-top: 2.2rem;
+  margin-top: 1.35rem;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.75rem;
@@ -1822,13 +1822,13 @@ main,
   }
 
   .team-stack-wrap {
-    margin-top: 2rem;
-    height: 690px;
+    margin-top: 0.65rem;
+    height: 640px;
   }
 
   .team-stack-card {
     padding: 0.95rem;
-    top: 96px;
+    top: 72px;
   }
 
   .team-stack-card h3 {
@@ -1844,11 +1844,11 @@ main,
     display: flex;
     perspective: 1200px;
     width: 100%;
-    margin-top: 0.1rem;
+    margin-top: 0.65rem;
   }
 
   .team-roster-grid {
-    margin-top: 1.35rem;
+    margin-top: 0.85rem;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.55rem;
     perspective: none;
@@ -1878,12 +1878,12 @@ main,
 
 @media (max-width: 520px) {
   .team-stack-wrap {
-    margin-top: 2.2rem;
-    height: 740px;
+    margin-top: 0.75rem;
+    height: 660px;
   }
 
   .team-stack-card {
-    top: 118px;
+    top: 86px;
   }
 
   .film-carousel-shell {
