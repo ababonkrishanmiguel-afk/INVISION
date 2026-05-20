@@ -294,14 +294,15 @@ function IntroSequence({ phase }) {
   )
 }
 
-function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile }) {
+function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile, dragOffset = 0 }) {
   const tiltX = useMotionValue(0)
   const tiltY = useMotionValue(0)
   const sx = useSpring(tiltX, { stiffness: 170, damping: 20, mass: 0.7 })
   const sy = useSpring(tiltY, { stiffness: 170, damping: 20, mass: 0.7 })
   const [mx, setMx] = useState(50)
   const [my, setMy] = useState(50)
-  const x = isMobile ? (isActive ? 0 : rel < 0 ? -28 : 28) : isActive ? 0 : rel < 0 ? -360 : 360
+  const baseX = isMobile ? (isActive ? 0 : rel < 0 ? -28 : 28) : isActive ? 0 : rel < 0 ? -360 : 360
+  const x = isMobile ? baseX + dragOffset : baseX
   const y = isMobile ? (isActive ? 0 : 16) : isActive ? 0 : 14
   const scale = isActive ? 1 : isMobile ? 0.9 : 0.82
   const opacity = hidden ? 0 : isActive ? 1 : 0.5
@@ -412,6 +413,8 @@ function FilmographyShowcase() {
   const [isMobile, setIsMobile] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
   const [autoEnabled, setAutoEnabled] = useState(true)
+  const [dragOffset, setDragOffset] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
   const resumeTimerRef = useRef(null)
   const touchStartXRef = useRef(0)
   const touchDeltaXRef = useRef(0)
@@ -500,18 +503,32 @@ function FilmographyShowcase() {
           const x = e.changedTouches?.[0]?.clientX ?? 0
           touchStartXRef.current = x
           touchDeltaXRef.current = 0
+          setIsDragging(true)
+          setAutoEnabled(false)
+          if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
         }}
         onTouchMove={(e) => {
           const x = e.changedTouches?.[0]?.clientX ?? 0
-          touchDeltaXRef.current = x - touchStartXRef.current
+          const delta = x - touchStartXRef.current
+          touchDeltaXRef.current = delta
+          setDragOffset(Math.max(-68, Math.min(68, delta * 0.32)))
         }}
         onTouchEnd={() => {
           const delta = touchDeltaXRef.current
-          if (Math.abs(delta) < 44) return
-          pauseAutoscroll(7000)
-          if (delta < 0) goNext()
-          else goPrev()
+          setIsDragging(false)
+          if (Math.abs(delta) >= 44) {
+            if (delta < 0) goNext()
+            else goPrev()
+          }
+          pauseAutoscroll(6500)
+          setDragOffset(0)
           touchDeltaXRef.current = 0
+        }}
+        onTouchCancel={() => {
+          setIsDragging(false)
+          touchDeltaXRef.current = 0
+          setDragOffset(0)
+          pauseAutoscroll(4000)
         }}
       >
         <button
@@ -549,6 +566,7 @@ function FilmographyShowcase() {
                 hidden={hidden}
                 direction={direction}
                 isMobile={isMobile}
+                dragOffset={dragOffset}
               />
             )
           })}
@@ -775,7 +793,7 @@ function TeamStack() {
     const raw = Math.max(0, Math.min(1, (value - 0.02) / 0.58))
     const eased = Math.pow(raw, 0.82)
     if (isMobile) {
-      if (raw >= 0.36) setSpreadAmount(1)
+      if (raw >= 0.18) setSpreadAmount(1)
       else setSpreadAmount(Math.min(1, eased * 1.85))
       return
     }
