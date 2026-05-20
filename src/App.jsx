@@ -292,13 +292,21 @@ function FilmChapter({ chapter, idx }) {
           <p>{chapter.logline}</p>
           <div className="film-award-mini">
             <div className="laurette-badge">
-              <div className="laurette-wing laurette-wing-left" />
+              <div className="laurette-wing laurette-wing-left">
+                {Array.from({ length: 9 }).map((_, leafIndex) => (
+                  <span key={`left-${leafIndex}`} className="laurette-leaf" style={{ '--i': leafIndex }} />
+                ))}
+              </div>
               <div className="laurette-core">
                 <span className="laurette-label">Film Award</span>
                 <strong>{awardTitle}</strong>
                 <span className="laurette-sub">{chapter.title}</span>
               </div>
-              <div className="laurette-wing laurette-wing-right" />
+              <div className="laurette-wing laurette-wing-right">
+                {Array.from({ length: 9 }).map((_, leafIndex) => (
+                  <span key={`right-${leafIndex}`} className="laurette-leaf" style={{ '--i': leafIndex }} />
+                ))}
+              </div>
             </div>
             <p className="film-award-event">{awardEvent}</p>
           </div>
@@ -435,6 +443,62 @@ function FilmLanguageMarquee() {
   )
 }
 
+function TeamProfileCard({ member, isMobile }) {
+  const rotateX = useMotionValue(0)
+  const rotateY = useMotionValue(0)
+  const lightX = useMotionValue(50)
+  const lightY = useMotionValue(50)
+  const rX = useSpring(rotateX, { stiffness: 170, damping: 20, mass: 0.7 })
+  const rY = useSpring(rotateY, { stiffness: 170, damping: 20, mass: 0.7 })
+  const glowOffsetX = useTransform(lightX, (v) => `${v - 50}%`)
+  const glowOffsetY = useTransform(lightY, (v) => `${v - 50}%`)
+  const [mx, setMx] = useState(50)
+  const [my, setMy] = useState(50)
+
+  return (
+    <motion.article
+      key={member.name}
+      className="team-roster-card"
+      style={{
+        rotateX: rX,
+        rotateY: rY,
+        transformPerspective: 1200,
+        '--mx': `${mx}%`,
+        '--my': `${my}%`
+      }}
+      onMouseMove={(e) => {
+        if (isMobile) return
+        const rect = e.currentTarget.getBoundingClientRect()
+        const px = ((e.clientX - rect.left) / rect.width) * 100
+        const py = ((e.clientY - rect.top) / rect.height) * 100
+        setMx(px)
+        setMy(py)
+        rotateY.set(((px / 100) - 0.5) * 12)
+        rotateX.set(((py / 100) - 0.5) * -10)
+        lightX.set(px)
+        lightY.set(py)
+      }}
+      onMouseLeave={() => {
+        rotateX.set(0)
+        rotateY.set(0)
+        lightX.set(50)
+        lightY.set(50)
+        setMx(50)
+        setMy(50)
+      }}
+      whileHover={isMobile ? { y: -2, scale: 1.006 } : { y: -8, scale: 1.02 }}
+      transition={{ type: 'spring', stiffness: 180, damping: 20 }}
+    >
+      <motion.div className="team-roster-glow" style={{ x: glowOffsetX, y: glowOffsetY }} />
+      <DriveImage src={member.photo} alt={member.name} className="team-photo" />
+      <div>
+        <h4>{member.name}</h4>
+        <p>{member.role}</p>
+      </div>
+    </motion.article>
+  )
+}
+
 function TeamStack() {
   const ref = useRef(null)
   const [activeCard, setActiveCard] = useState(1)
@@ -463,14 +527,13 @@ function TeamStack() {
     },
     {
       id: 1,
-      role: 'Krishan Miguel',
-      text: 'Founder | Editorial rhythm, digital craft, and post-production systems.',
-      featured: true
+      role: 'Jade Lagasca',
+      text: 'Founder | Lens language, movement grammar, and atmosphere-first composition.'
     },
     {
       id: 2,
-      role: 'Micah Jirah Mendoza & Jade Lagasca',
-      text: 'Founders | Production leadership, cinematography language, and visual execution.'
+      role: 'Krishan Miguel & Micah Jirah Mendoza',
+      text: 'Founders | Editorial systems, production leadership, and final-frame execution.'
     }
   ]
 
@@ -478,8 +541,8 @@ function TeamStack() {
     <section id="team" ref={ref} className="content-section">
       <SectionHeading
         eyebrow="INVISION"
-        title="Founders"
-        subtitle="Built by the founding creatives who shaped INVISION FILMS from first concept to final frame."
+        title="The Team who made it happen"
+        subtitle="Built by storytellers, directors, editors, cinematographers, and creatives who shared the same vision from concept to final frame."
       />
       <div className={`team-stack-wrap ${isMobile ? 'is-mobile-stack' : spreadAmount > 0.03 ? 'is-spread' : 'is-stacked'}`}>
         {stack.map((item, idx) => {
@@ -500,7 +563,7 @@ function TeamStack() {
           return (
             <motion.article
               key={item.role}
-              className={`team-stack-card team-stack-${idx} ${isActive ? 'is-active' : ''} ${item.featured ? 'is-featured' : ''}`}
+              className={`team-stack-card team-stack-${idx} ${isActive ? 'is-active' : ''}`}
               onMouseEnter={() => setActiveCard(idx)}
               onClick={() => setActiveCard(idx)}
               style={{
@@ -526,13 +589,7 @@ function TeamStack() {
       </div>
       <div className="team-roster-grid">
         {teamMembers.map((member) => (
-          <article key={member.name} className="team-roster-card">
-            <DriveImage src={member.photo} alt={member.name} className="team-photo" />
-            <div>
-              <h4>{member.name}</h4>
-              <p>{member.role}</p>
-            </div>
-          </article>
+          <TeamProfileCard key={member.name} member={member} isMobile={isMobile} />
         ))}
       </div>
     </section>

@@ -389,7 +389,7 @@ main,
 
 .chapters-section {
   width: 100%;
-  padding: 4.8rem 0 0;
+  padding: 3.8rem 0 0;
   position: relative;
   isolation: isolate;
 }
@@ -413,13 +413,13 @@ main,
 }
 
 .film-chapter {
-  min-height: 124vh;
+  min-height: 94vh;
   position: relative;
 }
 
 .film-sticky {
   position: sticky;
-  top: 12vh;
+  top: 10vh;
   width: 92%;
   max-width: 1220px;
   margin: 0 auto;
@@ -454,10 +454,12 @@ main,
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   border-radius: inherit;
-  opacity: 0.72;
-  filter: saturate(0.92) contrast(1.08);
+  background: #050505;
+  opacity: 0.92;
+  filter: saturate(0.95) contrast(1.04);
 }
 
 .image-fallback {
@@ -589,31 +591,33 @@ main,
 .laurette-wing {
   position: relative;
   height: 100%;
+  width: 100%;
 }
 
-.laurette-wing::before,
-.laurette-wing::after {
-  content: '';
+.laurette-leaf {
   position: absolute;
-  inset: 16px 14px;
-  border: 2px solid rgba(255, 216, 152, 0.55);
-  border-radius: 120px;
-  filter: drop-shadow(0 0 5px rgba(255, 205, 126, 0.24));
+  width: 10px;
+  height: 24px;
+  border-radius: 12px 12px 12px 12px;
+  background: linear-gradient(160deg, rgba(255, 236, 196, 0.95), rgba(214, 156, 76, 0.88));
+  box-shadow: 0 0 8px rgba(255, 205, 126, 0.26);
 }
 
-.laurette-wing::after {
-  inset: 24px 20px;
-  border-color: rgba(255, 228, 186, 0.44);
+.laurette-wing-left .laurette-leaf {
+  top: calc(14px + (var(--i) * 9px));
+  left: calc(36px - (var(--i) * 2.7px));
+  transform: rotate(calc(-42deg + (var(--i) * 8deg)));
 }
 
-.laurette-wing-left::before,
-.laurette-wing-left::after {
-  border-right: 0;
+.laurette-wing-right .laurette-leaf {
+  top: calc(14px + (var(--i) * 9px));
+  right: calc(36px - (var(--i) * 2.7px));
+  transform: rotate(calc(42deg - (var(--i) * 8deg)));
 }
 
-.laurette-wing-right::before,
-.laurette-wing-right::after {
-  border-left: 0;
+.laurette-wing-left,
+.laurette-wing-right {
+  overflow: hidden;
 }
 
 .film-award-event {
@@ -956,16 +960,40 @@ main,
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.75rem;
+  perspective: 1500px;
 }
 
 .team-roster-card {
+  position: relative;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 0.9rem;
   overflow: hidden;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.74));
+  background:
+    radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 45%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.74));
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.4s ease;
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.32);
+}
+
+.team-roster-card:hover {
+  border-color: rgba(255, 120, 128, 0.42);
+  box-shadow: 0 26px 42px rgba(0, 0, 0, 0.5), 0 0 24px rgba(175, 26, 33, 0.22);
+}
+
+.team-roster-glow {
+  position: absolute;
+  inset: -30%;
+  background: radial-gradient(circle, rgba(255, 98, 106, 0.22), rgba(255, 98, 106, 0) 55%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 1;
 }
 
 .team-photo {
+  position: relative;
+  z-index: 2;
   width: 100%;
   height: 160px;
   object-fit: cover;
@@ -974,6 +1002,9 @@ main,
 }
 
 .team-roster-card div {
+  position: relative;
+  z-index: 2;
+  transform: translateZ(16px);
   padding: 0.7rem;
 }
 
@@ -1114,11 +1145,11 @@ main,
   }
 
   .film-chapter {
-    min-height: 110vh;
+    min-height: 84vh;
   }
 
   .film-sticky {
-    top: 8.5vh;
+    top: 7.5vh;
     gap: 0.72rem;
   }
 
@@ -1146,6 +1177,21 @@ main,
   .laurette-badge {
     min-height: 112px;
     grid-template-columns: 56px 1fr 56px;
+  }
+
+  .laurette-leaf {
+    width: 8px;
+    height: 19px;
+  }
+
+  .laurette-wing-left .laurette-leaf {
+    top: calc(18px + (var(--i) * 7px));
+    left: calc(29px - (var(--i) * 2.2px));
+  }
+
+  .laurette-wing-right .laurette-leaf {
+    top: calc(18px + (var(--i) * 7px));
+    right: calc(29px - (var(--i) * 2.2px));
   }
 
   .laurette-core strong {
@@ -1253,6 +1299,7 @@ main,
     margin-top: 1rem;
     grid-template-columns: 1fr;
     gap: 0.55rem;
+    perspective: none;
   }
 
   .team-photo {
