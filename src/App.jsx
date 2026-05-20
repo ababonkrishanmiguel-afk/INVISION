@@ -472,6 +472,7 @@ function FilmographyShowcase() {
   const resumeTimerRef = useRef(null)
   const touchStartXRef = useRef(0)
   const touchDeltaXRef = useRef(0)
+  const touchLastShiftAtRef = useRef(0)
 
   const wrap = (value) => {
     const total = chapters.length
@@ -557,6 +558,7 @@ function FilmographyShowcase() {
           const x = e.changedTouches?.[0]?.clientX ?? 0
           touchStartXRef.current = x
           touchDeltaXRef.current = 0
+          touchLastShiftAtRef.current = 0
           setIsDragging(true)
           setAutoEnabled(false)
           if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
@@ -566,6 +568,25 @@ function FilmographyShowcase() {
           const delta = x - touchStartXRef.current
           touchDeltaXRef.current = delta
           setDragOffset(Math.max(-140, Math.min(140, delta * 0.6)))
+
+          // Continuous swipe: while finger is still down, crossing threshold
+          // shifts to the neighboring film immediately and keeps chaining.
+          const now = Date.now()
+          const minInterval = 140
+          const shiftThreshold = 120
+          if (Math.abs(delta) >= shiftThreshold && now - touchLastShiftAtRef.current >= minInterval) {
+            if (delta < 0) {
+              setDirection(1)
+              setActiveIndex((prev) => wrap(prev + 1))
+            } else {
+              setDirection(-1)
+              setActiveIndex((prev) => wrap(prev - 1))
+            }
+            touchLastShiftAtRef.current = now
+            touchStartXRef.current = x
+            touchDeltaXRef.current = 0
+            setDragOffset(0)
+          }
         }}
         onTouchEnd={() => {
           const delta = touchDeltaXRef.current
@@ -677,10 +698,10 @@ function FramesCarousel() {
             <motion.figure
               key={frame.title}
               className="frame-item"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: idx % 2 === 0 ? -84 : 84, y: 18, filter: 'blur(7px)' }}
+              whileInView={{ opacity: 1, x: 0, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.45, delay: idx * 0.03 }}
+              transition={{ duration: 0.6, delay: idx * 0.035, ease: [0.22, 1, 0.36, 1] }}
             >
               <div className="frame-visual">
                 <DriveImage src={frame.image} alt={frame.title} className="frame-visual-img" />
@@ -699,10 +720,10 @@ function FramesCarousel() {
               <motion.figure
                 key={frame.title}
                 className={`frame-item ${idx % 2 === 0 ? 'frame-up' : 'frame-down'}`}
-                initial={{ opacity: 0, y: 26 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: idx % 2 === 0 ? -110 : 110, y: 24, filter: 'blur(8px)' }}
+                whileInView={{ opacity: 1, x: 0, y: 0, filter: 'blur(0px)' }}
                 viewport={{ once: true, amount: 0.22 }}
-                transition={{ duration: 0.65, delay: idx * 0.05 }}
+                transition={{ duration: 0.72, delay: idx * 0.05, ease: [0.22, 1, 0.36, 1] }}
                 whileHover={{ rotateY: idx % 2 === 0 ? 7 : -7, rotateX: 4, scale: 1.03 }}
               >
                 <div className="frame-visual">
@@ -720,10 +741,10 @@ function FramesCarousel() {
               <motion.figure
                 key={frame.title}
                 className={`frame-item ${idx % 2 === 0 ? 'frame-down' : 'frame-up'}`}
-                initial={{ opacity: 0, y: 26 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: (idx + topFrames.length) % 2 === 0 ? -110 : 110, y: 24, filter: 'blur(8px)' }}
+                whileInView={{ opacity: 1, x: 0, y: 0, filter: 'blur(0px)' }}
                 viewport={{ once: true, amount: 0.22 }}
-                transition={{ duration: 0.65, delay: idx * 0.05 }}
+                transition={{ duration: 0.72, delay: idx * 0.05, ease: [0.22, 1, 0.36, 1] }}
                 whileHover={{ rotateY: idx % 2 === 0 ? -7 : 7, rotateX: 4, scale: 1.03 }}
               >
                 <div className="frame-visual">
@@ -772,7 +793,7 @@ function FilmLanguageMarquee() {
   )
 }
 
-function TeamProfileCard({ member, isMobile }) {
+function TeamProfileCard({ member, isMobile, entryIndex }) {
   const rotateX = useMotionValue(0)
   const rotateY = useMotionValue(0)
   const lightX = useMotionValue(50)
@@ -788,6 +809,9 @@ function TeamProfileCard({ member, isMobile }) {
     <motion.article
       key={member.name}
       className="team-roster-card"
+      initial={{ opacity: 0, x: entryIndex % 2 === 0 ? -96 : 96, y: 18, filter: 'blur(8px)' }}
+      whileInView={{ opacity: 1, x: 0, y: 0, filter: 'blur(0px)' }}
+      viewport={{ once: true, amount: 0.2 }}
       style={{
         rotateX: rX,
         rotateY: rY,
@@ -816,7 +840,7 @@ function TeamProfileCard({ member, isMobile }) {
         setMy(50)
       }}
       whileHover={isMobile ? { y: -2, scale: 1.006 } : { y: -8, scale: 1.02 }}
-      transition={{ type: 'spring', stiffness: 180, damping: 20 }}
+      transition={{ type: 'spring', stiffness: 180, damping: 20, mass: 0.85 }}
     >
       <motion.div className="team-roster-glow" style={{ x: glowOffsetX, y: glowOffsetY }} />
       <DriveImage src={member.photo} alt={member.name} className="team-photo" />
@@ -887,13 +911,15 @@ function TeamStack() {
           const isActive = activeCard === idx
           const spreadX = idx === 0 ? -36 : idx === 1 ? 0 : 36
           const spreadRotate = idx === 0 ? -7 : idx === 1 ? 0 : 7
-          const stackY = idx * 5
-          const verticalDistance = isMobile ? 158 : 210
-          const mobileBaseOffset = isMobile ? 124 : 0
-          const spreadY = idx === 0 ? -verticalDistance : idx === 1 ? 0 : verticalDistance
           const styleX = isMobile ? 0 : spreadX * spreadAmount
           const styleRotate = isMobile ? 0 : spreadRotate * spreadAmount
-          const styleY = mobileBaseOffset + stackY + (spreadY - stackY) * spreadAmount + (isActive ? (isMobile ? 0 : -10) : 0)
+          const desktopStackY = idx * 5
+          const desktopSpreadY = idx === 0 ? -210 : idx === 1 ? 0 : 210
+          const mobileStackY = [0, 24, 48][idx]
+          const mobileSpreadY = [-20, 164, 348][idx]
+          const styleY = isMobile
+            ? mobileStackY + (mobileSpreadY - mobileStackY) * spreadAmount
+            : desktopStackY + (desktopSpreadY - desktopStackY) * spreadAmount + (isActive ? -10 : 0)
           const stackOpacity = 0.99 - spreadAmount * 0.3
           const glassOpacity = 0.02 + spreadAmount * 0.16
           const redOpacity = 0.03 + spreadAmount * 0.16
@@ -927,8 +953,8 @@ function TeamStack() {
         })}
       </div>
       <div className="team-roster-grid">
-        {teamMembers.map((member) => (
-          <TeamProfileCard key={member.name} member={member} isMobile={isMobile} />
+        {teamMembers.map((member, idx) => (
+          <TeamProfileCard key={member.name} member={member} isMobile={isMobile} entryIndex={idx} />
         ))}
       </div>
     </section>
@@ -1134,10 +1160,10 @@ export default function App() {
               <motion.article
                 key={group.film}
                 className={`award-plaque ${group.film === 'Taphaw Winners Screening and Talkback' ? 'is-center' : ''}`}
-                initial={{ opacity: 0, y: 22 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: idx % 2 === 0 ? -104 : 104, y: 18, filter: 'blur(7px)' }}
+                whileInView={{ opacity: 1, x: 0, y: 0, filter: 'blur(0px)' }}
                 viewport={{ once: true, amount: 0.22 }}
-                transition={{ duration: 0.62, delay: idx * 0.08 }}
+                transition={{ duration: 0.68, delay: idx * 0.06, ease: [0.22, 1, 0.36, 1] }}
                 whileHover={{ rotateY: idx % 2 === 0 ? 6 : -6, rotateX: 4, scale: 1.02 }}
               >
                 <DriveImage src={group.photo} alt={group.film} className="award-photo" />
