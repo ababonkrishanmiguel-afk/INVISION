@@ -413,6 +413,7 @@ function FilmographyShowcase() {
         start: 'top top',
         end: '+=2600',
         pin: true,
+        pinSpacing: true,
         scrub: 1.1,
         anticipatePin: 1,
         invalidateOnRefresh: true,
@@ -420,6 +421,7 @@ function FilmographyShowcase() {
           progress.set(self.progress)
         }
       })
+      ScrollTrigger.refresh()
 
       return () => {
         trigger.kill()
@@ -764,6 +766,10 @@ export default function App() {
       smoothWheel: true,
       touchMultiplier: 1.15
     })
+    const onLenisScroll = () => {
+      ScrollTrigger.update()
+    }
+    lenis.on('scroll', onLenisScroll)
 
     let rafId
     const raf = (time) => {
@@ -774,6 +780,7 @@ export default function App() {
 
     return () => {
       cancelAnimationFrame(rafId)
+      if (lenis.off) lenis.off('scroll', onLenisScroll)
       lenis.destroy()
     }
   }, [])
@@ -793,10 +800,12 @@ export default function App() {
   useEffect(() => {
     let navTimer
     let contentTimer
+    let refreshTimer
 
     if (introPhase === 'done') {
       navTimer = setTimeout(() => setNavReady(true), 140)
       contentTimer = setTimeout(() => setContentReady(true), 420)
+      refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 700)
     } else {
       setNavReady(false)
       setContentReady(false)
@@ -805,6 +814,7 @@ export default function App() {
     return () => {
       clearTimeout(navTimer)
       clearTimeout(contentTimer)
+      clearTimeout(refreshTimer)
     }
   }, [introPhase])
 
