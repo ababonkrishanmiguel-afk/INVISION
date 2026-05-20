@@ -199,9 +199,9 @@ const frames = [
     image: driveSrc('1crhqiQolAGGtdFK7sCraY4WCg3WelfRc')
   },
   {
-    title: 'Heart Of Padayon',
-    film: 'Taphaw (2026)',
-    image: driveSrc('1Z_pPnp2uied3DpdyKVBxMwuxY_clL1c9')
+    title: 'Waves In A Dream',
+    film: 'Specter Dream (2022)',
+    image: driveSrc('1Mxsn0UFH6MoZF0A4mqRLXeTjBdk1mg67')
   },
   {
     title: 'It Is What It Is',
@@ -214,9 +214,9 @@ const frames = [
     image: driveSrc('1_W1d_yRlHhQeFdqIf0KqDc9ai1F9mcWd')
   },
   {
-    title: 'Waves In A Dream',
-    film: 'Specter Dream (2022)',
-    image: driveSrc('1Mxsn0UFH6MoZF0A4mqRLXeTjBdk1mg67')
+    title: 'Heart Of Padayon',
+    film: 'Taphaw (2026)',
+    image: driveSrc('1Z_pPnp2uied3DpdyKVBxMwuxY_clL1c9')
   },
   {
     title: 'Fragile Corridor',
@@ -372,7 +372,7 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile 
                 <p>{chapter.logline}</p>
                 <div className="film-award-mini">
                   <div className="wreath-award-card">
-                    <img src="/Wreath%20awards.webp" alt="Film award wreath" className="wreath-award-graphic" />
+                    <img src="/wreath-awards.webp" alt="Film award wreath" className="wreath-award-graphic" />
                     <div className="wreath-award-copy">
                       <span>Film Awards</span>
                       <strong>{chapter.title}</strong>
@@ -744,7 +744,7 @@ function TeamStack() {
   const stack = [
     {
       id: 0,
-      role: 'JADE LAGASCA + KRISHAN MIGUEL',
+      role: 'JADE LAGASCA & KRISHAN MIGUEL',
       text: 'Founders | Cinematography, editorial systems, and web craft shaping the visual language of every chapter.'
     },
     {
@@ -754,7 +754,7 @@ function TeamStack() {
     },
     {
       id: 2,
-      role: 'MICAH JIRAH + VALERIE DEMICILLO',
+      role: 'MICAH JIRAH & VALERIE DEMICILLO',
       text: 'Founders | Production leadership, performance energy, and animated visual finishing.'
     }
   ]
@@ -1015,7 +1015,7 @@ export default function App() {
             {awards.map((group, idx) => (
               <motion.article
                 key={group.film}
-                className="award-plaque"
+                className={`award-plaque ${group.film === 'Taphaw Winners Screening and Talkback' ? 'is-center' : ''}`}
                 initial={{ opacity: 0, y: 22 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.22 }}
