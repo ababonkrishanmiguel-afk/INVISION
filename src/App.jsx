@@ -911,14 +911,14 @@ function TeamStack() {
       <div ref={stackRef} className={`team-stack-wrap ${spreadAmount > 0.03 ? 'is-spread' : 'is-stacked'}`}>
         {stack.map((item, idx) => {
           const isActive = activeCard === idx
-          const spreadX = idx === 0 ? -36 : idx === 1 ? 0 : 36
-          const spreadRotate = idx === 0 ? -7 : idx === 1 ? 0 : 7
+          // Desktop/tablet horizontal fan (mobile stays vertical via isMobile branch)
+          const spreadX = idx === 0 ? -248 : idx === 1 ? 0 : 248
+          const spreadRotate = idx === 0 ? -9 : idx === 1 ? 0 : 9
           const styleX = isMobile ? 0 : spreadX * spreadAmount
           const styleRotate = isMobile ? 0 : spreadRotate * spreadAmount
           const desktopStackY = idx * 5
-          // Desktop/tablet: keep the classic horizontal fan spread.
-          // Only use subtle Y offsets to avoid vertical drifting.
-          const desktopSpreadY = idx === 0 ? -12 : idx === 1 ? 0 : 12
+          // Desktop/tablet: horizontal spread with minimal Y drift.
+          const desktopSpreadY = idx === 0 ? -8 : idx === 1 ? 0 : 8
           const mobileStackY = [0, 18, 36][idx]
           // Fixed vertical slots with clear gaps (no touching/overlap).
           const mobileSpreadY = [0, 192, 384][idx]
