@@ -413,21 +413,19 @@ main,
 }
 
 .filmography-scene {
-  overflow: clip;
+  min-height: 100vh;
 }
 
-.filmography-scroll-space {
-  position: relative;
-  height: 300vh;
-}
-
-.filmography-sticky-wrap {
-  position: sticky;
-  top: 9vh;
+.filmography-pin-frame {
   height: 82vh;
   width: 92%;
   max-width: 1220px;
   margin: 0 auto;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, rgba(7, 7, 7, 0.82), rgba(17, 8, 9, 0.68));
+  box-shadow: 0 24px 44px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   perspective: 1800px;
 }
 
@@ -1108,8 +1106,7 @@ main,
     width: 150%;
   }
 
-  .filmography-sticky-wrap {
-    top: 8vh;
+  .filmography-pin-frame {
     height: 84vh;
   }
 
@@ -1190,15 +1187,13 @@ main,
     font-size: 0.92rem;
   }
 
-  .filmography-scroll-space {
-    height: auto;
-  }
-
-  .filmography-sticky-wrap {
-    position: relative;
-    top: auto;
+  .filmography-pin-frame {
     height: auto;
     perspective: none;
+    border-radius: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
   }
 
   .filmography-stage {

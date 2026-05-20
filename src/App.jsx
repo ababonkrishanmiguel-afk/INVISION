@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Lenis from 'lenis'
 import { motion, useMotionTemplate, useMotionValue, useMotionValueEvent, useSpring, useTransform, useScroll } from 'framer-motion'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import SectionHeading from './components/SectionHeading'
 
 const driveSrc = (id) => `https://drive.google.com/uc?export=view&id=${id}`
@@ -381,10 +383,53 @@ function FilmographySlide({ chapter, index, total, scrollYProgress }) {
 
 function FilmographyShowcase() {
   const ref = useRef(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
-  const stageRotateX = useTransform(scrollYProgress, [0, 0.5, 1], [2.5, 0, -2.5])
-  const stageRotateY = useTransform(scrollYProgress, [0, 0.5, 1], [-2.5, 0, 2.5])
-  const stageY = useTransform(scrollYProgress, [0, 1], [10, -10])
+  const progress = useMotionValue(0)
+  const [isMobile, setIsMobile] = useState(false)
+  const stageRotateX = useTransform(progress, [0, 0.5, 1], [2.5, 0, -2.5])
+  const stageRotateY = useTransform(progress, [0, 0.5, 1], [-2.5, 0, 2.5])
+  const stageY = useTransform(progress, [0, 1], [10, -10])
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 767px)')
+    const update = () => setIsMobile(media.matches)
+    update()
+    media.addEventListener('change', update)
+    return () => media.removeEventListener('change', update)
+  }, [])
+
+  useEffect(() => {
+    if (!ref.current || isMobile) {
+      progress.set(0)
+      return
+    }
+
+    gsap.registerPlugin(ScrollTrigger)
+    const section = ref.current
+    const mm = gsap.matchMedia()
+
+    mm.add('(min-width: 768px)', () => {
+      const trigger = ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: '+=2600',
+        pin: true,
+        scrub: 1.1,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          progress.set(self.progress)
+        }
+      })
+
+      return () => {
+        trigger.kill()
+      }
+    })
+
+    return () => {
+      mm.revert()
+    }
+  }, [isMobile, progress])
 
   return (
     <section id="films" ref={ref} className="chapters-section filmography-scene">
@@ -393,23 +438,21 @@ function FilmographyShowcase() {
         title="FILMOGRAPHY"
         subtitle="Merese, Somnium, and Taphaw - a layered cinematic showcase in motion."
       />
-      <div className="filmography-scroll-space">
-        <div className="filmography-sticky-wrap">
-          <motion.div
-            className="filmography-stage"
-            style={{ rotateX: stageRotateX, rotateY: stageRotateY, y: stageY, transformPerspective: 1800 }}
-          >
-            {chapters.map((chapter, idx) => (
-              <FilmographySlide
-                key={chapter.title}
-                chapter={chapter}
-                index={idx}
-                total={chapters.length}
-                scrollYProgress={scrollYProgress}
-              />
-            ))}
-          </motion.div>
-        </div>
+      <div className="filmography-pin-frame">
+        <motion.div
+          className="filmography-stage"
+          style={{ rotateX: stageRotateX, rotateY: stageRotateY, y: stageY, transformPerspective: 1800 }}
+        >
+          {chapters.map((chapter, idx) => (
+            <FilmographySlide
+              key={chapter.title}
+              chapter={chapter}
+              index={idx}
+              total={chapters.length}
+              scrollYProgress={progress}
+            />
+          ))}
+        </motion.div>
       </div>
     </section>
   )
