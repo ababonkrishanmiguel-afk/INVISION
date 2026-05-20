@@ -946,6 +946,39 @@ main,
   margin: 0 auto 1.25rem;
 }
 
+.frames-sticky-wrap {
+  width: 100%;
+  overflow: hidden;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.frames-track {
+  width: 132%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 0.9rem;
+  padding: 0 4%;
+  perspective: 1300px;
+}
+
+.frames-track-bottom {
+  margin-left: -12%;
+}
+
+.frames-mobile-grid {
+  width: 92%;
+  max-width: 1220px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.frames-mobile-grid .frame-item:first-child {
+  grid-column: 1 / -1;
+}
+
 .team-stack-wrap.is-stacked .team-stack-card,
 .team-stack-wrap.is-spread .team-stack-card {
   transition: background 0.6s ease, border-color 0.55s ease, box-shadow 0.4s ease;
@@ -1047,7 +1080,9 @@ main,
 }
 
 .frame-visual {
-  height: 220px;
+  aspect-ratio: 16 / 9;
+  min-height: 170px;
+  height: auto;
   position: relative;
   transition: transform 0.7s ease;
   overflow: hidden;
@@ -1650,6 +1685,11 @@ main,
   .frames-mobile-grid {
     width: 94%;
     gap: 0.62rem;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .frames-mobile-grid .frame-item:first-child {
+    grid-column: 1 / -1;
   }
 
   .frames-mobile-grid .frame-item {
@@ -1657,7 +1697,9 @@ main,
   }
 
   .frame-visual {
-    height: 152px;
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+    height: auto;
   }
 
   .frame-item figcaption {
@@ -1669,7 +1711,8 @@ main,
   }
 
   .frames-mobile-grid .frame-visual {
-    height: 138px;
+    aspect-ratio: 16 / 9;
+    min-height: 0;
   }
 
   .language-rail {
@@ -1752,6 +1795,16 @@ main,
     flex-direction: column;
     align-items: flex-start;
     gap: 0.52rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .frames-mobile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .frames-mobile-grid .frame-item:first-child {
+    grid-column: auto;
   }
 }
 
