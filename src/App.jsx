@@ -79,7 +79,7 @@ const chapters = [
     genre: 'Horror',
     logline: 'Claire, a skeptic who dismissed superstition, opens a doorway between the 3rd and 6th dimensions where reality unravels into something unholy.',
     aura: 'aura-1111',
-    poster: driveSrc('1crhqiQolAGGtdFK7sCraY4WCg3WelfRc'),
+    poster: driveSrc('1VqQDcLoedoCMP4AMyyNOwDqgAD_JyplW'),
     awardImage: '/1111awards.png',
     awards: [
       'SINEDISIPULO "X" Film Festival - Most Viewed Film',
@@ -93,7 +93,7 @@ const chapters = [
     genre: 'Romantic BL Drama',
     logline: 'A dreamlike love too fragile for reality, where John is somehow everywhere but nowhere in sight.',
     aura: 'aura-specter',
-    poster: driveSrc('1Mxsn0UFH6MoZF0A4mqRLXeTjBdk1mg67'),
+    poster: driveSrc('13TZHAFBpOIjeMvQ-qJhfoZtRMyijOVUG'),
     awardImage: '/specterdream%20awards.png',
     awards: [
       'CINEU "Catorce" Film Festival - Best Director, Best Production Design, Best Actor, Best Supporting Actor'
@@ -106,7 +106,7 @@ const chapters = [
     genre: 'Romantic Drama',
     logline: 'In blindness and love, Isabel discovers a reality she was never meant to see.',
     aura: 'aura-pasaglawom',
-    poster: driveSrc('12yLct-g_yKebVI-SVOhzNE56eDgmt7nb'),
+    poster: driveSrc('1sqswls2-xbSKB4emFtok9_GxImYMKY2i'),
     awardImage: '/pasaglawom%20awards.png',
     awards: [
       'SINEDISIPULO "XI" Film Exhibition - Official Selection'
@@ -378,7 +378,7 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile 
                 <h3>{chapter.title}</h3>
                 <p>{chapter.logline}</p>
                 {chapter.awardImage ? (
-                  <div className="film-award-image-wrap">
+                  <div className={`film-award-image-wrap ${chapter.title === '11:11' || chapter.title === 'Taphaw' ? 'is-large-award' : ''}`}>
                     <img src={chapter.awardImage} alt={`${chapter.title} awards`} className="film-award-image" loading="lazy" />
                   </div>
                 ) : (
