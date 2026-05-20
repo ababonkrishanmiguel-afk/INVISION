@@ -793,8 +793,10 @@ function TeamStack() {
     const raw = Math.max(0, Math.min(1, (value - 0.02) / 0.58))
     const eased = Math.pow(raw, 0.82)
     if (isMobile) {
-      if (raw >= 0.18) setSpreadAmount(1)
-      else setSpreadAmount(Math.min(1, eased * 1.85))
+      const mobileStart = 0.02
+      const mobileEnd = 0.42
+      const mobileProgress = Math.max(0, Math.min(1, (value - mobileStart) / (mobileEnd - mobileStart)))
+      setSpreadAmount(Math.pow(mobileProgress, 0.9))
       return
     }
     setSpreadAmount(eased)
@@ -832,10 +834,11 @@ function TeamStack() {
           const spreadRotate = idx === 0 ? -7 : idx === 1 ? 0 : 7
           const stackY = idx * 5
           const verticalDistance = isMobile ? 190 : 210
+          const mobileBaseOffset = isMobile ? 94 : 0
           const spreadY = idx === 0 ? -verticalDistance : idx === 1 ? 0 : verticalDistance
           const styleX = isMobile ? 0 : spreadX * spreadAmount
           const styleRotate = isMobile ? 0 : spreadRotate * spreadAmount
-          const styleY = stackY + (spreadY - stackY) * spreadAmount + (isActive ? (isMobile ? 0 : -10) : 0)
+          const styleY = mobileBaseOffset + stackY + (spreadY - stackY) * spreadAmount + (isActive ? (isMobile ? 0 : -10) : 0)
           const stackOpacity = 0.99 - spreadAmount * 0.3
           const glassOpacity = 0.02 + spreadAmount * 0.16
           const redOpacity = 0.03 + spreadAmount * 0.16
