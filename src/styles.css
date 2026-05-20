@@ -655,12 +655,6 @@ main,
   z-index: 1;
 }
 
-.film-award-image-wrap,
-.film-award-image,
-.film-award-text-fallback {
-  display: none;
-}
-
 .film-carousel-detail {
   transform-style: preserve-3d;
   will-change: transform, opacity, filter;

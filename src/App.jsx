@@ -356,13 +356,15 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile 
         <div className="film-carousel-poster-shell">
           <div className="filmography-poster-card">
             <DriveImage src={chapter.poster} alt={`${chapter.title} poster`} className="film-frame-poster" />
-            <div className="film-poster-award">
-              {chapter.awardImage ? (
-                <img src={chapter.awardImage} alt={`${chapter.title} awards`} className="film-poster-award-img" loading="lazy" />
-              ) : (
-                <div className="film-poster-award-fallback">{chapter.awards?.[0] || 'Award Pending'}</div>
-              )}
-            </div>
+            {isMobile ? (
+              <div className="film-poster-award">
+                {chapter.awardImage ? (
+                  <img src={chapter.awardImage} alt={`${chapter.title} awards`} className="film-poster-award-img" loading="lazy" />
+                ) : (
+                  <div className="film-poster-award-fallback">{chapter.awards?.[0] || 'Award Pending'}</div>
+                )}
+              </div>
+            ) : null}
             <div className="film-frame-light" />
             <span className="film-frame-mark">{chapter.chapter}</span>
           </div>
@@ -384,6 +386,17 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile 
                 </p>
                 <h3>{chapter.title}</h3>
                 <p>{chapter.logline}</p>
+                {!isMobile ? (
+                  chapter.awardImage ? (
+                    <div className={`film-award-image-wrap ${chapter.title === '11:11' || chapter.title === 'Taphaw' ? 'is-large-award' : ''}`}>
+                      <img src={chapter.awardImage} alt={`${chapter.title} awards`} className="film-award-image" loading="lazy" />
+                    </div>
+                  ) : (
+                    <div className="film-award-text-fallback">
+                      <span>{chapter.awards?.[0] || 'Award pending'}</span>
+                    </div>
+                  )
+                ) : null}
               </article>
             </motion.div>
           ) : null}
@@ -761,6 +774,11 @@ function TeamStack() {
   useMotionValueEvent(scrollYProgress, 'change', (value) => {
     const raw = Math.max(0, Math.min(1, (value - 0.02) / 0.58))
     const eased = Math.pow(raw, 0.82)
+    if (isMobile) {
+      if (raw >= 0.36) setSpreadAmount(1)
+      else setSpreadAmount(Math.min(1, eased * 1.85))
+      return
+    }
     setSpreadAmount(eased)
   })
 
