@@ -4,6 +4,53 @@ import { motion, useMotionValue, useMotionValueEvent, useSpring, useTransform, u
 import SectionHeading from './components/SectionHeading'
 
 const driveSrc = (id) => `https://drive.google.com/uc?export=view&id=${id}`
+const driveIdFromUrl = (url) => {
+  if (!url) return ''
+  const byPath = url.match(/\/d\/([a-zA-Z0-9_-]+)/)
+  if (byPath?.[1]) return byPath[1]
+  const byQuery = url.match(/[?&]id=([a-zA-Z0-9_-]+)/)
+  if (byQuery?.[1]) return byQuery[1]
+  return ''
+}
+
+const driveCandidates = (urlOrId) => {
+  const id = urlOrId.includes('http') ? driveIdFromUrl(urlOrId) : urlOrId
+  if (!id) return [urlOrId]
+  return [
+    `https://lh3.googleusercontent.com/d/${id}=w1800`,
+    `https://drive.google.com/thumbnail?id=${id}&sz=w1800`,
+    `https://drive.usercontent.google.com/download?id=${id}&export=view&authuser=0`,
+    `https://drive.google.com/uc?export=view&id=${id}`,
+    `https://drive.google.com/uc?export=download&id=${id}`
+  ]
+}
+
+function DriveImage({ src, alt, className }) {
+  const candidates = driveCandidates(src)
+  const [index, setIndex] = useState(0)
+  const [failed, setFailed] = useState(false)
+
+  useEffect(() => {
+    setIndex(0)
+    setFailed(false)
+  }, [src])
+
+  if (failed) return <div className={`${className} image-fallback`} aria-label={alt} />
+
+  return (
+    <img
+      src={candidates[index]}
+      alt={alt}
+      className={className}
+      loading="lazy"
+      referrerPolicy="no-referrer"
+      onError={() => {
+        if (index < candidates.length - 1) setIndex((v) => v + 1)
+        else setFailed(true)
+      }}
+    />
+  )
+}
 
 const aboutContent = {
   title: 'From Cebuano Roots to Award-Winning Films',
@@ -237,7 +284,7 @@ function FilmChapter({ chapter, idx }) {
           }}
         >
           <motion.div className="film-frame-card">
-            <img src={chapter.poster} alt={`${chapter.title} poster`} className="film-frame-poster" loading="lazy" />
+            <DriveImage src={chapter.poster} alt={`${chapter.title} poster`} className="film-frame-poster" />
             <div className="film-frame-light" />
             <span className="film-frame-mark">{chapter.chapter}</span>
             <strong>{chapter.title}</strong>
@@ -294,7 +341,9 @@ function FramesCarousel() {
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.45, delay: idx * 0.03 }}
             >
-              <div className="frame-visual" style={{ backgroundImage: `url(${frame.image})` }} />
+              <div className="frame-visual">
+                <DriveImage src={frame.image} alt={frame.title} className="frame-visual-img" />
+              </div>
               <figcaption>
                 <h4>{frame.title}</h4>
                 <p>{frame.film}</p>
@@ -315,7 +364,9 @@ function FramesCarousel() {
                 transition={{ duration: 0.65, delay: idx * 0.05 }}
                 whileHover={{ rotateY: idx % 2 === 0 ? 7 : -7, rotateX: 4, scale: 1.03 }}
               >
-                <div className="frame-visual" style={{ backgroundImage: `url(${frame.image})` }} />
+                <div className="frame-visual">
+                  <DriveImage src={frame.image} alt={frame.title} className="frame-visual-img" />
+                </div>
                 <figcaption>
                   <h4>{frame.title}</h4>
                   <p>{frame.film}</p>
@@ -334,7 +385,9 @@ function FramesCarousel() {
                 transition={{ duration: 0.65, delay: idx * 0.05 }}
                 whileHover={{ rotateY: idx % 2 === 0 ? -7 : 7, rotateX: 4, scale: 1.03 }}
               >
-                <div className="frame-visual" style={{ backgroundImage: `url(${frame.image})` }} />
+                <div className="frame-visual">
+                  <DriveImage src={frame.image} alt={frame.title} className="frame-visual-img" />
+                </div>
                 <figcaption>
                   <h4>{frame.title}</h4>
                   <p>{frame.film}</p>
@@ -465,7 +518,7 @@ function TeamStack() {
       <div className="team-roster-grid">
         {teamMembers.map((member) => (
           <article key={member.name} className="team-roster-card">
-            <img src={member.photo} alt={member.name} loading="lazy" />
+            <DriveImage src={member.photo} alt={member.name} className="team-photo" />
             <div>
               <h4>{member.name}</h4>
               <p>{member.role}</p>
@@ -668,7 +721,7 @@ export default function App() {
                 transition={{ duration: 0.62, delay: idx * 0.08 }}
                 whileHover={{ rotateY: idx % 2 === 0 ? 6 : -6, rotateX: 4, scale: 1.02 }}
               >
-                <img src={group.photo} alt={group.film} className="award-photo" loading="lazy" />
+                <DriveImage src={group.photo} alt={group.film} className="award-photo" />
                 <h3>{group.film}</h3>
                 <ul>
                   {group.items.map((item) => (
