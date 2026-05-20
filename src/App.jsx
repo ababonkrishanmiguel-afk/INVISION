@@ -916,10 +916,12 @@ function TeamStack() {
           const styleX = isMobile ? 0 : spreadX * spreadAmount
           const styleRotate = isMobile ? 0 : spreadRotate * spreadAmount
           const desktopStackY = idx * 5
-          const desktopSpreadY = idx === 0 ? -210 : idx === 1 ? 0 : 210
+          // Desktop/tablet: keep the classic horizontal fan spread.
+          // Only use subtle Y offsets to avoid vertical drifting.
+          const desktopSpreadY = idx === 0 ? -12 : idx === 1 ? 0 : 12
           const mobileStackY = [0, 18, 36][idx]
           // Fixed vertical slots with clear gaps (no touching/overlap).
-          const mobileSpreadY = [0, 224, 448][idx]
+          const mobileSpreadY = [0, 192, 384][idx]
           const styleY = isMobile
             ? mobileStackY + (mobileSpreadY - mobileStackY) * spreadAmount
             : desktopStackY + (desktopSpreadY - desktopStackY) * spreadAmount + (isActive ? -10 : 0)
