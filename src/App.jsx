@@ -469,6 +469,8 @@ function FilmographyShowcase() {
         eyebrow="INVISION"
         title="FILMOGRAPHY"
         subtitle="A curated journey through stories shaped by memory, identity, emotion, and motion."
+        className="filmography-heading"
+        subtitleClassName="filmography-subtitle"
       />
       <div
         className="film-carousel-shell"
