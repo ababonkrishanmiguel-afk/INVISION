@@ -3,55 +3,117 @@ import Lenis from 'lenis'
 import { motion, useMotionValue, useMotionValueEvent, useSpring, useTransform, useScroll } from 'framer-motion'
 import SectionHeading from './components/SectionHeading'
 
+const driveSrc = (id) => `https://drive.google.com/uc?export=view&id=${id}`
+
+const aboutContent = {
+  title: 'From Cebuano Roots to Award-Winning Films',
+  subtitle: 'Founded in 2021 as a Cebuano student multimedia body, we have since evolved into a professional creative team producing award-winning films.',
+  body: 'INVISION FILMS was founded in 2021 as a Cebuano student multimedia collective driven by a shared passion for storytelling and filmmaking. Through years of persistence, collaboration, and creative growth, we evolved into a professional team producing award-winning films. We remain rooted in cinematic storytelling, and our visual language adapts to the emotion, atmosphere, and identity of every story we choose to tell.'
+}
+
 const chapters = [
   {
     title: 'Merese',
     chapter: 'Chapter I',
-    year: '2026',
-    genre: 'Drama / Memory',
-    logline: 'A cinematic study of memory, absence, and the language of what remains unspoken.',
-    aura: 'aura-merese'
+    year: '2023',
+    genre: 'Comedy',
+    logline: 'Five friends join a 48-hour film challenge, but with no script in hand, imagination takes over and reality begins to unravel.',
+    aura: 'aura-merese',
+    poster: driveSrc('1POrIhcBCBpT0p7hEmUrF-weF1LYMaV7I'),
+    awardLine: "DTI's Fiesta Kucha Film Festival 2025 | Best Editing"
   },
   {
     title: 'Somnium',
     chapter: 'Chapter II',
-    year: '2026',
-    genre: 'Psychological / Poetic',
-    logline: 'A drifting meditation where dream logic and waking guilt fold into one quiet unraveling.',
-    aura: 'aura-somnium'
+    year: '2025',
+    genre: 'Psychological Horror',
+    logline: 'At the center is Elaine De Gracia, a student nurse in a Catholic school whose mind quietly unravels as sanity begins to expire.',
+    aura: 'aura-somnium',
+    poster: driveSrc('1oNOu2PlykdDlNn-ByDzXrVSrpEUkLwNk'),
+    awardLine: '3rd University of Wollongong in Dubai | Top 10 Official Selection'
   },
   {
     title: 'Taphaw',
     chapter: 'Chapter III',
     year: '2026',
-    genre: 'Cebuano / Grounded Drama',
-    logline: 'A grounded Cebuano chapter about tension, inheritance, and dignity under pressure.',
-    aura: 'aura-taphaw'
+    genre: 'Drama',
+    logline: 'In the quiet of the unseen, Elsie Daayon fights tirelessly for her dreams, climbing through struggle and sacrifice. Can hope guide her to the top?',
+    aura: 'aura-taphaw',
+    poster: driveSrc('1OhwFBCW1V15OWkTJqapGA40XZMMXhXjH'),
+    awardLine: 'Sinulog Film Festival 2026 | Best Film, Best Screenplay, Best Director, Best Cinematography'
   }
 ]
 
 const awards = [
   {
-    film: 'Merese',
-    items: ['Best Short Film Placeholder', 'Official Selection Placeholder']
+    film: 'Confusing Roads that Spiraled to Filmmaking',
+    items: ['Coming-of-age feature article', 'Cebu Daily News'],
+    photo: driveSrc('1Oh8z7OsWPx0w5XCzT4mScPFks8Fg17Zx'),
+    article: 'https://cebudailynews.inquirer.net/559343/confusing-roads-that-spiraled-to-filmmaking-a-coming-of-age-journey'
   },
   {
     film: 'Somnium',
-    items: ['Best Cinematography Placeholder', 'Jury Mention Placeholder']
+    items: ['Top 10 Official Selection', 'UOW Dubai Film Festival 2025'],
+    photo: driveSrc('1_8MhVj5teENEZR55sMM_n3tc-9b4RnbP'),
+    article: 'https://www.facebook.com/share/p/1DtrereRoa/'
   },
   {
-    film: 'Taphaw',
-    items: ['Best Direction Placeholder', 'Regional Film Festival Placeholder']
+    film: "Taphaw Team's Journey to Success",
+    items: ['Sinulog Film Festival 2026 feature', 'Cebu Daily News'],
+    photo: driveSrc('11fD0XAtlSV0ZLBREwppkwJACP_fs09nW'),
+    article: 'https://cebudailynews.inquirer.net/704942/taphaw-teams-journey-to-success-at-the-sinulog-film-festival-2026?utm_source=dlvr.it&utm_medium=facebook'
+  },
+  {
+    film: 'Taphaw Wins Big',
+    items: ['Festival recognition update', 'Instagram feature'],
+    photo: driveSrc('1MoQtgPTYixlEUHuw788DWFJ09rlQvqVy'),
+    article: 'https://www.instagram.com/p/DVpX6q2jz5u/'
+  },
+  {
+    film: 'Taphaw Top 10 Official Selection',
+    items: ['Sinepiyu XVIII Diwa: Sa Lente Ng Katauhan', 'Feature post'],
+    photo: driveSrc('1aSSazPHpCMnEn_yk47P2bRsiPAZRPxh2'),
+    article: 'https://www.facebook.com/share/p/1CBKjv9DDt/'
+  },
+  {
+    film: 'Taphaw Featured on Sinegang.ph',
+    items: ['Official lineup feature', 'Sinepiyu XVIII Diwa'],
+    photo: driveSrc('1z1-KcjeuwTs1j-EV7r7kvcO1sdQu8bVT'),
+    article: 'https://www.facebook.com/share/p/1H1a3L3ZJN/'
   }
 ]
 
 const frames = [
-  'Ashes in Light',
-  'Window of Silence',
-  'Liminal Hallway',
-  'Night Geometry',
-  'Beneath Neon Rain',
-  'The Last Breath'
+  {
+    title: 'Where The Sixth Dimension Burns',
+    film: '11:11 (2022)',
+    image: driveSrc('1crhqiQolAGGtdFK7sCraY4WCg3WelfRc')
+  },
+  {
+    title: 'Waves In A Dream',
+    film: 'Specter Dream (2022)',
+    image: driveSrc('1Mxsn0UFH6MoZF0A4mqRLXeTjBdk1mg67')
+  },
+  {
+    title: 'It Is What It Is',
+    film: 'Merese (2023)',
+    image: driveSrc('12yLct-g_yKebVI-SVOhzNE56eDgmt7nb')
+  },
+  {
+    title: 'The Expiration Ritual',
+    film: 'Somnium (2025)',
+    image: driveSrc('1_W1d_yRlHhQeFdqIf0KqDc9ai1F9mcWd')
+  },
+  {
+    title: 'Heart Of Padayon',
+    film: 'Taphaw (2026)',
+    image: driveSrc('1Z_pPnp2uied3DpdyKVBxMwuxY_clL1c9')
+  },
+  {
+    title: 'Fragile Corridor',
+    film: '1975 (2021)',
+    image: driveSrc('1S2Senewo9YubCPs3L78lV8htFvZapQ2T')
+  }
 ]
 
 const language = [
@@ -61,6 +123,21 @@ const language = [
   'Editing and Color',
   'Sound and Atmosphere',
   'Festival Preparation'
+]
+
+const teamMembers = [
+  { name: 'Far Spencer', role: 'Film Director & Producer', photo: driveSrc('1BvqNS7hVta210DoVUuOniYfjYSUxgq84') },
+  { name: 'Micah Jirah Mendoza', role: 'Production Secretary & Actress', photo: driveSrc('1WRYwPWr4poKH3WOh5Sk3jEc1-xk3gC99') },
+  { name: 'Jade Lagasca', role: 'Director of Cinematography & Editor', photo: driveSrc('1HXOKJ6U7GsbMqEA-vnreqKIEtOThz9Fj') },
+  { name: 'Denver Hoybia', role: 'Assistant Director & Actor', photo: driveSrc('1drFQkJs_U74Ni2uArCDGHrIjCEI2bomX') },
+  { name: 'John Lloyd Caramihan', role: 'Production Designer & Actor', photo: driveSrc('1e3uzy5UlqATC5Ify3B3FR1s-9BNo0O2f') },
+  { name: 'Krishan Miguel', role: 'Editor Assist & Web Dev', photo: driveSrc('1dCFr7Ya4KyfjR4aHKNoLnc7DqMIXCjog') },
+  { name: 'Ella Sigue', role: 'Sound Recordist & Camera Operator', photo: driveSrc('1F1KKL110WBdHVNWILurqjxH_H8kyXR-J') },
+  { name: 'Ken Martinez', role: 'Editor & Assistant Cinematographer', photo: driveSrc('1ebAMwZqvw7OJjp7Nx6qB0Urs9qz5MVpE') },
+  { name: 'Christian Josh Baguio', role: 'Photographer & Gaffer', photo: driveSrc('1dTe235j49BYOrB9se6YsnyDxw7W_bRUN') },
+  { name: 'Brylle Mande Ocular', role: 'Graphic Designer', photo: driveSrc('1bZMOk0BckWMOaH5C6qyrTgIV2OpFOBef') },
+  { name: 'Valerie Demecillo', role: 'Graphic Animator', photo: driveSrc('128uM-cIYogwIFJv59ioRAKOH8ZYgps8n') },
+  { name: 'Abby Aparicio', role: 'Actress', photo: driveSrc('1fdmCe9K-7PpEl2U4TrxcCxQdOjvKfOMf') }
 ]
 
 function IntroSequence({ phase }) {
@@ -160,6 +237,7 @@ function FilmChapter({ chapter, idx }) {
           }}
         >
           <motion.div className="film-frame-card">
+            <img src={chapter.poster} alt={`${chapter.title} poster`} className="film-frame-poster" loading="lazy" />
             <div className="film-frame-light" />
             <span className="film-frame-mark">{chapter.chapter}</span>
             <strong>{chapter.title}</strong>
@@ -172,7 +250,7 @@ function FilmChapter({ chapter, idx }) {
           </p>
           <h3>{chapter.title}</h3>
           <p>{chapter.logline}</p>
-          <div className="film-award-mini">Awards Placeholder | Scene {String(idx + 1).padStart(2, '0')}</div>
+          <div className="film-award-mini">{chapter.awardLine}</div>
         </motion.article>
       </div>
     </section>
@@ -209,17 +287,17 @@ function FramesCarousel() {
         <div className="frames-mobile-grid">
           {frames.map((frame, idx) => (
             <motion.figure
-              key={frame}
+              key={frame.title}
               className="frame-item"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.45, delay: idx * 0.03 }}
             >
-              <div className="frame-visual" />
+              <div className="frame-visual" style={{ backgroundImage: `url(${frame.image})` }} />
               <figcaption>
-                <h4>{frame}</h4>
-                <p>Frame {String(idx + 1).padStart(2, '0')}</p>
+                <h4>{frame.title}</h4>
+                <p>{frame.film}</p>
               </figcaption>
             </motion.figure>
           ))}
@@ -229,7 +307,7 @@ function FramesCarousel() {
           <motion.div className="frames-track frames-track-top" style={{ x: topX, rotate: topRotate }}>
             {topFrames.map((frame, idx) => (
               <motion.figure
-                key={frame}
+                key={frame.title}
                 className={`frame-item ${idx % 2 === 0 ? 'frame-up' : 'frame-down'}`}
                 initial={{ opacity: 0, y: 26 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -237,10 +315,10 @@ function FramesCarousel() {
                 transition={{ duration: 0.65, delay: idx * 0.05 }}
                 whileHover={{ rotateY: idx % 2 === 0 ? 7 : -7, rotateX: 4, scale: 1.03 }}
               >
-                <div className="frame-visual" />
+                <div className="frame-visual" style={{ backgroundImage: `url(${frame.image})` }} />
                 <figcaption>
-                  <h4>{frame}</h4>
-                  <p>Frame {String(idx + 1).padStart(2, '0')}</p>
+                  <h4>{frame.title}</h4>
+                  <p>{frame.film}</p>
                 </figcaption>
               </motion.figure>
             ))}
@@ -248,7 +326,7 @@ function FramesCarousel() {
           <motion.div className="frames-track frames-track-bottom" style={{ x: bottomX, rotate: bottomRotate }}>
             {bottomFrames.map((frame, idx) => (
               <motion.figure
-                key={frame}
+                key={frame.title}
                 className={`frame-item ${idx % 2 === 0 ? 'frame-down' : 'frame-up'}`}
                 initial={{ opacity: 0, y: 26 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -256,10 +334,10 @@ function FramesCarousel() {
                 transition={{ duration: 0.65, delay: idx * 0.05 }}
                 whileHover={{ rotateY: idx % 2 === 0 ? -7 : 7, rotateX: 4, scale: 1.03 }}
               >
-                <div className="frame-visual" />
+                <div className="frame-visual" style={{ backgroundImage: `url(${frame.image})` }} />
                 <figcaption>
-                  <h4>{frame}</h4>
-                  <p>Frame {String(idx + 4).padStart(2, '0')}</p>
+                  <h4>{frame.title}</h4>
+                  <p>{frame.film}</p>
                 </figcaption>
               </motion.figure>
             ))}
@@ -323,18 +401,18 @@ function TeamStack() {
   const stack = [
     {
       id: 0,
-      role: 'Direction',
-      text: 'Story architecture, emotional pacing, and chapter orchestration.'
+      role: 'Far Spencer',
+      text: 'Film Director & Producer'
     },
     {
       id: 1,
-      role: 'Cinematography',
-      text: 'Lens language, movement grammar, and atmosphere-first composition.'
+      role: 'Jade Lagasca',
+      text: 'Director of Cinematography & Editor'
     },
     {
       id: 2,
-      role: 'Post',
-      text: 'Editorial rhythm, color worldbuilding, and sonic depth finishing.'
+      role: 'Micah Jirah Mendoza',
+      text: 'Production Secretary & Actress'
     }
   ]
 
@@ -383,6 +461,17 @@ function TeamStack() {
             </motion.article>
           )
         })}
+      </div>
+      <div className="team-roster-grid">
+        {teamMembers.map((member) => (
+          <article key={member.name} className="team-roster-card">
+            <img src={member.photo} alt={member.name} loading="lazy" />
+            <div>
+              <h4>{member.name}</h4>
+              <p>{member.role}</p>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   )
@@ -545,21 +634,17 @@ export default function App() {
         <section id="about" className="content-section">
           <SectionHeading
             eyebrow="About"
-            title="From Student Roots to Award-Winning Films"
-            subtitle="Founded in 2021 as a student multimedia body, we grew into a team producing award-winning cinematic films."
+            title={aboutContent.title}
+            subtitle={aboutContent.subtitle}
           />
-          <div className="about-glass">
-            INVISION FILMS was founded in 2021 as a student multimedia body and rose through persistence, craft, and
-            collaboration into producing award-winning films. We stay cinematic, but our visual language adapts to the
-            theme, mood, and emotional world of each story.
-          </div>
+          <div className="about-glass">{aboutContent.body}</div>
         </section>
 
         <section id="films" className="chapters-section">
           <SectionHeading
             eyebrow="Films"
             title="Film Chapters"
-            subtitle="Scroll through three immersive chapter scenes."
+            subtitle="Merese, Somnium, and Taphaw — each chapter grounded in the official filmography."
           />
           {chapters.map((chapter, idx) => (
             <FilmChapter key={chapter.title} chapter={chapter} idx={idx} />
@@ -570,7 +655,7 @@ export default function App() {
           <SectionHeading
             eyebrow="Awards"
             title="Awards & Recognition"
-            subtitle="Placeholder laurels and recognitions presented as cinematic plaques."
+            subtitle="Recognition and festival features sourced from the INVISION FILMS dossier."
           />
           <div className="awards-grid">
             {awards.map((group, idx) => (
@@ -583,12 +668,16 @@ export default function App() {
                 transition={{ duration: 0.62, delay: idx * 0.08 }}
                 whileHover={{ rotateY: idx % 2 === 0 ? 6 : -6, rotateX: 4, scale: 1.02 }}
               >
+                <img src={group.photo} alt={group.film} className="award-photo" loading="lazy" />
                 <h3>{group.film}</h3>
                 <ul>
                   {group.items.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
+                <a href={group.article} target="_blank" rel="noreferrer">
+                  View Article
+                </a>
               </motion.article>
             ))}
           </div>
