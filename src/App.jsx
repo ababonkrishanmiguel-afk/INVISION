@@ -381,7 +381,11 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile 
                   <div className="film-award-image-wrap">
                     <img src={chapter.awardImage} alt={`${chapter.title} awards`} className="film-award-image" loading="lazy" />
                   </div>
-                ) : null}
+                ) : (
+                  <div className="film-award-text-fallback">
+                    <span>{chapter.awards?.[0] || 'Award pending'}</span>
+                  </div>
+                )}
               </article>
             </motion.div>
           ) : null}
