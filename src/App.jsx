@@ -912,7 +912,7 @@ function TeamStack() {
         {stack.map((item, idx) => {
           const isActive = activeCard === idx
           // Desktop/tablet horizontal fan (mobile stays vertical via isMobile branch)
-          const spreadX = idx === 0 ? -248 : idx === 1 ? 0 : 248
+          const spreadX = idx === 0 ? -390 : idx === 1 ? 0 : 390
           const spreadRotate = idx === 0 ? -9 : idx === 1 ? 0 : 9
           const styleX = isMobile ? 0 : spreadX * spreadAmount
           const styleRotate = isMobile ? 0 : spreadRotate * spreadAmount
