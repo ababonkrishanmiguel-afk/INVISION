@@ -1413,7 +1413,7 @@ main,
 .team-roster-grid {
   margin-top: 1.35rem;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.72rem;
   perspective: 1500px;
   align-items: stretch;
@@ -1429,7 +1429,7 @@ main,
   background: #090909;
   text-decoration: none;
   aspect-ratio: 9 / 14;
-  min-height: 320px;
+  min-height: 292px;
   transform-style: preserve-3d;
   will-change: transform;
   backdrop-filter: blur(13px) saturate(136%);
@@ -1512,13 +1512,13 @@ main,
 
 @media (min-width: 1024px) {
   .team-roster-grid {
-    max-width: 1060px;
+    max-width: 1120px;
     margin-inline: auto;
-    gap: 0.64rem;
+    gap: 0.62rem;
   }
 
   .team-roster-card {
-    min-height: 286px;
+    min-height: 272px;
   }
 }
 
@@ -1867,7 +1867,7 @@ main,
   }
 
   .team-roster-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.72rem;
   }
 
@@ -2042,7 +2042,7 @@ main,
   }
 
   .team-roster-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     max-width: none;
     margin-inline: 0;
     gap: 0.72rem;

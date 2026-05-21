@@ -457,6 +457,11 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile,
                       ))}
                     </div>
                   </>
+                ) : chapter.awards?.length ? (
+                  <>
+                    <div className="film-laurel-divider" />
+                    <div className="film-laurel-fallback">{chapter.awards[0]}</div>
+                  </>
                 ) : null}
               </article>
             </motion.div>
