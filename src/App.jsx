@@ -352,6 +352,17 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile,
         rotateYBase = -9 + dragPower * 9
         rotateZBase = 2.4 - dragPower * 2.4
         zIndex = 9
+      } else if (isDragging && dragToPrev) {
+        // While dragging toward previous, hide the next-card preview
+        // to avoid dual-side overlap/glitch artifacts.
+        x = baseRight + 26
+        y = 20
+        scale = 0.82
+        opacity = 0.02
+        blur = 6.2
+        rotateYBase = -11
+        rotateZBase = 2.8
+        zIndex = 4
       } else {
         x = 38
         y = 16
@@ -369,6 +380,17 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile,
         rotateYBase = 9 - dragPower * 9
         rotateZBase = -2.4 + dragPower * 2.4
         zIndex = 9
+      } else if (isDragging && dragToNext) {
+        // While dragging toward next, hide the previous-card preview
+        // to avoid dual-side overlap/glitch artifacts.
+        x = baseLeft - 26
+        y = 20
+        scale = 0.82
+        opacity = 0.02
+        blur = 6.2
+        rotateYBase = 11
+        rotateZBase = -2.8
+        zIndex = 4
       } else {
         x = -38
         y = 16
