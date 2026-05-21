@@ -195,7 +195,7 @@ const awards = [
     film: 'Taphaw Winners Screening and Talkback',
     items: ['Featured on Sinegang.ph', 'Cinematheque Centre - Manila (FDCP)'],
     photo: driveSrc('1z1-KcjeuwTs1j-EV7r7kvcO1sdQu8bVT'),
-    article: 'https://www.sinegang.ph/'
+    article: 'https://www.facebook.com/sinegangdotph/posts/pfbid0HWERfSJnpeg5coCGFfj4noVZyGrtyEzvEhQdiQ7UAvPkgAyVSouunbgdvhbEUXAhl'
   }
 ]
 
@@ -242,18 +242,18 @@ const language = [
 ]
 
 const teamMembers = [
-  { name: 'Far Spencer', role: 'Film Director & Producer', photo: driveSrc('1BvqNS7hVta210DoVUuOniYfjYSUxgq84') },
-  { name: 'Micah Jirah Mendoza', role: 'Production Secretary & Actress', photo: driveSrc('1WRYwPWr4poKH3WOh5Sk3jEc1-xk3gC99') },
-  { name: 'Jade Lagasca', role: 'Director of Cinematography & Editor', photo: driveSrc('1HXOKJ6U7GsbMqEA-vnreqKIEtOThz9Fj') },
-  { name: 'Denver Hoybia', role: 'Assistant Director & Actor', photo: driveSrc('1drFQkJs_U74Ni2uArCDGHrIjCEI2bomX') },
-  { name: 'John Lloyd Caramihan', role: 'Production Designer & Actor', photo: driveSrc('1e3uzy5UlqATC5Ify3B3FR1s-9BNo0O2f') },
-  { name: 'Krishan Miguel', role: 'Editor Assist & Web Dev', photo: driveSrc('1dCFr7Ya4KyfjR4aHKNoLnc7DqMIXCjog') },
-  { name: 'Ella Sigue', role: 'Sound Recordist & Camera Operator', photo: driveSrc('1F1KKL110WBdHVNWILurqjxH_H8kyXR-J') },
-  { name: 'Ken Martinez', role: 'Editor & Assistant Cinematographer', photo: driveSrc('1ebAMwZqvw7OJjp7Nx6qB0Urs9qz5MVpE') },
-  { name: 'Christian Josh Baguio', role: 'Photographer & Gaffer', photo: driveSrc('1dTe235j49BYOrB9se6YsnyDxw7W_bRUN') },
-  { name: 'Brylle Mande Ocular', role: 'Graphic Designer', photo: driveSrc('1bZMOk0BckWMOaH5C6qyrTgIV2OpFOBef') },
-  { name: 'Valerie Demecillo', role: 'Graphic Animator', photo: driveSrc('128uM-cIYogwIFJv59ioRAKOH8ZYgps8n') },
-  { name: 'Abby Aparicio', role: 'Actress', photo: driveSrc('1fdmCe9K-7PpEl2U4TrxcCxQdOjvKfOMf') }
+  { name: 'Far Spencer', role: 'Film Director & Producer', photo: driveSrc('1BvqNS7hVta210DoVUuOniYfjYSUxgq84'), social: 'https://www.facebook.com/share/1AyD9Bx3Nm/?mibextid=wwXIfr' },
+  { name: 'Micah Jirah Mendoza', role: 'Production Secretary & Actress', photo: driveSrc('1WRYwPWr4poKH3WOh5Sk3jEc1-xk3gC99'), social: 'https://www.facebook.com/share/1GajGMPMQV/?mibextid=wwXIfr' },
+  { name: 'Jade Lagasca', role: 'Director of Cinematography & Editor', photo: driveSrc('1HXOKJ6U7GsbMqEA-vnreqKIEtOThz9Fj'), social: 'https://www.facebook.com/share/1DTFMGf1cY/?mibextid=wwXIfr' },
+  { name: 'Denver Hoybia', role: 'Assistant Director & Actor', photo: driveSrc('1drFQkJs_U74Ni2uArCDGHrIjCEI2bomX'), social: 'https://www.facebook.com/share/17CBUiSvew/?mibextid=wwXIfr' },
+  { name: 'John Lloyd Caramihan', role: 'Production Designer & Actor', photo: driveSrc('1e3uzy5UlqATC5Ify3B3FR1s-9BNo0O2f'), social: 'https://www.facebook.com/share/1DZ27UwhKf/?mibextid=wwXIfr' },
+  { name: 'Krishan Miguel', role: 'Editor Assist & Web Dev', photo: driveSrc('1dCFr7Ya4KyfjR4aHKNoLnc7DqMIXCjog'), social: 'https://www.facebook.com/share/1B7MZp5hYM/?mibextid=wwXIfr' },
+  { name: 'Ella Sigue', role: 'Sound Recordist & Camera Operator', photo: driveSrc('1F1KKL110WBdHVNWILurqjxH_H8kyXR-J'), social: 'https://www.facebook.com/share/1NHLJN5Xks/?mibextid=wwXIfr' },
+  { name: 'Ken Martinez', role: 'Editor & Assistant Cinematographer', photo: driveSrc('1ebAMwZqvw7OJjp7Nx6qB0Urs9qz5MVpE'), social: 'https://www.facebook.com/share/189ffZVBjh/?mibextid=wwXIfr' },
+  { name: 'Christian Josh Baguio', role: 'Photographer & Gaffer', photo: driveSrc('1dTe235j49BYOrB9se6YsnyDxw7W_bRUN'), social: 'https://www.facebook.com/share/1FpZfovwYe/?mibextid=wwXIfr' },
+  { name: 'Brylle Mande Ocular', role: 'Graphic Designer', photo: driveSrc('1bZMOk0BckWMOaH5C6qyrTgIV2OpFOBef'), social: 'https://www.facebook.com/share/1FuvSZ3qKv/?mibextid=wwXIfr' },
+  { name: 'Valerie Demecillo', role: 'Graphic Animator', photo: driveSrc('128uM-cIYogwIFJv59ioRAKOH8ZYgps8n'), social: 'https://www.facebook.com/share/1G8EFJyHJX/?mibextid=wwXIfr' },
+  { name: 'Abby Aparicio', role: 'Actress', photo: driveSrc('1fdmCe9K-7PpEl2U4TrxcCxQdOjvKfOMf'), social: 'https://www.facebook.com/share/1GN31MuTij/?mibextid=wwXIfr' }
 ]
 
 function IntroSequence({ phase }) {
@@ -806,9 +806,13 @@ function TeamProfileCard({ member, isMobile, entryIndex }) {
   const [my, setMy] = useState(50)
 
   return (
-    <motion.article
+    <motion.a
       key={member.name}
       className="team-roster-card"
+      href={member.social}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={`Open ${member.name} Facebook profile`}
       initial={{ opacity: 0, x: entryIndex % 2 === 0 ? -96 : 96, y: 18, filter: 'blur(8px)' }}
       whileInView={{ opacity: 1, x: 0, y: 0, filter: 'blur(0px)' }}
       viewport={{ once: true, amount: 0.2 }}
@@ -848,7 +852,7 @@ function TeamProfileCard({ member, isMobile, entryIndex }) {
         <h4>{member.name}</h4>
         <p>{member.role}</p>
       </div>
-    </motion.article>
+    </motion.a>
   )
 }
 
@@ -878,9 +882,11 @@ function TeamStack() {
       setSpreadAmount(Math.pow(mobileProgress, 0.9))
       return
     }
-    // Desktop/tablet: keep cards clearly in horizontal spread (left/center/right)
-    // and avoid mobile-style stacked overlap.
-    setSpreadAmount(1)
+    // Desktop/tablet: start stacked, then spread horizontally as user scrolls.
+    const desktopStart = 0.06
+    const desktopEnd = 0.56
+    const desktopProgress = Math.max(0, Math.min(1, (value - desktopStart) / (desktopEnd - desktopStart)))
+    setSpreadAmount(Math.pow(desktopProgress, 0.82))
   })
 
   const stack = [
@@ -913,7 +919,7 @@ function TeamStack() {
           const isActive = activeCard === idx
           // Desktop/tablet horizontal fan (mobile stays vertical via isMobile branch)
           const spreadX = idx === 0 ? -390 : idx === 1 ? 0 : 390
-          const spreadRotate = idx === 0 ? -9 : idx === 1 ? 0 : 9
+          const spreadRotate = 0
           const styleX = isMobile ? 0 : spreadX * spreadAmount
           const styleRotate = isMobile ? 0 : spreadRotate * spreadAmount
           const desktopStackY = idx * 5
@@ -921,15 +927,15 @@ function TeamStack() {
           const desktopSpreadY = idx === 0 ? -8 : idx === 1 ? 0 : 8
           const mobileStackY = [0, 18, 36][idx]
           // Fixed vertical slots with clear gaps (no touching/overlap).
-          const mobileSpreadY = [0, 192, 384][idx]
+          const mobileSpreadY = [0, 180, 360][idx]
           const styleY = isMobile
             ? mobileStackY + (mobileSpreadY - mobileStackY) * spreadAmount
             : desktopStackY + (desktopSpreadY - desktopStackY) * spreadAmount + (isActive ? -10 : 0)
           const stackOpacity = 0.99 - spreadAmount * 0.3
           const glassOpacity = 0.02 + spreadAmount * 0.16
           const redOpacity = 0.03 + spreadAmount * 0.16
-          const tiltY = isMobile ? 0 : (idx === 1 ? 7 : 4) * spreadAmount
-          const tiltX = isMobile ? 0 : (idx === 1 ? -4 : -2) * spreadAmount
+          const tiltY = 0
+          const tiltX = 0
 
           return (
             <motion.article
