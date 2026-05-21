@@ -762,6 +762,40 @@ main,
   color: rgba(236, 236, 236, 0.9);
 }
 
+.film-laurel-divider {
+  margin-top: 0.9rem;
+  border-top: 1px solid rgba(242, 242, 242, 0.54);
+}
+
+.film-laurel-list {
+  margin-top: 0.72rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.film-laurel-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.film-laurel-mark {
+  color: rgba(236, 236, 236, 0.88);
+  font-size: 0.74rem;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.film-laurel-text {
+  display: block;
+  font-size: 0.66rem;
+  line-height: 1.35;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(236, 236, 236, 0.86);
+}
+
 .film-award-mini {
   margin-top: 1rem;
 }
@@ -1740,6 +1774,21 @@ main,
     line-height: 1.34;
   }
 
+  .film-laurel-divider {
+    margin-top: 0.72rem;
+  }
+
+  .film-laurel-list {
+    margin-top: 0.55rem;
+    gap: 0.44rem;
+  }
+
+  .film-laurel-text {
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+    line-height: 1.28;
+  }
+
   .wreath-award-card {
     min-height: 112px;
   }
@@ -1822,13 +1871,13 @@ main,
   }
 
   .team-stack-wrap {
-    margin-top: 0.65rem;
+    margin-top: 0.45rem;
     height: 640px;
   }
 
   .team-stack-card {
     padding: 0.95rem;
-    top: 72px;
+    top: 56px;
   }
 
   .team-stack-card h3 {
@@ -1844,7 +1893,7 @@ main,
     display: flex;
     perspective: 1200px;
     width: 100%;
-    margin-top: 0.65rem;
+    margin-top: 0.45rem;
   }
 
   .team-roster-grid {
@@ -1878,12 +1927,12 @@ main,
 
 @media (max-width: 520px) {
   .team-stack-wrap {
-    margin-top: 0.75rem;
+    margin-top: 0.55rem;
     height: 660px;
   }
 
   .team-stack-card {
-    top: 86px;
+    top: 64px;
   }
 
   .film-carousel-shell {

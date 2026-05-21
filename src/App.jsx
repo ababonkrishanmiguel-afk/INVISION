@@ -67,7 +67,6 @@ const chapters = [
     logline: 'Every so often, time is unpredictable and destiny is inescapable.',
     aura: 'aura-1975',
     poster: driveSrc('1S2Senewo9YubCPs3L78lV8htFvZapQ2T'),
-    awardImage: '',
     awards: [
       'Debut Film'
     ]
@@ -80,10 +79,9 @@ const chapters = [
     logline: 'Claire, a skeptic who dismissed superstition, opens a doorway between the 3rd and 6th dimensions where reality unravels into something unholy.',
     aura: 'aura-1111',
     poster: driveSrc('1VqQDcLoedoCMP4AMyyNOwDqgAD_JyplW'),
-    awardImage: '/1111awards.png',
     awards: [
-      'SINEDISIPULO "X" Film Festival - Most Viewed Film',
-      'CINEU "Catorce" Film Festival - Best Film, Best Picture, Best Editing, Best Cinematography, Best Sound Design, Jury Prize Award, Best Actress'
+      'SINEDISIPULO “X” Film Festival (Most Viewed Film)',
+      'CINEU “Catorce” Film Festival (Best Film, Best Picture, Best Editing, Best Cinematography, Best Sound Design, Jury Prize Award, & Best Actress)'
     ]
   },
   {
@@ -94,9 +92,8 @@ const chapters = [
     logline: 'A dreamlike love too fragile for reality, where John is somehow everywhere but nowhere in sight.',
     aura: 'aura-specter',
     poster: driveSrc('13TZHAFBpOIjeMvQ-qJhfoZtRMyijOVUG'),
-    awardImage: '/specterdream-awards.png',
     awards: [
-      'CINEU "Catorce" Film Festival - Best Director, Best Production Design, Best Actor, Best Supporting Actor'
+      'CINEU “Catorce” Film Festival (Best Director, Best Production Design, Best Actor, & Best Supporting Actor)'
     ]
   },
   {
@@ -107,9 +104,8 @@ const chapters = [
     logline: 'In blindness and love, Isabel discovers a reality she was never meant to see.',
     aura: 'aura-pasaglawom',
     poster: driveSrc('1sqswls2-xbSKB4emFtok9_GxImYMKY2i'),
-    awardImage: '/pasaglawom-awards.png',
     awards: [
-      'SINEDISIPULO "XI" Film Exhibition - Official Selection'
+      'SINEDISIPULO “XI” Film Exhibition (Official Selection)'
     ]
   },
   {
@@ -120,9 +116,8 @@ const chapters = [
     logline: 'Five friends join a 48-hour film challenge, but with no script in hand, imagination takes over and reality begins to unravel.',
     aura: 'aura-merese',
     poster: driveSrc('1POrIhcBCBpT0p7hEmUrF-weF1LYMaV7I'),
-    awardImage: '/merese-awards.png',
     awards: [
-      "DTI's Fiesta Kucha Film Festival 2025 - Best Editing"
+      'DTI’s Fiesta Kucha Film Festival 2025 (Best Editing)'
     ]
   },
   {
@@ -133,9 +128,8 @@ const chapters = [
     logline: 'At the center is Elaine De Gracia, a student nurse in a Catholic school whose mind quietly unravels as sanity begins to expire.',
     aura: 'aura-somnium',
     poster: driveSrc('1oNOu2PlykdDlNn-ByDzXrVSrpEUkLwNk'),
-    awardImage: '/somnium-awards.png',
     awards: [
-      '3rd University of Wollongong in Dubai Film Festival 2025 - Top 10 Official Selection'
+      '3rd University of Wollongong in Dubai (Top 10: Official Selection)'
     ]
   },
   {
@@ -146,10 +140,9 @@ const chapters = [
     logline: 'In the quiet of the unseen, Elsie Daayon fights tirelessly for her dreams, climbing through struggle and sacrifice. Can hope guide her to the top?',
     aura: 'aura-taphaw',
     poster: driveSrc('1OhwFBCW1V15OWkTJqapGA40XZMMXhXjH'),
-    awardImage: '/taphaw-awards.png',
     awards: [
-      'Sinulog Film Festival 2026 - Best Film, Best Screenplay, Best Director, Best Cinematography, Best Production Design, Best Playbill, Best Actress',
-      'Sinepiyu XVIII Diwa: Sa Lente Ng Katauhan - Best Actress'
+      'Sinulog Film Festival 2026 (Best Film, Best Screenplay, Best Director, Best Cinematography, Best Production Design, Best Playbill, & Best Actress)',
+      'Sinepiyu XVIII Diwa: Sa Lente Ng Katauhan (Best Actress)'
     ]
   }
 ]
@@ -411,15 +404,6 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile,
         <div className="film-carousel-poster-shell">
           <div className="filmography-poster-card">
             <DriveImage src={chapter.poster} alt={`${chapter.title} poster`} className="film-frame-poster" />
-            {isMobile ? (
-              <div className="film-poster-award">
-                {chapter.awardImage ? (
-                  <img src={chapter.awardImage} alt={`${chapter.title} awards`} className="film-poster-award-img" loading="lazy" />
-                ) : (
-                  <div className="film-poster-award-fallback">{chapter.awards?.[0] || 'Award Pending'}</div>
-                )}
-              </div>
-            ) : null}
             <div className="film-frame-light" />
             <span className="film-frame-mark">{chapter.chapter}</span>
           </div>
@@ -441,17 +425,16 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile,
                 </p>
                 <h3>{chapter.title}</h3>
                 <p>{chapter.logline}</p>
-                {!isMobile ? (
-                  chapter.awardImage ? (
-                    <div className={`film-award-image-wrap ${chapter.title === '11:11' || chapter.title === 'Taphaw' ? 'is-large-award' : ''}`}>
-                      <img src={chapter.awardImage} alt={`${chapter.title} awards`} className="film-award-image" loading="lazy" />
+                <div className="film-laurel-divider" />
+                <div className="film-laurel-list" aria-label={`${chapter.title} award laurels`}>
+                  {(chapter.awards || []).map((award) => (
+                    <div key={award} className="film-laurel-item">
+                      <span className="film-laurel-mark" aria-hidden="true">❦</span>
+                      <span className="film-laurel-text">{award}</span>
+                      <span className="film-laurel-mark" aria-hidden="true">❦</span>
                     </div>
-                  ) : (
-                    <div className="film-award-text-fallback">
-                      <span>{chapter.awards?.[0] || 'Award pending'}</span>
-                    </div>
-                  )
-                ) : null}
+                  ))}
+                </div>
               </article>
             </motion.div>
           ) : null}
@@ -874,12 +857,8 @@ function TeamStack() {
 
   useMotionValueEvent(scrollYProgress, 'change', (value) => {
     if (isMobile) {
-      // Spread earlier and finish earlier on mobile so cards are fully
-      // separated when this section is in focus.
-      const mobileStart = 0.0
-      const mobileEnd = 0.26
-      const mobileProgress = Math.max(0, Math.min(1, (value - mobileStart) / (mobileEnd - mobileStart)))
-      setSpreadAmount(Math.pow(mobileProgress, 0.9))
+      // Mobile: keep cards statically spaced (no in/out spread motion).
+      setSpreadAmount(1)
       return
     }
     // Desktop/tablet: start stacked, then spread horizontally as user scrolls.
@@ -925,9 +904,9 @@ function TeamStack() {
           const desktopStackY = idx * 5
           // Desktop/tablet: horizontal spread with minimal Y drift.
           const desktopSpreadY = idx === 0 ? -8 : idx === 1 ? 0 : 8
-          const mobileStackY = [0, 18, 36][idx]
-          // Fixed vertical slots with clear gaps (no touching/overlap).
-          const mobileSpreadY = [0, 180, 360][idx]
+          const mobileStackY = [0, 0, 0][idx]
+          // Equal vertical spacing on mobile.
+          const mobileSpreadY = [0, 170, 340][idx]
           const styleY = isMobile
             ? mobileStackY + (mobileSpreadY - mobileStackY) * spreadAmount
             : desktopStackY + (desktopSpreadY - desktopStackY) * spreadAmount + (isActive ? -10 : 0)
