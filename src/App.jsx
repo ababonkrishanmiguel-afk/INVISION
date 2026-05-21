@@ -69,7 +69,8 @@ const chapters = [
     poster: driveSrc('1S2Senewo9YubCPs3L78lV8htFvZapQ2T'),
     awards: [
       'Debut Film'
-    ]
+    ],
+    laurels: []
   },
   {
     title: '11:11',
@@ -82,6 +83,10 @@ const chapters = [
     awards: [
       'SINEDISIPULO “X” Film Festival (Most Viewed Film)',
       'CINEU “Catorce” Film Festival (Best Film, Best Picture, Best Editing, Best Cinematography, Best Sound Design, Jury Prize Award, & Best Actress)'
+    ],
+    laurels: [
+      driveSrc('1L7Sg0B04YMzYDOfpeLwZtm9OOnb0-fUV'),
+      driveSrc('1_7g_O6VQYtnoDVOFSnlJ6bJDM-nFZeIc')
     ]
   },
   {
@@ -94,6 +99,9 @@ const chapters = [
     poster: driveSrc('13TZHAFBpOIjeMvQ-qJhfoZtRMyijOVUG'),
     awards: [
       'CINEU “Catorce” Film Festival (Best Director, Best Production Design, Best Actor, & Best Supporting Actor)'
+    ],
+    laurels: [
+      driveSrc('1jVJkRkY7IFad3RKHTh38iEuFk0mwJMZR')
     ]
   },
   {
@@ -106,6 +114,9 @@ const chapters = [
     poster: driveSrc('1sqswls2-xbSKB4emFtok9_GxImYMKY2i'),
     awards: [
       'SINEDISIPULO “XI” Film Exhibition (Official Selection)'
+    ],
+    laurels: [
+      driveSrc('1ptLkpdYOJtIv1IHmAB4hMbfh4UmuQYs_')
     ]
   },
   {
@@ -118,6 +129,9 @@ const chapters = [
     poster: driveSrc('1POrIhcBCBpT0p7hEmUrF-weF1LYMaV7I'),
     awards: [
       'DTI’s Fiesta Kucha Film Festival 2025 (Best Editing)'
+    ],
+    laurels: [
+      driveSrc('1ptLkpdYOJtIv1IHmAB4hMbfh4UmuQYs_')
     ]
   },
   {
@@ -130,6 +144,9 @@ const chapters = [
     poster: driveSrc('1oNOu2PlykdDlNn-ByDzXrVSrpEUkLwNk'),
     awards: [
       '3rd University of Wollongong in Dubai (Top 10: Official Selection)'
+    ],
+    laurels: [
+      driveSrc('12POd_6Dn-To9c2glDh7niLEwQNimbhf6')
     ]
   },
   {
@@ -143,6 +160,10 @@ const chapters = [
     awards: [
       'Sinulog Film Festival 2026 (Best Film, Best Screenplay, Best Director, Best Cinematography, Best Production Design, Best Playbill, & Best Actress)',
       'Sinepiyu XVIII Diwa: Sa Lente Ng Katauhan (Best Actress)'
+    ],
+    laurels: [
+      driveSrc('1Uvq1qqHgHqOqGFNoxnHeRlEAk9AP3Xmz'),
+      driveSrc('1_-KpzrwrJA4dmutGdroN7P6CosEmzI3A')
     ]
   }
 ]
@@ -425,16 +446,18 @@ function FilmCarouselItem({ chapter, isActive, rel, hidden, direction, isMobile,
                 </p>
                 <h3>{chapter.title}</h3>
                 <p>{chapter.logline}</p>
-                <div className="film-laurel-divider" />
-                <div className="film-laurel-list" aria-label={`${chapter.title} award laurels`}>
-                  {(chapter.awards || []).map((award) => (
-                    <div key={award} className="film-laurel-item">
-                      <span className="film-laurel-mark" aria-hidden="true">❦</span>
-                      <span className="film-laurel-text">{award}</span>
-                      <span className="film-laurel-mark" aria-hidden="true">❦</span>
+                {chapter.laurels?.length ? (
+                  <>
+                    <div className="film-laurel-divider" />
+                    <div className="film-laurel-gallery" aria-label={`${chapter.title} award laurels`}>
+                      {chapter.laurels.map((src, i) => (
+                        <div key={`${chapter.title}-laurel-${i}`} className="film-laurel-image-wrap">
+                          <DriveImage src={src} alt={`${chapter.title} laurel ${i + 1}`} className="film-laurel-image" />
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </>
+                ) : null}
               </article>
             </motion.div>
           ) : null}
@@ -831,7 +854,7 @@ function TeamProfileCard({ member, isMobile, entryIndex }) {
     >
       <motion.div className="team-roster-glow" style={{ x: glowOffsetX, y: glowOffsetY }} />
       <DriveImage src={member.photo} alt={member.name} className="team-photo" />
-      <div>
+      <div className="team-profile-copy">
         <h4>{member.name}</h4>
         <p>{member.role}</p>
       </div>
@@ -905,8 +928,8 @@ function TeamStack() {
           // Desktop/tablet: horizontal spread with minimal Y drift.
           const desktopSpreadY = idx === 0 ? -8 : idx === 1 ? 0 : 8
           const mobileStackY = [0, 0, 0][idx]
-          // Equal vertical spacing on mobile.
-          const mobileSpreadY = [0, 170, 340][idx]
+          // Equal vertical spacing on mobile (matched to approved reference spacing).
+          const mobileSpreadY = [0, 196, 392][idx]
           const styleY = isMobile
             ? mobileStackY + (mobileSpreadY - mobileStackY) * spreadAmount
             : desktopStackY + (desktopSpreadY - desktopStackY) * spreadAmount + (isActive ? -10 : 0)
