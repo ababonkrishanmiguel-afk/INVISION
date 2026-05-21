@@ -796,7 +796,7 @@ main,
 
 @media (max-width: 1023px) {
   .film-laurel-image {
-    max-height: 64px;
+    max-height: 70px;
   }
 }
 
@@ -1833,7 +1833,7 @@ main,
   }
 
   .film-laurel-image {
-    max-height: 62px;
+    max-height: 68px;
   }
 
   .film-carousel-indicators {
@@ -2030,7 +2030,7 @@ main,
   }
 
   .film-laurel-image {
-    max-height: 56px;
+    max-height: 62px;
   }
 
   .film-carousel-indicators {
