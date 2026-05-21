@@ -928,8 +928,9 @@ function TeamStack() {
           // Desktop/tablet: horizontal spread with minimal Y drift.
           const desktopSpreadY = idx === 0 ? -8 : idx === 1 ? 0 : 8
           const mobileStackY = [0, 0, 0][idx]
-          // Equal vertical spacing on mobile (matched to approved reference spacing).
-          const mobileSpreadY = [0, 196, 392][idx]
+          // Mobile-only vertical stack spacing (balanced to keep equal rhythm
+          // between top/middle/bottom cards and remove oversized bottom gap).
+          const mobileSpreadY = [0, 186, 352][idx]
           const styleY = isMobile
             ? mobileStackY + (mobileSpreadY - mobileStackY) * spreadAmount
             : desktopStackY + (desktopSpreadY - desktopStackY) * spreadAmount + (isActive ? -10 : 0)
