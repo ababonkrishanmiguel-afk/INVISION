@@ -238,11 +238,6 @@ const frames = [
     title: 'Waves In A Dream',
     film: 'Specter Dream (2022)',
     image: driveSrc('1Mxsn0UFH6MoZF0A4mqRLXeTjBdk1mg67')
-  },
-  {
-    title: 'Fragile Corridor',
-    film: '1975 (2021)',
-    image: driveSrc('1S2Senewo9YubCPs3L78lV8htFvZapQ2T')
   }
 ]
 
