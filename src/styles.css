@@ -1101,7 +1101,7 @@ main,
 .frames-track-bottom.frames-track-bottom-two {
   width: min(1040px, 88%);
   grid-template-columns: repeat(2, minmax(260px, 1fr));
-  margin-left: 0;
+  margin-left: auto;
   margin-right: auto;
   padding: 0 2%;
 }

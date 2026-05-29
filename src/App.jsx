@@ -716,6 +716,7 @@ function FramesCarousel() {
   const bottomRotate = useTransform(scrollYProgress, [0, 1], ['0deg', '1.1deg'])
   const topFrames = frames.slice(0, 3)
   const bottomFrames = frames.slice(3)
+  const hasTwoBottomFrames = bottomFrames.length === 2
 
   useEffect(() => {
     const media = window.matchMedia('(max-width: 767px)')
@@ -776,7 +777,10 @@ function FramesCarousel() {
               </motion.figure>
             ))}
           </motion.div>
-          <motion.div className={`frames-track frames-track-bottom ${bottomFrames.length === 2 ? 'frames-track-bottom-two' : ''}`} style={{ x: bottomX, rotate: bottomRotate }}>
+          <motion.div
+            className={`frames-track frames-track-bottom ${hasTwoBottomFrames ? 'frames-track-bottom-two' : ''}`}
+            style={{ x: hasTwoBottomFrames ? '0%' : bottomX, rotate: bottomRotate }}
+          >
             {bottomFrames.map((frame, idx) => (
               <motion.figure
                 key={frame.title}
