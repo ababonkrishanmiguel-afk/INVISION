@@ -782,30 +782,26 @@ main,
 }
 
 .film-laurel-gallery {
-  margin-top: 0.3rem;
+  margin-top: 0.72rem;
   display: flex;
   flex-wrap: nowrap;
-  justify-content: flex-end;
   align-items: flex-end;
-  gap: 0.24rem;
+  gap: 0.42rem;
 }
 
 .film-laurel-image-wrap {
-  flex: 0 0 auto;
-  min-width: auto;
+  flex: 1 1 0;
+  min-width: 0;
   border-radius: 0.45rem;
-  display: flex;
-  align-items: flex-end;
   overflow: visible;
 }
 
 .film-laurel-image-wrap:only-child {
-  flex: 0 0 auto;
+  flex: 0 1 62%;
 }
 
 .film-laurel-image {
-  width: auto;
-  max-width: 100%;
+  width: 100%;
   height: auto;
   display: block;
   object-fit: contain;
