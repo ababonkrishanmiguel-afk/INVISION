@@ -212,16 +212,16 @@ const awards = [
     article: 'https://www.facebook.com/sinegangdotph/posts/pfbid0HWERfSJnpeg5coCGFfj4noVZyGrtyEzvEhQdiQ7UAvPkgAyVSouunbgdvhbEUXAhl'
   },
   {
-    film: 'Taphaw is now on Letterboxd',
-    items: ['Now listed on Letterboxd', 'Watchlist / review feature'],
-    photo: driveSrc('1E11G9Mbu7ibPhmCohR_bjVsoQLl5DSxm'),
-    article: 'https://boxd.it/135Qg'
-  },
-  {
     film: 'Taphaw now streaming worldwide on JuanFlix',
     items: ['Worldwide streaming release', 'FDCP JuanFlix feature'],
     photo: driveSrc('1NbRRVMc0_i0JXVgWwMokv8lDn9AtqEbm'),
     article: 'https://web.facebook.com/share/p/1Bt2hqJUQu/'
+  },
+  {
+    film: 'Taphaw is now on Letterboxd',
+    items: ['Now listed on Letterboxd', 'Watchlist / review feature'],
+    photo: driveSrc('1E11G9Mbu7ibPhmCohR_bjVsoQLl5DSxm'),
+    article: 'https://boxd.it/135Qg'
   }
 ]
 

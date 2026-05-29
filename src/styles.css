@@ -983,6 +983,7 @@ main,
 .awards-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-flow: row dense;
   gap: 0.9rem;
   perspective: 1200px;
 }
